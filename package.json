@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imlinhanchao/fishpi.git"
+    "url": "git+https://github.com/imlinhanchao/fishpi-api-package.git"
   },
   "license": "MIT",
   "author": {
@@ -24,9 +24,9 @@
   },
   "keywords": [],
   "bugs": {
-    "url": "https://github.com/imlinhanchao/fishpi/issues"
+    "url": "https://github.com/imlinhanchao/fishpi-api-package/issues"
   },
-  "homepage": "https://github.com/imlinhanchao/fishpi#readme",
+  "homepage": "https://github.com/imlinhanchao/fishpi-api-package#readme",
   "dependencies": {
     "axios": "^0.25.0",
     "form-data": "^4.0.0",
