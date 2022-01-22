@@ -54,5 +54,5 @@ function toMetal(sysMetal:string):Metal {
 }
 
 export {
-    request, domain, toMetal
+    request, domain, toMetal,
 }

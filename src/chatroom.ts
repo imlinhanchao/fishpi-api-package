@@ -1,12 +1,11 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import WebSocket from 'ws';
 import { request, domain, toMetal } from './utils';
 import { 
     ApiResponse, ChatRoomMessage, RedPacket 
 } from '..';
 
 class ChatRoom {
-    private _token:string = '';
+    private _apiKey:string = '';
     private _onlines:Array<any>=[];
     private _rws:ReconnectingWebSocket | null = null;
     private _wsTimer:NodeJS.Timeout | null = null;
@@ -14,21 +13,32 @@ class ChatRoom {
 
     constructor(token:string='') {
         if (!token) { return; }
-        this._token = token;
+        this._apiKey = token;
     }
 
-    get onlines() {
+    /**
+     * 当前在线人数列表，需要先调用 addListener 添加聊天室消息监听
+     */
+     get onlines() {
         return this._onlines;
     }
 
-    setToken(token:string) {
-        this._token = token;
+    /**
+     * 重新设置请求 Token
+     * @param apiKey 接口 API Key
+     */
+     setToken(apiKey:string) {
+        this._apiKey = apiKey;
     }
 
-    async more(page=1):Promise<ApiResponse<Array<ChatRoomMessage>>> {
+    /**
+     * 查询聊天室历史消息
+     * @param page 消息页码
+     */
+     async more(page=1):Promise<ApiResponse<Array<ChatRoomMessage>>> {
         try {
             let rsp = await request({
-                url: `chat-room/more?page=${page}&apiKey=${this._token}`
+                url: `chat-room/more?page=${page}&apiKey=${this._apiKey}`
             });
 
             if (rsp.status === 401) { 
@@ -58,14 +68,18 @@ class ChatRoom {
         }
     }
 
-    async revoke(oId:string):Promise<ApiResponse<undefined>> {
+    /**
+     * 撤回消息，普通成员 24 小时内可撤回一条自己的消息，纪律委员/OP/管理员角色可以撤回任意人消息
+     * @param oId 消息 Id
+     */
+     async revoke(oId:string):Promise<ApiResponse<undefined>> {
         let rsp;
         try {
             rsp = await request({
                 url: `chat-room/revoke/${oId}`,
                 method: 'delete',
                 data: {
-                    apiKey: this._token
+                    apiKey: this._apiKey
                 },
             });
 
@@ -79,7 +93,11 @@ class ChatRoom {
         }
     }
 
-    async send(msg:string):Promise<{ code:number }> {
+    /**
+     * 发送一条消息
+     * @param msg 消息内容，支持 Markdown
+     */
+     async send(msg:string):Promise<{ code:number }> {
         let rsp;
         try {
             rsp = await request({
@@ -87,7 +105,7 @@ class ChatRoom {
                 method: 'post',
                 data: {
                     content: msg,
-                    apiKey: this._token
+                    apiKey: this._apiKey
                 },
             });
 
@@ -99,7 +117,11 @@ class ChatRoom {
         }
     }
 
-    async raw(oId:string):Promise<string> {
+    /**
+     * 获取消息原文（比如 Markdown）
+     * @param oId 消息 Id
+     */
+     async raw(oId:string):Promise<string> {
         let rsp;
         try {
             rsp = await request({
@@ -112,9 +134,15 @@ class ChatRoom {
         }
     }
 
-    get emoji() {
-        let apiKey = this._token;
+    /**
+     * 表情包接口对象
+     */
+     get emoji() {
+        let apiKey = this._apiKey;
         return {
+            /**
+             * 获取表情包图像列表
+             */
             async get ():Promise<Array<string>> {
                 let rsp;
                 try {
@@ -134,6 +162,10 @@ class ChatRoom {
                     throw e;
                 }
             },
+            /**
+             * 设置表情包列表
+             * @param data 所有表情包图像列表
+             */
             async set (data:Array<string>) {
                 let rsp;
                 try {
@@ -159,10 +191,17 @@ class ChatRoom {
         }
     }
 
-    get redpacket() {
-        let apiKey = this._token;
+    /**
+     * 红包接口对象
+     */
+     get redpacket() {
+        let apiKey = this._apiKey;
         let that = this;
         return {
+            /**
+             * 打开一个红包
+             * @param oId 红包消息 Id
+             */
             async open(oId:string) {
                 let rsp;
                 try {
@@ -184,18 +223,30 @@ class ChatRoom {
                     throw e;
                 }
             },
+            /**
+             * 发送一个红包
+             * @param redpacket 红包对象
+             */
             async send(redpacket:RedPacket) {
                 return await that.send(`[redpacket]${JSON.stringify(redpacket)}[/redpacket]`)
             }
         }
     }
 
-    removeListener(wsCallback:Function) {
+    /**
+     * 移除聊天室消息监听函数
+     * @param wsCallback 消息监听函数
+     */
+     removeListener(wsCallback:Function) {
         if (this._wsCallbacks.indexOf(wsCallback) < 0) return;
         this._wsCallbacks.splice(this._wsCallbacks.indexOf(wsCallback), 1);
     }
 
-    addListener(wsCallback:Function) {
+    /**
+     * 添加聊天室消息监听函数
+     * @param wsCallback 消息监听函数
+     */
+     addListener(wsCallback:Function) {
         if (this._rws !== null) { 
             if (this._wsCallbacks.indexOf(wsCallback) < 0) 
                 this._wsCallbacks.push(wsCallback);
@@ -203,9 +254,9 @@ class ChatRoom {
         }
         this._wsCallbacks.push(wsCallback);
         this._rws = new ReconnectingWebSocket(
-            `wss://${domain}chat-room-channel?apiKey=${this._token}`, [], {
+            `wss://${domain}chat-room-channel?apiKey=${this._apiKey}`, [], {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                WebSocket: WebSocket,
+                WebSocket: window ? window.WebSocket : import('ws'),
                 connectionTimeout: 10000
             }
         );

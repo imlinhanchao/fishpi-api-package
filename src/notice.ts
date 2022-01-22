@@ -5,22 +5,29 @@ import {
 
 class Notice
 {
-    private _token:string = '';
+    private _apiKey:string = '';
 
     constructor(token:string='') {
         if (!token) { return; }
-        this._token = token;
+        this._apiKey = token;
     }
 
+    /**
+     * 重新设置请求 Token
+     * @param apiKey 接口 API Key
+     */
     setToken(token:string) {
-        this._token = token;
+        this._apiKey = token;
     }
 
-    async count():Promise<NoticeCount> {
+    /**
+     * 获取未读消息数
+     */
+     async count():Promise<NoticeCount> {
         let rsp;
         try {
             rsp = await request({
-                url: `notifications/unread/count?apiKey=${this._token}`,
+                url: `notifications/unread/count?apiKey=${this._apiKey}`,
             });
 
             rsp.data.userNotifyStatus = rsp.data.userNotifyStatus != 0;
@@ -30,11 +37,15 @@ class Notice
         }
     }
 
-    async list(type:string):Promise<ApiResponse<NoticeList>> {
+    /**
+     * 获取消息列表
+     * @param type 消息类型
+     */
+     async list(type:string):Promise<ApiResponse<NoticeList>> {
         let rsp;
         try {
             rsp = await request({
-                url: `api/getNotifications?apiKey=${this._token}&type=${type}`,
+                url: `api/getNotifications?apiKey=${this._apiKey}&type=${type}`,
             });
 
             return rsp.data;
@@ -43,11 +54,15 @@ class Notice
         }
     }
 
-    async makeRead(type:string):Promise<{code:number}> {
+    /**
+     * 已读指定类型消息
+     * @param type 消息类型
+     */
+     async makeRead(type:string):Promise<{code:number}> {
         let rsp;
         try {
             rsp = await request({
-                url: `notifications/make-read/${type}?apiKey=${this._token}`,
+                url: `notifications/make-read/${type}?apiKey=${this._apiKey}`,
             });
 
             return rsp.data;
@@ -56,11 +71,14 @@ class Notice
         }
     }
 
-    async readAll():Promise<{code:number}> {
+    /**
+     * 已读所有消息
+     */
+     async readAll():Promise<{code:number}> {
         let rsp;
         try {
             rsp = await request({
-                url: `notifications/all-read?apiKey=${this._token}`,
+                url: `notifications/all-read?apiKey=${this._apiKey}`,
             });
 
             return rsp.data;

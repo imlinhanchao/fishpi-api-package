@@ -1,7 +1,7 @@
 export type ApiResponse<T> = {
     code: number;
     msg: string;
-    data: T | undefined
+    data?: T
 }
 
 export type Account = {
@@ -11,7 +11,7 @@ export type Account = {
 
 export type UserInfo = {
     userCity: string,
-    userOnlineFlag: false,
+    userOnlineFlag: boolean,
     userPoint: number;
     userAppRole: string;
     userIntro: string;
@@ -27,6 +27,7 @@ export type UserInfo = {
     userRole: string;
     followerCount: number;
     userURL: string;
+    canFollow?: boolean;
 }
 
 export type RedPacket = {
