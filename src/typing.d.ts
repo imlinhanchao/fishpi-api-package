@@ -4,6 +4,12 @@ export type ApiResponse<T> = {
     data?: T
 }
 
+export type ApiKey = {
+    code: number;
+    msg: string;
+    Key: string
+}
+
 export type Account = {
     username: string;
     passwd: string;

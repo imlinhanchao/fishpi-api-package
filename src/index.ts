@@ -3,10 +3,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { isBrowse, request, toMetal } from './utils';
 import {
-    ApiResponse, Account, UserInfo, AtUserList, UploadInfo
+    ApiResponse, Account, UserInfo, AtUserList, UploadInfo, ApiKey
 } from './typing';
 import ChatRoom from './chatroom';
 import Notice from './notice';
+import Emoji from './emoji';
 
 class FishPi {
     /**
@@ -21,6 +22,10 @@ class FishPi {
      *  通知接口对象
      */
     notice: Notice = new Notice();
+    /**
+     *  表情包接口对象
+     */
+    emoji: Emoji = new Emoji();
 
     /**
      * 构造一个 API 请求对象
@@ -31,13 +36,14 @@ class FishPi {
         this.apiKey = token;
         this.chatroom.setToken(this.apiKey);
         this.notice.setToken(this.apiKey);
+        this.emoji.setToken(this.apiKey);
     }
 
     /**
      * 登录账号返回 API Key
      * @param data 用户账密
      */   
-    async login(data: Account): Promise<ApiResponse<string>> {
+    async login(data: Account): Promise<ApiKey> {
         try {
             let md5 = crypto.createHash('md5');
             let rsp = await request({
@@ -52,6 +58,7 @@ class FishPi {
             this.apiKey = rsp.data.Key;
             this.chatroom.setToken(this.apiKey);
             this.notice.setToken(this.apiKey);
+            this.emoji.setToken(this.apiKey);
 
             return rsp.data;
         } catch (e) {

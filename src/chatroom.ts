@@ -135,63 +135,6 @@ class ChatRoom {
     }
 
     /**
-     * 表情包接口对象
-     */
-     get emoji() {
-        let apiKey = this._apiKey;
-        return {
-            /**
-             * 获取表情包图像列表
-             */
-            async get ():Promise<Array<string>> {
-                let rsp;
-                try {
-                    rsp = await request({
-                        url: `api/cloud/get`,
-                        method: 'post',
-                        data: {
-                            gameId: 'emojis',
-                            apiKey
-                        },
-                    });
-        
-                    if (rsp.status === 401) {throw new Error('登录已失效，请重新登录！');}
-        
-                    return JSON.parse(rsp.data.data);            
-                } catch (e) {
-                    throw e;
-                }
-            },
-            /**
-             * 设置表情包列表
-             * @param data 所有表情包图像列表
-             */
-            async set (data:Array<string>) {
-                let rsp;
-                try {
-                    rsp = await request({
-                        url: `api/cloud/sync`,
-                        method: 'post',
-                        data: {
-                            gameId: 'emojis',
-                            data: JSON.stringify(data),
-                            apiKey
-                        },
-                    });
-            
-                    if (rsp.status === 401) {
-                        throw new Error('登录已失效，请重新登录！');
-                    }
-            
-                    return rsp.data;            
-                } catch (e) {
-                    throw e;
-                }
-            }
-        }
-    }
-
-    /**
      * 红包接口对象
      */
      get redpacket() {
