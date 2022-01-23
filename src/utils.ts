@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as https from 'https';
 import { 
     Metal
-} from '..';
+} from './typing';
 
 const domain = 'fishpi.cn/'
 
@@ -14,8 +14,10 @@ async function request(opt:any) {
         data
     } = opt;
 
-    headers['User-Agent'] = `Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36`;
-    headers['Referer'] = `https://${domain}`;
+    if (!isBrowse) {
+        headers['User-Agent'] = `Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36`;
+        headers['Referer'] = `https://${domain}`;
+    }
 
     let options = {
         method, headers,
@@ -53,6 +55,8 @@ function toMetal(sysMetal:string):Metal {
     }
 }
 
+const isBrowse = typeof window !== 'undefined';
+
 export {
-    request, domain, toMetal,
+    request, domain, toMetal, isBrowse
 }

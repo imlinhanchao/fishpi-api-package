@@ -1,7 +1,7 @@
 import { request } from './utils';
 import { 
     ApiResponse, NoticeCount, NoticeList
-} from '..';
+} from './typing';
 
 class Notice
 {

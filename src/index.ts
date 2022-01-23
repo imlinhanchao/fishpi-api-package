@@ -1,10 +1,10 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { request, toMetal } from './utils';
+import { isBrowse, request, toMetal } from './utils';
 import {
     ApiResponse, Account, UserInfo, AtUserList, UploadInfo
-} from '..';
+} from './typing';
 import ChatRoom from './chatroom';
 import Notice from './notice';
 
@@ -222,7 +222,7 @@ class FishPi {
      */   
      async upload(files: Array<File|string>):Promise<UploadInfo> {
         let data:any;
-        if (typeof window !== 'undefined') {
+        if (isBrowse) {
             data = new FormData();
             files.forEach(f => data.append('file[]', f));
         } else {
@@ -237,10 +237,10 @@ class FishPi {
                 url: `upload`,
                 method: 'post',
                 data,
-                headers: data.getHeaders()
+                headers: isBrowse ? undefined : data.getHeaders()
             });
 
-            return rsp.data.data;
+            return rsp.data;
         } catch (e) {
             throw e;
         }

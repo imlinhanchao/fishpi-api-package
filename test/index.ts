@@ -1,5 +1,5 @@
-import { Account } from "..";
-import FishPi from "../src";
+import { Account } from '../src/typing';
+import FishPi from '../src';
 
 async function test(account: Account) {
     let fish = new FishPi();

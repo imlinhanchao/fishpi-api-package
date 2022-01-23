@@ -1,8 +1,8 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { request, domain, toMetal } from './utils';
+import { request, domain, toMetal, isBrowse } from './utils';
 import { 
     ApiResponse, ChatRoomMessage, RedPacket 
-} from '..';
+} from './typing';
 
 class ChatRoom {
     private _apiKey:string = '';
@@ -256,7 +256,7 @@ class ChatRoom {
         this._rws = new ReconnectingWebSocket(
             `wss://${domain}chat-room-channel?apiKey=${this._apiKey}`, [], {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                WebSocket: typeof window !== 'undefined' ? window.WebSocket : (await import('ws')).WebSocket,
+                WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
                 connectionTimeout: 10000
             }
         );
