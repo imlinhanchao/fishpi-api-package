@@ -37,7 +37,7 @@ export type UserInfo = {
 }
 
 export type RedPacket = {
-    type: string;
+    type: 'random' | 'average' | 'specify' | 'heartbeat';
     money: number;
     count: number;
     msg: string;
