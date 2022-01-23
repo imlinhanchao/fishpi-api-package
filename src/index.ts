@@ -72,7 +72,7 @@ class FishPi {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp.data.data.sysMetal = toMetal(rsp.data.data.sysMetal);
+            if(rsp.data.data) rsp.data.data.sysMetal = toMetal(rsp.data.data.sysMetal);
 
             return rsp.data;
         } catch (e) {
@@ -222,7 +222,7 @@ class FishPi {
      */   
      async upload(files: Array<File|string>):Promise<UploadInfo> {
         let data:any;
-        if (window) {
+        if (typeof window !== 'undefined') {
             data = new FormData();
             files.forEach(f => data.append('file[]', f));
         } else {

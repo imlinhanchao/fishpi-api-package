@@ -246,7 +246,7 @@ class ChatRoom {
      * 添加聊天室消息监听函数
      * @param wsCallback 消息监听函数
      */
-     addListener(wsCallback:Function) {
+     async addListener(wsCallback:Function) {
         if (this._rws !== null) { 
             if (this._wsCallbacks.indexOf(wsCallback) < 0) 
                 this._wsCallbacks.push(wsCallback);
@@ -256,7 +256,7 @@ class ChatRoom {
         this._rws = new ReconnectingWebSocket(
             `wss://${domain}chat-room-channel?apiKey=${this._apiKey}`, [], {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                WebSocket: window ? window.WebSocket : import('ws'),
+                WebSocket: typeof window !== 'undefined' ? window.WebSocket : (await import('ws')).WebSocket,
                 connectionTimeout: 10000
             }
         );
