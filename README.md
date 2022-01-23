@@ -32,16 +32,16 @@ let fish = new FishPi(apiKey);
 console.dir(await fish.info());
 
 // 获取用户自定义表情包
-let emojis = fish.emoji.get();
+let emojis = await fish.emoji.get();
 // 获取默认表情包
 let defaultEmoji = fish.emoji.default;
 
 // 监听聊天室消息
 fish.chatroom.addListener((ev:any) => console.dir(ev));
 // 向聊天室发送信息（需要登录）
-fish.chatroom.send('Hello World!');
+await fish.chatroom.send('Hello World!');
 // 向聊天室发送红包
-fish.chatroom.redpacket.send({
+await fish.chatroom.redpacket.send({
     type: 'random';
     money: 32;
     count: 2;
