@@ -10,6 +10,173 @@ export type ApiKey = {
     Key: string
 }
 
+export enum DataType {
+    /**
+     * 文章
+     */
+    article = 0,
+
+    /**
+     * 评论
+     */
+    comment = 1,
+
+    /**
+     * @
+     */
+    at = 2,
+
+    /**
+     * 被评论
+     */
+    commented = 3,
+
+    /**
+     * 关注者
+     */
+    followingUser = 4,
+
+    /**
+     * 积分 - 充值
+     */
+    pointCharge = 5,
+
+    /**
+     * 积分 - 转账
+     */
+    pointTransfer = 6,
+
+    /**
+     * 积分 - 文章打赏
+     */
+    pointArticleReward = 7,
+
+    /**
+     * 积分 - 评论感谢
+     */
+    pointCommentThank = 8,
+
+    /**
+     * 同城广播
+     */
+    broadcast = 9,
+
+    /**
+     * 积分 - 交易
+     */
+    pointExchange = 10,
+
+    /**
+     * 积分 - 滥用扣除
+     */
+    abusePointDeduct = 11,
+
+    /**
+     * 积分 - 文章被感谢
+     */
+    pointArticleThank = 12,
+
+    /**
+     * 回复
+     */
+    reply = 13,
+
+    /**
+     * 使用邀请码
+     */
+    invitecodeUsed = 14,
+
+    /**
+     * 系统公告 - 文章
+     */
+    sysAnnounceArticle = 15,
+
+    /**
+     * 系统公告 - 新用户
+     */
+    sysAnnounceNewUser = 16,
+
+    /**
+     * 新的关注者
+     */
+    newFollower = 17,
+
+    /**
+     * 邀请链接
+     */
+    invitationLinkUsed = 18,
+
+    /**
+     * 系统通知 - 角色变化
+     */
+    sysAnnounceRoleChanged = 19,
+
+    /**
+     * 关注的文章更新
+     */
+    followingArticleUpdate = 20,
+
+    /**
+     * 关注的文章评论
+     */
+    followingArticleComment = 21,
+
+    /**
+     * 积分 - 文章优选
+     */
+    pointPerfectArticle = 22,
+
+    /**
+     * article new follower.
+     */
+    articleNewFollower = 23,
+
+    /**
+     * 文章被关注
+     */
+    articleNewWatcher = 24,
+
+    /**
+     * 评论点赞
+     */
+    commentVoteUp = 25,
+
+    /**
+     * 评论点踩
+     */
+    commentVoteDown = 26,
+
+    /**
+     * 文章被点赞
+     */
+    articleVoteUp = 27,
+
+    /**
+     * 文章被点踩
+     */
+    articleVoteDown = 28,
+
+    /**
+     * 积分 - 评论被接受
+     */
+    pointCommentAccept = 33,
+
+    /**
+     * 积分 - 举报处理
+     */
+    pointReportHandled = 36,
+
+    /**
+     * 聊天室 @
+     */
+    chatRoomAt = 38,
+
+    /**
+     * 专属红包提醒
+     */
+    redPacket = 39,
+}
+
 export type Account = {
     username: string;
     passwd: string;
@@ -142,7 +309,7 @@ export type NoticeCount = {
 export type NoticePoint = {
     createTime: string;
     dataId: string;
-    dataType: number;
+    dataType: DataType;
     description: string;
     hasRead: boolean
     oId: string;
@@ -165,7 +332,7 @@ export type NoticeComment = {
 export type NoticeAt = {
     content: string;
     createTime: string;
-    dataType: number;
+    dataType: DataType;
     hasRead: boolean;
     oId: string;
     userAvatarURL: string;
@@ -182,7 +349,7 @@ export type NoticeFollow = {
     authorName: string;
     content: string;
     createTime: string;
-    dataType: number;
+    dataType: DataType;
     hasRead: boolean;
     isComment: boolean;
     oId: string;
@@ -193,7 +360,7 @@ export type NoticeFollow = {
 export type NoticeSystem = {
     createTime: string;
     dataId: string;
-    dataType: number;
+    dataType: DataType;
     description: string;
     hasRead: boolean;
     oId: string;

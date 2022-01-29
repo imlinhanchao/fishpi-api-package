@@ -8,6 +8,7 @@ import {
 import ChatRoom from './chatroom';
 import Notice from './notice';
 import Emoji from './emoji';
+import User from './user';
 
 class FishPi {
     /**
@@ -26,6 +27,10 @@ class FishPi {
      *  表情包接口对象
      */
     emoji: Emoji = new Emoji();
+    /**
+     *  用户接口对象
+     */
+    account: User = new User();
 
     /**
      * 构造一个 API 请求对象
@@ -33,10 +38,15 @@ class FishPi {
      */
     constructor(token: string='') {
         if (!token) { return; }
-        this.apiKey = token;
+        this.setToken(token);
+    }
+
+    async setToken(apiKey: string) {
+        this.apiKey = apiKey;
         this.chatroom.setToken(this.apiKey);
         this.notice.setToken(this.apiKey);
         this.emoji.setToken(this.apiKey);
+        this.account.setToken(this.apiKey);
     }
 
     /**
@@ -55,10 +65,7 @@ class FishPi {
                 },
             });
 
-            this.apiKey = rsp.data.Key;
-            this.chatroom.setToken(this.apiKey);
-            this.notice.setToken(this.apiKey);
-            this.emoji.setToken(this.apiKey);
+            this.setToken(rsp.data.Key);
 
             return rsp.data;
         } catch (e) {
@@ -66,26 +73,6 @@ class FishPi {
         }
     }
 
-    /**
-     * 返回登录账户信息，需要先登录或设置有效的 api key
-     */   
-    async info(): Promise<ApiResponse<UserInfo>> {
-        try {
-            let rsp = await request({
-                url: `api/user?apiKey=${this.apiKey}`
-            });
-
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            if(rsp.data.data) rsp.data.data.sysMetal = toMetal(rsp.data.data.sysMetal);
-
-            return rsp.data;
-        } catch (e) {
-            throw e;
-        }
-    }
 
     /**
      * 查询指定用户信息
@@ -94,7 +81,7 @@ class FishPi {
      async user(username:string): Promise<ApiResponse<UserInfo>> {
         try {
             let rsp = await request({
-                url: `user/${username}?apiKey=${this.apiKey}`
+                url: `user/${username}`
             });
 
             if (rsp.status === 401) {
@@ -125,99 +112,6 @@ class FishPi {
             });
 
             return rsp.data.data;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /**
-     * 查询登录用户常用表情
-     */   
-     async emotions():Promise<ApiResponse<Array<string>>> {
-        let rsp;
-        try {
-            rsp = await request({
-                url: `users/emotions?apiKey=${this.apiKey}`,
-            });
-
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            rsp.data.data = Object.keys(rsp.data.data);
-            return rsp.data;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /**
-     * 查询登录用户当前活跃度，请求频率请控制在 30 ~ 60 秒一次
-     */   
-     async liveness():Promise<number> {
-        if (!this.apiKey) { return 0; }
-        try {
-            let rsp = await request({
-                url: `user/liveness?apiKey=${this.apiKey}`
-            });
-
-            if (rsp.status === 401) { return -1; }
-
-            return rsp.data.liveness || 0;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /**
-     * 检查登录用户是否已经签到
-     */   
-     async isCheckIn():Promise<boolean> {
-        if (!this.apiKey) { return false; }
-        try {
-            let rsp = await request({
-                url: `user/checkedIn?apiKey=${this.apiKey}`
-            });
-
-            if (rsp.status === 401) { return false; }
-
-            return rsp.data.checkedIn || false;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /**
-     * 检查登录用户是否已经领取昨日活跃奖励
-     */   
-     async isCollectedLiveness():Promise<boolean> {
-        if (!this.apiKey) { return false; }
-        try {
-            let rsp = await request({
-                url: `api/activity/is-collected-liveness?apiKey=${this.apiKey}`
-            });
-
-            if (rsp.status === 401) { return false; }
-
-            return rsp.data.isCollectedYesterdayLivenessReward || false;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /**
-     * 领取昨日活跃度奖励
-     */   
-     async rewardLiveness():Promise<number> {
-        if (!this.apiKey) { return 0; }
-        try {
-            let rsp = await request({
-                url: `api/activity/yesterday-liveness-reward-api?apiKey=${this.apiKey}`
-            });
-
-            if (rsp.status === 401) { return 0; }
-
-            return rsp.data.sum || 0;
         } catch (e) {
             throw e;
         }
