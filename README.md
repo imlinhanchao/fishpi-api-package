@@ -29,7 +29,7 @@ if (rsp.code == 0) apiKey = rsp.Key;
 
 // 通过 apiKey 获取登录用户信息
 let fish = new FishPi(apiKey);
-console.dir(await fish.info());
+console.dir(await fish.account.info());
 
 // 获取用户自定义表情包
 let emojis = await fish.emoji.get();
