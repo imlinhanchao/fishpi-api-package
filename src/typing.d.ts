@@ -127,12 +127,12 @@ export enum DataType {
     pointPerfectArticle = 22,
 
     /**
-     * article new follower.
+     * 文章新的被关注者
      */
     articleNewFollower = 23,
 
     /**
-     * 文章被关注
+     * 文章新的关注者
      */
     articleNewWatcher = 24,
 
