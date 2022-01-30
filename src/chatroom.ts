@@ -27,7 +27,7 @@ class ChatRoom {
      * 重新设置请求 Token
      * @param apiKey 接口 API Key
      */
-     setToken(apiKey:string) {
+    setToken(apiKey:string) {
         this._apiKey = apiKey;
     }
 
@@ -56,7 +56,7 @@ class ChatRoom {
                 try {
                     data[i].sysMetal = toMetal(data[i].sysMetal);
                     redpacket = JSON.parse(d.content);
-                    if (redpacket.msgType !== 'msgType') return rsp;
+                    if (redpacket.msgType !== 'redPacket') return rsp;
                     redpacket.recivers = JSON.parse(redpacket.recivers);
                     data[i].content = redpacket;
                 } catch (e) {}
