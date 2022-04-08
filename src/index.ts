@@ -81,7 +81,7 @@ class FishPi {
      async user(username:string): Promise<ApiResponse<UserInfo>> {
         try {
             let rsp = await request({
-                url: `user/${username}`
+                url: `user/${username}?apiKey=${this.apiKey}`
             });
 
             if (rsp.status === 401) {
