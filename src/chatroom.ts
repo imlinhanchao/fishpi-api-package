@@ -6,6 +6,7 @@ import {
 
 class ChatRoom {
     private _apiKey:string = '';
+    private _discusse:string = '';
     private _onlines:Array<any>=[];
     private _rws:ReconnectingWebSocket | null = null;
     private _wsTimer:NodeJS.Timeout | null = null;
@@ -19,8 +20,22 @@ class ChatRoom {
     /**
      * 当前在线人数列表，需要先调用 addListener 添加聊天室消息监听
      */
-     get onlines() {
+    get onlines() {
         return this._onlines;
+    }
+
+    /**
+     * 当前聊天室话题，需要先调用 addListener 添加聊天室消息监听
+     */
+    get discusse() {
+        return this._discusse;
+    }
+
+    /**
+     * 設置当前聊天室话题
+     */
+     set discusse(val) {
+        this.send(`[setdiscuss]${val}[/setdiscuss]`);
     }
 
     /**
@@ -215,7 +230,15 @@ class ChatRoom {
             let data:any | null = null;
             switch(msg.type) {
                 case 'online': {
-                    data = this._onlines = msg.users;
+                    this._onlines = msg.users;
+                    this._discusse = msg.users;
+                    data = {
+
+                    }
+                    break;
+                }
+                case 'discussChanged': {
+                    data = msg.newDiscuss;
                     break;
                 }
                 case 'revoke': {
