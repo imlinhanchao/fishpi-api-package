@@ -231,7 +231,7 @@ class ChatRoom {
             switch(msg.type) {
                 case 'online': {
                     this._onlines = msg.users;
-                    this._discusse = msg.users;
+                    this._discusse = msg.discussing;
                     data = this._onlines;
                     break;
                 }
