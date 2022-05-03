@@ -232,9 +232,7 @@ class ChatRoom {
                 case 'online': {
                     this._onlines = msg.users;
                     this._discusse = msg.users;
-                    data = {
-
-                    }
+                    data = this._onlines;
                     break;
                 }
                 case 'discussChanged': {
