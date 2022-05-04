@@ -58,7 +58,7 @@ class Notice
      * 已读指定类型消息
      * @param type 消息类型
      */
-     async makeRead(type:string):Promise<{code:number}> {
+     async makeRead(type:string):Promise<ApiResponse<undefined>> {
         let rsp;
         try {
             rsp = await request({

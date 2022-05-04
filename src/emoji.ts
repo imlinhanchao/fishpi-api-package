@@ -201,7 +201,7 @@ class Emoji
         }
     }
 
-    async get ():Promise<Array<string>> {
+    async get():Promise<Array<string>> {
         let rsp;
         try {
             rsp = await request({
@@ -213,7 +213,9 @@ class Emoji
                 },
             });
 
-            if (rsp.status === 401) {throw new Error('登录已失效，请重新登录！');}
+            if (rsp.status === 401) {
+                throw new Error('登录已失效，请重新登录！');
+            }
 
             return JSON.parse(rsp.data.data);            
         } catch (e) {

@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatRoomMessage, RedPacket 
+    ApiResponse, ChatMessageType, ChatRoomMessage, RedPacket, RedPacketMessage 
 } from './typing';
 
 class ChatRoom {
@@ -34,7 +34,7 @@ class ChatRoom {
     /**
      * 設置当前聊天室话题
      */
-     set discusse(val) {
+    set discusse(val) {
         this.send(`[setdiscuss]${val}[/setdiscuss]`);
     }
 
@@ -50,21 +50,56 @@ class ChatRoom {
      * 查询聊天室历史消息
      * @param page 消息页码
      */
-     async more(page=1):Promise<ApiResponse<Array<ChatRoomMessage>>> {
+    async more(page=1):Promise<ApiResponse<Array<ChatRoomMessage>>> {
         try {
             let rsp = await request({
                 url: `chat-room/more?page=${page}&apiKey=${this._apiKey}`
             });
 
             if (rsp.status === 401) { 
-                throw new Error('登录已失效，请重新登录！');
+                return { code:-1, msg: '登录已失效，请重新登录！' };
             }
+
+            rsp = rsp.data;
 
             if (rsp.code != 0) {
                 throw new Error(rsp.msg);
             }
 
+            if (!rsp.data) return rsp;
+            let redpacket;
+            (rsp.data as Array<any>).forEach((d, i, data) => {
+                try {
+                    data[i].sysMetal = toMetal(data[i].sysMetal);
+                    redpacket = JSON.parse(d.content);
+                    if (redpacket.msgType !== 'redPacket') return rsp;
+                    redpacket.recivers = JSON.parse(redpacket.recivers);
+                    data[i].content = redpacket;
+                } catch (e) {}
+            })
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async get(data:{ oId:string, mode:ChatMessageType.Context, size:25 }):Promise<ApiResponse<Array<ChatRoomMessage>>> {
+        try {
+            let rsp = await request({
+                url: `chat-room/getMessage?oId=${data.oId}&mode=${data.mode}&size=${data.size}&apiKey=${this._apiKey}`
+            });
+
+            if (rsp.status === 401) { 
+                return { code:-1, msg: '登录已失效，请重新登录！' };
+            }
+
             rsp = rsp.data;
+
+            if (rsp.code != 0) {
+                throw new Error(rsp.msg);
+            }
+
             if (!rsp.data) return rsp;
             let redpacket;
             (rsp.data as Array<any>).forEach((d, i, data) => {
@@ -99,7 +134,7 @@ class ChatRoom {
             });
 
             if (rsp.status === 401) {
-                throw new Error('登录已失效，请重新登录！');
+                return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
             return rsp.data;            
@@ -112,7 +147,7 @@ class ChatRoom {
      * 发送一条消息
      * @param msg 消息内容，支持 Markdown
      */
-     async send(msg:string):Promise<{ code:number }> {
+     async send(msg:string):Promise<ApiResponse<undefined>> {
         let rsp;
         try {
             rsp = await request({
@@ -124,7 +159,9 @@ class ChatRoom {
                 },
             });
 
-            if (rsp.status === 401) {throw new Error('登录已失效，请重新登录！');}
+            if (rsp.status === 401) {
+                return { code:-1, msg: '登录已失效，请重新登录！' };
+            }
 
             return rsp.data;            
         } catch (e) {
@@ -160,7 +197,7 @@ class ChatRoom {
              * 打开一个红包
              * @param oId 红包消息 Id
              */
-            async open(oId:string) {
+            async open(oId:string):Promise<ApiResponse<RedPacketMessage>> {
                 let rsp;
                 try {
                     rsp = await request({
@@ -173,7 +210,7 @@ class ChatRoom {
                     });
         
                     if (rsp.status === 401) {
-                        throw new Error('登录已失效，请重新登录！');
+                        return { code:-1, msg: '登录已失效，请重新登录！' };
                     }
         
                     return rsp.data;            
