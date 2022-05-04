@@ -1,6 +1,6 @@
 export type ApiResponse<T> = {
     code: number;
-    msg: string;
+    msg?: string;
     data?: T
 }
 
@@ -201,7 +201,7 @@ export type UserInfo = {
     userRole: string;
     followerCount: number;
     userURL: string;
-    canFollow?: boolean;
+    canFollow: 'hide' | 'no' | 'yes';
 }
 
 export type RedPacket = {
@@ -254,6 +254,24 @@ export type ChatRoomMessage = {
     oId: string;
     userName: string;
     content: string | RedPacketMessage;
+}
+
+/**
+ * chatroom get 接口获取 oId 的相关消息类型
+ */
+export enum ChatMessageType {
+    /**
+     * 前后消息
+     */
+    Context = 0,
+    /**
+     * 前面的消息
+     */
+    Before = 1,
+    /**
+     * 后面的消息
+     */
+    After = 2,
 }
 
 export type AtUserList = Array<{
@@ -368,7 +386,7 @@ export type NoticeSystem = {
     userId: string;
 }
 
-export type Breezemoon = {
+export type BreezemoonContent = {
     /**
      * 发布者用户名
      */
