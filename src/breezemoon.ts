@@ -24,7 +24,7 @@ class Breezemoon
      * 查询聊天室历史消息
      * @param page 消息页码
      */
-    async list(page=1, size=20):Promise<ApiResponse<Array<BreezemoonContent>>> {
+    async list(page=1, size=20):Promise<{code:number,breezemoons:Array<BreezemoonContent>}> {
         try {
             let rsp = await request({
                 url: `api/breezemoons?p=${page}&size=${size}`
