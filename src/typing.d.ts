@@ -204,12 +204,19 @@ export type UserInfo = {
     canFollow: 'hide' | 'no' | 'yes';
 }
 
+export enum GestureType {
+    Rock = 0,
+    Scissors = 1,
+    Paper = 2,
+}
+
 export type RedPacket = {
-    type: 'random' | 'average' | 'specify' | 'heartbeat';
+    type: 'random' | 'average' | 'specify' | 'heartbeat' | 'rockPaperScissors';
     money: number;
     count: number;
     msg: string;
     recivers: Array<string>;
+    gesture?: GestureType;
 }
 
 export type RedPacketGot = {
@@ -226,10 +233,24 @@ export type RedPacketMessage = {
     money: number;
     msg: string;
     msgType: string;
-    recivers: Array<string>;
     senderId: string;
     type: string;
+    recivers: Array<string>;
     who: Array<RedPacketGot>
+}
+
+
+export type RedPacketInfo = {
+    info: {
+        count: number;
+        gesture?: GestureType;
+        got: number;
+        msg: string;
+        userAvatarURL: string;
+        userName: string;
+    };
+    recivers: Array<string>;
+    who: Array<RedPacketGot>;
 }
 
 export type Metal = {

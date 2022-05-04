@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatMessageType, ChatRoomMessage, RedPacket, RedPacketMessage 
+    ApiResponse, ChatMessageType, ChatRoomMessage, GestureType, RedPacket, RedPacketInfo, RedPacketMessage 
 } from './typing';
 
 class ChatRoom {
@@ -196,8 +196,9 @@ class ChatRoom {
             /**
              * 打开一个红包
              * @param oId 红包消息 Id
+             * @param gesture 猜拳类型
              */
-            async open(oId:string):Promise<ApiResponse<RedPacketMessage>> {
+            async open(oId:string, gesture?:GestureType):Promise<ApiResponse<RedPacketInfo>> {
                 let rsp;
                 try {
                     rsp = await request({
@@ -205,6 +206,7 @@ class ChatRoom {
                         method: 'post',
                         data: {
                             oId,
+                            gesture,
                             apiKey
                         },
                     });
