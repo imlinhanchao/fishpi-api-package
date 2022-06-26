@@ -378,8 +378,10 @@ export type NoticeAt = {
     userAvatarURL: string;
     userName: string;
 }
-
-export type NoticeFollow = {
+/**
+ * 我关注的(following) 通知响应
+ */
+ export type NoticeFollow = {
     articleCommentCount: number;
     articlePerfect: number;
     articleTagObjs: Array<ArticleTag>;
@@ -397,14 +399,38 @@ export type NoticeFollow = {
     url: string;
 }
 
+/**
+ * 系统通知数据
+ */
 export type NoticeSystem = {
-    createTime: string;
-    dataId: string;
-    dataType: DataType;
-    description: string;
-    hasRead: boolean;
+    /**
+     * 消息的 oId
+     */
     oId: string;
+    /**
+     * 用户 Id
+     */
     userId: string;
+    /**
+     * 数据 Id
+     */
+    dataId: string;
+    /**
+     * 数据类型
+     */
+    dataType: DataType;
+    /**
+     * 消息描述
+     */
+    description: string;
+    /**
+     * 是否已读
+     */
+    hasRead: boolean;
+    /**
+     * 创建日期
+     */
+    createTime: string;
 }
 
 export type BreezemoonContent = {
@@ -444,4 +470,94 @@ export type BreezemoonContent = {
      * 发布城市（可能为空，请注意做判断）
      */
     breezemoonCity: string; 
+}
+
+/**
+ * 举报数据类型
+ */
+ export enum ReportDataType {
+    /**
+     * 文章
+     */
+    article = 0,
+    /**
+     * 评论
+     */
+    comment = 1,
+    /**
+     * 用户
+     */
+    user = 2,
+    /**
+     * 聊天消息
+     */
+    chatroom = 3,
+}
+
+/**
+ * 举报类型
+ */
+export enum ReportType {
+    /**
+     * 垃圾广告
+     */
+    advertise = 0,
+    /**
+     * 色情
+     */
+    porn = 1,
+    /**
+     * 违规
+     */
+    violate = 2,
+    /**
+     * 侵权
+     */
+    infringement = 3,
+    /**
+     * 人身攻击
+     */
+    attacks = 4,
+    /**
+     * 冒充他人账号
+     */
+    impersonate = 5,
+    /**
+     * 垃圾广告账号
+     */
+    advertisingAccount = 6,
+    /**
+     * 违规泄露个人信息
+     */
+    leakPrivacy = 7,
+    /**
+     * 其它
+     */
+    other = 8
+}
+
+/**
+ * 举报接口数据
+ */
+export type Report = {
+    /**
+     * API Key，登录取得
+     */
+    apiKey: string;
+    /**
+     * 举报对象的 oId
+     */
+    reportDataId: string;
+    /**
+     * 举报数据的类型
+     */
+    reportDataType: ReportDataType;
+    /**
+     * 举报的类型
+     */
+    reportType: ReportType;
+    /**
+     * 举报的理由
+     */
+    reportMemo: string;
 }
