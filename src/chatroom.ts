@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatMessageType, ChatRoomMessage, GestureType, RedPacket, RedPacketInfo, RedPacketMessage 
+    ApiResponse, ChatContentType, ChatMessageType, ChatRoomMessage, GestureType, RedPacket, RedPacketInfo, RedPacketMessage 
 } from './typing';
 
 class ChatRoom {
@@ -50,10 +50,10 @@ class ChatRoom {
      * 查询聊天室历史消息
      * @param page 消息页码
      */
-    async more(page=1):Promise<ApiResponse<Array<ChatRoomMessage>>> {
+    async more(page=1, type=ChatContentType.HTML):Promise<ApiResponse<Array<ChatRoomMessage>>> {
         try {
             let rsp = await request({
-                url: `chat-room/more?page=${page}&apiKey=${this._apiKey}`
+                url: `chat-room/more?page=${page}&type=${type}&apiKey=${this._apiKey}`
             });
 
             if (rsp.status === 401) { 
@@ -84,10 +84,10 @@ class ChatRoom {
         }
     }
 
-    async get(data:{ oId:string, mode:ChatMessageType.Context, size:25 }):Promise<ApiResponse<Array<ChatRoomMessage>>> {
+    async get(data:{ oId:string, mode:ChatMessageType.Context, size:25, type:ChatContentType.HTML }):Promise<ApiResponse<Array<ChatRoomMessage>>> {
         try {
             let rsp = await request({
-                url: `chat-room/getMessage?oId=${data.oId}&mode=${data.mode}&size=${data.size}&apiKey=${this._apiKey}`
+                url: `chat-room/getMessage?oId=${data.oId}&mode=${data.mode}&size=${data.size}&type=${data.type}&apiKey=${this._apiKey}`
             });
 
             if (rsp.status === 401) { 
