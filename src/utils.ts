@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as https from 'https';
 import { 
+    Metal,
     MetalList
 } from './typing';
 
@@ -38,27 +39,31 @@ async function request(opt:any) {
     }
 }
 
+function analyzeMetalAttr(m:any): Metal {
+    if (!m) return m;
+    if (typeof m.attr != 'string') return m;
+    let attr = m.attr.split('&');
+    m.attr = { };
+    attr.forEach((a:string) => m.attr[a.split('=')[0]] = a.split('=')[1])
+    m.url = `https://fishpi.cn/gen?txt=${m.description}&${m.attr.url}`;
+    m.icon = `https://fishpi.cn/gen?txt=&${m.attr.url}`;
+    return m;
+}
+
 function toMetal(sysMetal:string):MetalList {
     try {
         let metal: { list: Array<any> } = JSON.parse(sysMetal);
         metal.list.forEach((m, i, list) => {
-            let attr = m.attr.split('&')
-            m.attr = { };
-            attr.forEach((a:string) => m.attr[a.split('=')[0]] = a.split('=')[1])
-            m.url = `https://fishpi.cn/gen?txt=${m.description}&${m.attr.url}`;
-            m.icon = `https://fishpi.cn/gen?txt=&${m.attr.url}`;
-            list[i] = m;
+            list[i] = analyzeMetalAttr(m);
         })
-        return metal;
+        return metal.list;
     } catch (error) {
-        return {
-            list: []
-        }        
+        return []
     }
 }
 
 const isBrowse = typeof window !== 'undefined';
 
 export {
-    request, domain, toMetal, isBrowse
+    request, domain, toMetal, analyzeMetalAttr, isBrowse
 }
