@@ -1752,6 +1752,10 @@ export type ArticleDetail = {
      */
     articleContent?: string,
     /**
+     * 文章内容 Markdown
+     */
+    articleOriginalContent?: string,
+    /**
      * 文章缩略图
      */
     articleImg1URL?: string,
@@ -1880,7 +1884,39 @@ export enum ArticleListType {
     Perfect = '/perfact'
 }
 
+/**
+ * 点赞类型
+ */
 export enum VoteStatus {
+    /**
+     * 点赞
+     */
     Voted = 0,
+    /**
+     * 取消点赞
+     */
     Unvote = -1
+}
+
+export type CommentPost = {
+    /**
+     * 文章 Id
+     */
+    articleId: string,
+    /**
+     * 是否匿名评论
+     */
+    commentAnonymous: boolean,
+    /**
+     * 评论是否楼主可见
+     */
+    commentVisible: boolean,
+    /**
+     * 评论内容
+     */
+    commentContent: string,
+    /**
+     * 回复评论 Id
+     */
+    commentOriginalCommentId?: string,
 }
