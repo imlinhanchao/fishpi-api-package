@@ -7,7 +7,11 @@ export type ApiResponse<T> = {
     /**
      * 请求状态
      */
-    code: number;
+    code?: number;
+    /**
+     * 请求状态
+     */
+     result?: number;
     /**
      * 请求信息
      */
@@ -1924,7 +1928,7 @@ export type CommentPost = {
 /**
  * 私聊内容
  */
-export type PrivateChat = {
+export type ChatData = {
     /**
      * 接收者 Id
      */
