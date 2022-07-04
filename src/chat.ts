@@ -144,29 +144,31 @@ class Chat {
      * @param user 私聊用户名
      * @returns Websocket 连接对象
      */
-    async connect(user:string):Promise<ReconnectingWebSocket> {
-        if (this._rwss[user]) return this._rwss[user];
-        this._rwss[user] = new ReconnectingWebSocket(
-            `wss://${domain}user-channel?apiKey=${this._apiKey}${user ? `&toUser=${user}` : ''}`, [], {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
-                connectionTimeout: 10000
-            }
-        );
-
-        this._rwss[user].onopen = (e) => {
-        };
-        this._rwss[user].onmessage = async (e) => {
-            this._wsCallbacks[user].forEach(call => call(e));
-        };
-        this._rwss[user].onerror = (e) => {
-            console.error(e);
-        };
-        this._rwss[user].onclose = (e) => {
-            delete this._rwss[user];
-        };
-
-        return this._rwss[user];
+    connect(user:string):Promise<ReconnectingWebSocket> {
+        return new Promise(async (resolve, reject) => {
+            if (this._rwss[user]) return resolve(this._rwss[user]);
+            this._rwss[user] = new ReconnectingWebSocket(user ? 
+                `wss://${domain}chat-channel?apiKey=${this._apiKey}&toUser=${user}`
+                : `wss://${domain}user-channel`, [], {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
+                    connectionTimeout: 10000
+                }
+            );
+    
+            this._rwss[user].onopen = (e) => {
+                resolve(this._rwss[user])
+            };
+            this._rwss[user].onmessage = async (e) => {
+                this._wsCallbacks[user].forEach(call => call(e));
+            };
+            this._rwss[user].onerror = (e) => {
+                reject(e);
+            };
+            this._rwss[user].onclose = (e) => {
+                delete this._rwss[user];
+            };
+        })
     }
 
     /**
@@ -175,8 +177,8 @@ class Chat {
      * @param content 私聊内容
      * @returns Websocket 连接对象
      */
-    send(user:string, content:string):ReconnectingWebSocket {
-        if (!this._rwss[user]) this.connect(user);
+    async send(user:string, content:string):Promise<ReconnectingWebSocket> {
+        if (!this._rwss[user]) await this.connect(user);
         this._rwss[user].send(content);
         return this._rwss[user];
     }

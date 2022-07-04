@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatContentType, ChatMessageType, ChatRoomMessage, GestureType, RedPacket, RedPacketInfo, RedPacketMessage 
+    ApiResponse, ChatContentType, ChatMessageType, ChatRoomMessage, GestureType, RedPacket, RedPacketInfo 
 } from './typing';
 
 class ChatRoom {

@@ -9,6 +9,8 @@ import ChatRoom from './chatroom';
 import Notice from './notice';
 import Emoji from './emoji';
 import User from './user';
+import Article from './article';
+import Chat from './chat';
 
 class FishPi {
     /**
@@ -31,6 +33,14 @@ class FishPi {
      *  用户接口对象
      */
     account: User = new User();
+    /**
+     *  文章接口对象
+     */
+    article: Article = new Article();
+    /**
+     * 私聊接口对象
+     */
+    chat: Chat = new Chat();
 
     /**
      * 构造一个 API 请求对象
@@ -47,6 +57,8 @@ class FishPi {
         this.notice.setToken(this.apiKey);
         this.emoji.setToken(this.apiKey);
         this.account.setToken(this.apiKey);
+        this.article.setToken(this.apiKey);
+        this.chat.setToken(this.apiKey);
     }
 
     /**

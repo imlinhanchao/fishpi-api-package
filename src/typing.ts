@@ -1,5 +1,3 @@
-import { type } from "os";
-
 /**
  * Api 响应
  */

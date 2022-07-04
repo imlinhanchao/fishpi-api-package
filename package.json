@@ -1,10 +1,10 @@
 {
   "name": "fishpi",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A Package to use API of fishpi.",
   "main": "./lib/src/index.js",
   "files": [
-    "lib/**/*"
+    "lib"
   ],
   "scripts": {
     "prebuild": "rm -rf lib",
