@@ -289,7 +289,6 @@ class ChatRoom {
                         if (data.msgType === 'redPacket') {
                             content = data;
                             msg.type = 'redPacket'
-                            break;
                         }
                     } catch (e) { }
                     data = { oId, time, userName, userNickname, userAvatarURL, content, md };
