@@ -285,16 +285,13 @@ class ChatRoom {
                 case 'msg': {
                     let { oId, time, userName, userNickname, userAvatarURL, content, md } = msg;
                     try {
-                        let { msg, recivers, money, count, type, got, who, msgType } = JSON.parse(content);
-                        if (msgType === 'redPacket') {
-                            data = { 
-                                oId, time, userName, userNickname, userAvatarURL, 
-                                redpacket: { msg, recivers, money, count, type, got, who }
-                            };
+                        let data = JSON.parse(content);
+                        if (data.msgType === 'redPacket') {
+                            content = data;
                             msg.type = 'redPacket'
                             break;
                         }
-                    } catch (e) {}
+                    } catch (e) { }
                     data = { oId, time, userName, userNickname, userAvatarURL, content, md };
                     break;
                 }
