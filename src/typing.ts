@@ -310,10 +310,15 @@ export type UserInfo = {
      */
     canFollow: 'hide' | 'no' | 'yes';
     /**
+     * 用户所有勋章列表，包含未佩戴
+     */
+     allMetalOwned: MetalList;
+
+    /**
      * 用户勋章列表
      */
-    sysMetal: MetalList;
-}
+     sysMetal: MetalList;
+    }
 
 /**
  * 猜拳类型
@@ -410,7 +415,7 @@ export type RedPacketGot = {
      */
     userMoney: number;
     /**
-     * 领取积分
+     * 领取积分时间
      */
     time: string;
 }
