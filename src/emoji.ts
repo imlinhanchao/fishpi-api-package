@@ -3,10 +3,11 @@ import { request, domain } from './utils';
 class Emoji
 {
     private _apiKey:string = '';
+    private _emojis:Array<string> = [];
 
     constructor(token:string='') {
         if (!token) { return; }
-        this._apiKey = token;
+        this.setToken(token);
     }
 
     /**
@@ -15,6 +16,7 @@ class Emoji
      */
     setToken(token:string) {
         this._apiKey = token;
+        this.get().then(e => this._emojis = e).catch(console.error);
     }
 
     get default() {
@@ -217,7 +219,8 @@ class Emoji
                 throw new Error('登录已失效，请重新登录！');
             }
 
-            return JSON.parse(rsp.data.data);            
+            this._emojis = JSON.parse(rsp.data.data);            
+            return this._emojis.concat([]);
         } catch (e) {
             throw e;
         }
@@ -248,6 +251,29 @@ class Emoji
         } catch (e) {
             throw e;
         }
+    }
+
+    async append(url:string):Promise<Array<string>> {
+        let emojis = this._emojis.length > 0 ? this._emojis : await this.get();
+        if (emojis.indexOf(url) >= 0) throw('表情包已存在');
+        emojis.push(url);
+        await this.set(emojis);
+        this._emojis = emojis;
+        return emojis.concat([]);
+    }
+
+    async remove(url:string):Promise<Array<string>> {
+        let emojis = this._emojis.length > 0 ? this._emojis : await this.get();
+        if (emojis.indexOf(url) < 0) return emojis;
+        emojis.splice(emojis.indexOf(url), 1);
+        await this.set(emojis);
+        this._emojis = emojis;
+        return emojis.concat([]);
+    }
+
+    async exists(url:string):Promise<Boolean> {
+        let emojis = this._emojis.length > 0 ? this._emojis : await this.get();
+        return emojis.indexOf(url) >= 0;
     }
 }
 
