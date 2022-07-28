@@ -16,7 +16,7 @@ class Emoji
      */
     setToken(token:string) {
         this._apiKey = token;
-        this.get().then(e => this._emojis = e).catch(console.error);
+        if(token) this.get().then(e => this._emojis = e).catch(console.error);
     }
 
     get default() {
@@ -255,7 +255,7 @@ class Emoji
 
     async append(url:string):Promise<Array<string>> {
         let emojis = this._emojis.length > 0 ? this._emojis : await this.get();
-        if (emojis.indexOf(url) >= 0) throw('表情包已存在');
+        if (emojis.indexOf(url) >= 0) throw(new Error('表情包已存在'));
         emojis.push(url);
         await this.set(emojis);
         this._emojis = emojis;
