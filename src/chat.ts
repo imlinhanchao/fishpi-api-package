@@ -51,8 +51,9 @@ class Chat {
      */
     async get(param:{ user:string, page: 1, size: 20, autoRead: true }):Promise<ApiResponse<Array<ChatData>>> {
         try {
+            param = Object.assign({ page: 1, size: 20, autoRead: true }, param);
             let rsp = await request({
-                url: `chat/get-message?apiKey=${this._apiKey}&toUser=${param.user}&page=${param.page}&Size=${param.size}`
+                url: `chat/get-message?apiKey=${this._apiKey}&toUser=${param.user}&page=${param.page}&pageSize=${param.size}`
             });
 
             if (rsp.status === 401) { 
@@ -76,7 +77,7 @@ class Chat {
     async markRead(user:string):Promise<ApiResponse<undefined>> {
         try {
             let rsp = await request({
-                url: `chat/get-message?apiKey=${this._apiKey}&fromUser=${user}`
+                url: `chat/mark-as-read?apiKey=${this._apiKey}&fromUser=${user}`
             });
 
             if (rsp.status === 401) { 
@@ -120,7 +121,7 @@ class Chat {
      */
      removeListener(user:string = '', wsCallback:Function) {
         if (wsCallback == null) delete this._wsCallbacks[user];
-        if (this._wsCallbacks[user].indexOf(wsCallback) < 0) return;
+        if (!this._wsCallbacks[user] || this._wsCallbacks[user].indexOf(wsCallback) < 0) return;
         this._wsCallbacks[user].splice(this._wsCallbacks[user].indexOf(wsCallback), 1);
     }
 
@@ -135,6 +136,7 @@ class Chat {
                 this._wsCallbacks[user].push(wsCallback);
             return;
         }
+        this._wsCallbacks[user] = this._wsCallbacks[user] || []
         this._wsCallbacks[user].push(wsCallback);
         this.connect(user);
     }
@@ -160,7 +162,9 @@ class Chat {
                 resolve(this._rwss[user])
             };
             this._rwss[user].onmessage = async (e) => {
-                this._wsCallbacks[user].forEach(call => call(e));
+                let data:any = Object.assign({}, e);
+                data.msg = JSON.parse(e.data);
+                this._wsCallbacks[user].forEach(call => call(data));
             };
             this._rwss[user].onerror = (e) => {
                 reject(e);
