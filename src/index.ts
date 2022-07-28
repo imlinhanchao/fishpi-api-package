@@ -101,8 +101,8 @@ class FishPi {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp.data.data.sysMetal = toMetal(rsp.data.data.sysMetal);
-            rsp.data.data.allMetalOwned= toMetal(rsp.data.data.allMetalOwned);
+            rsp.data.sysMetal = toMetal(rsp.data.sysMetal);
+            rsp.data.allMetalOwned= toMetal(rsp.data.allMetalOwned);
 
             return rsp.data;
         } catch (e) {
