@@ -43,10 +43,11 @@ function analyzeMetalAttr(m:any): Metal {
     if (!m) return m;
     if (typeof m.attr != 'string') return m;
     let attr = m.attr.split('&');
-    m.attr = { };
+    let src = m.attr;
+    m.attr = { src };
     attr.forEach((a:string) => m.attr[a.split('=')[0]] = a.split('=')[1])
-    m.url = `https://fishpi.cn/gen?txt=${m.description}&${m.attr.url}`;
-    m.icon = `https://fishpi.cn/gen?txt=&${m.attr.url}`;
+    m.url = `https://fishpi.cn/gen?txt=${m.description}&url=${m.attr.src}`;
+    m.icon = `https://fishpi.cn/gen?txt=&${m.attr.src}`;
     return m;
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "fishpi",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A Package to use API of fishpi.",
   "main": "./lib/src/index.js",
   "files": [
