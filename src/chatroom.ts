@@ -73,7 +73,7 @@ class ChatRoom {
                     data[i].sysMetal = toMetal(data[i].sysMetal);
                     redpacket = JSON.parse(d.content);
                     if (redpacket.msgType !== 'redPacket') return rsp;
-                    redpacket.recivers = JSON.parse(redpacket.recivers);
+                    if (redpacket.recivers) redpacket.recivers = JSON.parse(redpacket.recivers);
                     data[i].content = redpacket;
                 } catch (e) {}
             })
@@ -107,7 +107,7 @@ class ChatRoom {
                     data[i].sysMetal = toMetal(data[i].sysMetal);
                     redpacket = JSON.parse(d.content);
                     if (redpacket.msgType !== 'redPacket') return rsp;
-                    redpacket.recivers = JSON.parse(redpacket.recivers);
+                    if (redpacket.recivers) redpacket.recivers = JSON.parse(redpacket.recivers);
                     data[i].content = redpacket;
                 } catch (e) {}
             })
