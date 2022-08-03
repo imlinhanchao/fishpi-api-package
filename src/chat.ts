@@ -151,7 +151,7 @@ class Chat {
             if (this._rwss[user]) return resolve(this._rwss[user]);
             this._rwss[user] = new ReconnectingWebSocket(user ? 
                 `wss://${domain}chat-channel?apiKey=${this._apiKey}&toUser=${user}`
-                : `wss://${domain}user-channel`, [], {
+                : `wss://${domain}user-channel?apiKey=${this._apiKey}`, [], {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
                     connectionTimeout: 10000
