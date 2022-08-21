@@ -123,7 +123,7 @@ class User
         if (!this._apiKey) { return 0; }
         try {
             let rsp = await request({
-                url: `api/activity/yesterday-liveness-reward-api?apiKey=${this._apiKey}`
+                url: `activity/yesterday-liveness-reward-api?apiKey=${this._apiKey}`
             });
 
             if (rsp.status === 401) { return 0; }
