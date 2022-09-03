@@ -21,8 +21,9 @@ class Breezemoon
     }
 
     /**
-     * 查询聊天室历史消息
+     * 获取清风明月列表
      * @param page 消息页码
+     * @param size 每页个数
      */
     async list(page=1, size=20):Promise<{code:number,breezemoons:Array<BreezemoonContent>}> {
         try {
@@ -40,7 +41,11 @@ class Breezemoon
         }
     }
 
-    async send(content:string):Promise<ApiResponse<undefined>> {
+    /**
+     * 发送清风明月
+     * @param content 内容
+     */
+     async send(content:string):Promise<ApiResponse<undefined>> {
         try {
             let rsp = await request({
                 url: `breezemoon`,

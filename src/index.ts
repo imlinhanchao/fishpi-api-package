@@ -11,6 +11,7 @@ import Emoji from './emoji';
 import User from './user';
 import Article from './article';
 import Chat from './chat';
+import Breezemoon from './breezemoon';
 
 class FishPi {
     /**
@@ -38,6 +39,10 @@ class FishPi {
      */
     article: Article = new Article();
     /**
+     *  清风明月对象
+     */
+    breezemoon: Breezemoon = new Breezemoon();
+     /**
      * 私聊接口对象
      */
     chat: Chat = new Chat();
@@ -58,6 +63,7 @@ class FishPi {
         this.emoji.setToken(this.apiKey);
         this.account.setToken(this.apiKey);
         this.article.setToken(this.apiKey);
+        this.breezemoon.setToken(this.apiKey);
         this.chat.setToken(this.apiKey);
     }
 
