@@ -31,10 +31,6 @@ class Breezemoon
                 url: `api/breezemoons?p=${page}&size=${size}`
             });
 
-            if (rsp.code != 0) {
-                throw new Error(rsp.msg);
-            }
-
             return rsp.data;
         } catch (e) {
             throw e;
