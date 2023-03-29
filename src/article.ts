@@ -99,11 +99,11 @@ class Article
      * @param id 文章id
      * @returns 文章详情
      */
-    async detail(id:string):Promise<ApiResponse<{ article:ArticleDetail }>> {
+    async detail(id:string, p=1):Promise<ApiResponse<{ article:ArticleDetail }>> {
         let rsp;
         try {
             rsp = await request({
-                url: `article/${id}?apiKey=${this._apiKey}`,
+                url: `article/${id}?apiKey=${this._apiKey}&p=${p}`,
             });
 
             rsp.data.articleAuthor.sysMetal = analyzeMetalAttr(rsp.data.articleAuthor.sysMetal);
