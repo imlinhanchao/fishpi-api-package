@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatContentType, ChatMessageType, ChatRoomMessage, GestureType, RedPacket, RedPacketInfo 
+    ApiResponse, ChatContentType, ChatMessageType, ChatRoomMessage, GestureType, Message, RedPacket, RedPacketInfo 
 } from './typing';
 
 class ChatRoom {
@@ -223,7 +223,7 @@ class ChatRoom {
      * 添加聊天室消息监听函数
      * @param wsCallback 消息监听函数
      */
-     async addListener(wsCallback:Function) {
+     async addListener(wsCallback: (msg: Message) => void, error=(ev: any) => {}, close=(ev: any) => {}) {
         if (this._rws !== null) { 
             if (this._wsCallbacks.indexOf(wsCallback) < 0) 
                 this._wsCallbacks.push(wsCallback);
@@ -231,7 +231,7 @@ class ChatRoom {
         }
         this._wsCallbacks.push(wsCallback);
         this._rws = new ReconnectingWebSocket(
-            `wss://${domain}chat-room-channel?apiKey=${this._apiKey}`, [], {
+            `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`, [], {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
                 connectionTimeout: 10000
@@ -262,6 +262,11 @@ class ChatRoom {
                     data = msg.oId;
                     break;
                 }
+                case 'barrager': {
+                    let { barragerContent, userAvatarURL, userAvatarURL20, userNickname, barragerColor, userName, userAvatarURL210, userAvatarURL48 } = msg;
+                    data = { barragerContent, userAvatarURL, userAvatarURL20, userNickname, barragerColor, userName, userAvatarURL210, userAvatarURL48 };
+                    break;
+                }
                 case 'msg': {
                     let { oId, time, userName, userNickname, userAvatarURL, content, md } = msg;
                     try {
@@ -282,11 +287,12 @@ class ChatRoom {
             }
             this._wsCallbacks.forEach(call => call(Object.assign({ msg: { type: msg.type, data } }, e )));
         };
-        this._rws.onerror = (e) => {
+        this._rws.onerror = error || ((e) => {
             console.error(e);
-        };
-        this._rws.onclose = (e) => {
-        };
+        });
+        this._rws.onclose = close || ((e) => {
+            console.log(e);
+        });
     }
 }
 

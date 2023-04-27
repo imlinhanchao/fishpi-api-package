@@ -1,7 +1,7 @@
 /**
  * Api 响应
  */
-export type ApiResponse<T> = {
+export interface ApiResponse<T> {
     /**
      * 请求状态
      */
@@ -9,7 +9,7 @@ export type ApiResponse<T> = {
     /**
      * 请求状态
      */
-     result?: number;
+    result?: number;
     /**
      * 请求信息
      */
@@ -23,7 +23,7 @@ export type ApiResponse<T> = {
 /**
  * ApiKey 响应
  */
-export type ApiKey = {
+export interface ApiKey {
     /**
      * 请求状态
      */
@@ -211,7 +211,7 @@ export enum DataType {
 /**
  * 登录信息
  */
-export type Account = {
+export interface Account {
     /**
      * 用户名
      */
@@ -224,7 +224,7 @@ export type Account = {
      * 二次验证码，非必填
      */
     mfaCode?: string;
-} 
+}
 
 export enum UserAppRole {
     /**
@@ -240,7 +240,7 @@ export enum UserAppRole {
 /**
  * 用户信息
  */
-export type UserInfo = {
+export interface UserInfo {
     /**
      * 用户 id
      */
@@ -312,13 +312,13 @@ export type UserInfo = {
     /**
      * 用户所有勋章列表，包含未佩戴
      */
-     allMetalOwned: MetalList;
+    allMetalOwned: MetalList;
 
     /**
      * 用户勋章列表
      */
-     sysMetal: MetalList;
-    }
+    sysMetal: MetalList;
+}
 
 /**
  * 猜拳类型
@@ -349,7 +349,7 @@ export enum RedPacketType {
     /**
      * 平分
      */
-    Average =  'average',
+    Average = 'average',
     /**
      * 专属
      */
@@ -367,7 +367,7 @@ export enum RedPacketType {
 /**
  * 红包数据
  */
-export type RedPacket = {
+export interface RedPacket {
     /**
      * 红包类型
      */
@@ -397,7 +397,7 @@ export type RedPacket = {
 /**
  * 红包领取者信息
  */
-export type RedPacketGot = {
+export interface RedPacketGot {
     /**
      * 用户 id
      */
@@ -423,7 +423,7 @@ export type RedPacketGot = {
 /**
  * 红包历史信息
  */
-export type RedPacketMessage = {
+export interface RedPacketMessage {
     /**
      * 消息类型，固定为 redPacket
      */
@@ -451,7 +451,7 @@ export type RedPacketMessage = {
     /**
      * 红包类型
      */
-    type: string;
+    interface: string;
     /**
      * 接收者，专属红包有效
      */
@@ -465,7 +465,7 @@ export type RedPacketMessage = {
 /**
  * 红包信息
  */
-export type RedPacketInfo = {
+export interface RedPacketInfo {
     /**
      * 红包基本信息
      */
@@ -506,9 +506,35 @@ export type RedPacketInfo = {
 }
 
 /**
+ * 红包状态信息
+ */
+export interface RedPacketStatusMsg {
+    /**
+     * 对应红包消息 oId
+     */
+    oId: string,
+    /**
+     * 红包个数
+     */
+    count: number,
+    /**
+     * 已领取数量
+     */
+    got: number,
+    /**
+     * 发送者信息
+     */
+    whoGive: any,
+    /**
+     * 领取者信息
+     */
+    whoGot: Array<any>
+}
+
+/**
  * 徽章信息
  */
-export type Metal = {
+export interface Metal {
     /**
      * 完整徽章地址（含文字）
      */
@@ -524,28 +550,28 @@ export type Metal = {
         /**
          * 徽标图地址
          */
-        url:string;
+        url: string;
         /**
          * 背景色
          */
-        backcolor:string;
+        backcolor: string;
         /**
          * 文字颜色
          */
-        fontcolor:string;
+        fontcolor: string;
     } | string;
     /**
      * 徽章名
      */
-    name:string,
+    name: string,
     /**
      * 徽章描述
      */
-    description:string;
+    description: string;
     /**
      * 徽章数据
      */
-    data:string;
+    data: string;
     /**
      * 是否佩戴
      */
@@ -560,7 +586,7 @@ export type MetalList = Array<Metal>
 /**
  * 聊天室消息
  */
-export type ChatRoomMessage = {
+export interface ChatRoomMessage {
     /**
      * 消息 Id
      */
@@ -624,6 +650,127 @@ export enum ChatMessageType {
 }
 
 /**
+ * 聊天室消息类型
+ */
+export enum ChatRoomMessageType {
+    /**
+     * 在线用户
+     */
+    online = 'online',
+    /**
+     * 话题修改
+     */
+    discussChanged = 'discussChanged',
+    /**
+     * 消息撤回
+     */
+    revoke = 'revoke',
+    /**
+     * 消息
+     */
+    msg = 'msg',
+    /**
+     * 红包
+     */
+    redPacket = 'redPacket',
+    /**
+     * 红包状态
+     */
+    redPacketStatus = 'redPacketStatus',
+    /**
+     * 弹幕
+     */
+    barrager = 'barrager',
+}
+
+/**
+ * 聊天室消息
+ */
+export interface Message {
+    /**
+     * 消息类型，
+     */
+    interface: ChatRoomMessageType | string;
+    /**
+     * 消息内容
+     */
+    data: OnlineMsg | discussMsg | RevokeMsg | ChatMsg | RedPacketMessage | RedPacketStatusMsg | BarragerMsg;
+}
+
+export interface BarragerMsg { 
+    barragerContent: string,
+    userAvatarURL: string,
+    userAvatarURL20: string,
+    userNickname: string,
+    barragerColor: string,
+    userName: string,
+    userAvatarURL210: string,
+    userAvatarURL48 : string,
+}
+
+/**
+* 在线用户消息
+*/
+export type OnlineMsg = Array<{
+    /**
+     * 用户首页
+     */
+    homePage: string,
+    /**
+     * 用户头像
+     */
+    userAvatarURL: string,
+    /**
+     * 用户名
+     */
+    userName: string,
+}>
+
+/**
+* 主题修改消息，主题内容
+*/
+export type discussMsg = string
+
+/**
+* 撤回消息，被撤回消息的 oId
+*/
+export type RevokeMsg = string
+
+/**
+* 聊天消息
+*/
+export interface ChatMsg {
+    /**
+     * 消息 oId
+     */
+    oId: string,
+    /**
+     * 消息发送时间
+     */
+    time: string,
+    /**
+     * 发送者用户名
+     */
+    userName: string,
+    /**
+     * 发送者昵称
+     */
+    userNickname: string,
+    /**
+     * 发送者头像
+     */
+    userAvatarURL: string,
+    /**
+     * 消息内容
+     */
+    content: string,
+    /**
+     * 消息内容 Markdown
+     */
+    md: string
+}
+
+/**
  * @ 用户列表
  */
 export type AtUserList = Array<{
@@ -644,7 +791,7 @@ export type AtUserList = Array<{
 /**
  * 上传文件响应
  */
-export type UploadInfo = {
+export interface UploadInfo {
     /**
      * 上传失败文件
      */
@@ -703,7 +850,7 @@ export type NoticeList = Array<NoticePoint | NoticeComment | NoticeAt | NoticeFo
 /**
  * 通知数
  */
-export type NoticeCount = {
+export interface NoticeCount {
     /**
      * 请求结果，成功为 0
      */
@@ -753,7 +900,7 @@ export type NoticeCount = {
 /**
  * 积分通知
  */
-export type NoticePoint = {
+export interface NoticePoint {
     /**
      * 通知 id
      */
@@ -787,7 +934,7 @@ export type NoticePoint = {
 /**
  * 评论/回帖通知
  */
-export type NoticeComment = {
+export interface NoticeComment {
     /**
      * 通知 id
      */
@@ -833,7 +980,7 @@ export type NoticeComment = {
 /**
  * 提到我通知
  */
-export type NoticeAt = {
+export interface NoticeAt {
     /**
      * 通知 id
      */
@@ -867,10 +1014,10 @@ export type NoticeAt = {
 /**
  * 我关注的通知
  */
- export type NoticeFollow = {
-     /**
-      * 通知 Id
-      */
+export interface NoticeFollow {
+    /**
+     * 通知 Id
+     */
     oId: string;
     /**
      * 文章地址
@@ -933,7 +1080,7 @@ export type NoticeAt = {
 /**
  * 系统通知数据
  */
-export type NoticeSystem = {
+export interface NoticeSystem {
     /**
      * 消息的 oId
      */
@@ -964,7 +1111,7 @@ export type NoticeSystem = {
     createTime: string;
 }
 
-export type BreezemoonContent = {
+export interface BreezemoonContent {
     /**
      * 发布者用户名
      */
@@ -1000,7 +1147,7 @@ export type BreezemoonContent = {
     /**
      * 发布城市（可能为空，请注意做判断）
      */
-    breezemoonCity: string; 
+    breezemoonCity: string;
 }
 
 /**
@@ -1070,7 +1217,7 @@ export enum ReportType {
 /**
  * 举报接口数据
  */
-export type Report = {
+export interface Report {
     /**
      * API Key，登录取得
      */
@@ -1107,7 +1254,7 @@ export enum ArticleType {
 /**
  * 发帖信息
  */
-export type ArticlePost = {
+export interface ArticlePost {
     /**
      * 帖子标题
      */
@@ -1157,7 +1304,7 @@ export type ArticlePost = {
 /**
  * 文章标签
  */
- export type ArticleTag = {
+export interface ArticleTag {
     /**
      * 标签 id
      */
@@ -1278,7 +1425,7 @@ export type CommentAuthor = ArticleAuthor;
 /**
  * 文章作者信息
  */
-export type ArticleAuthor = {
+export interface ArticleAuthor {
     /**
      * 用户是否在线
      */
@@ -1533,7 +1680,7 @@ export type ArticleAuthor = {
     sysMetal?: MetalList,
 }
 
-export type ArticleDetail = {
+export interface ArticleDetail {
     /**
      * 是否在列表展示
      */
@@ -1833,7 +1980,7 @@ export type ArticleDetail = {
     articleNiceComments?: Array<ArticleComment>,
 }
 
-export type ArticleComment = {
+export interface ArticleComment {
     commentNice: boolean,
     commentCreateTimeStr: string,
     commentAuthorId: string,
@@ -1864,6 +2011,16 @@ export type ArticleComment = {
     commentAudioURL: string,
     commentQnAOffered: number,
 }
+
+export interface ArticleList {
+    articles: Array<ArticleDetail>;
+    pagination: {
+        paginationPageCount: number;
+        paginationPageNums: Array<number>;
+    };
+    tag?: ArticleTag;
+};
+
 
 /**
  * 帖子列表查询类型
@@ -1905,7 +2062,7 @@ export enum VoteStatus {
     Unvote = -1
 }
 
-export type CommentPost = {
+export interface CommentPost {
     /**
      * 文章 Id
      */
@@ -1931,7 +2088,7 @@ export type CommentPost = {
 /**
  * 私聊内容
  */
-export type ChatData = {
+export interface ChatData {
     /**
      * 接收者 Id
      */
