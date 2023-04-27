@@ -2,13 +2,16 @@
   "name": "fishpi",
   "version": "0.0.19",
   "description": "A Package to use API of fishpi.",
-  "main": "./lib/src/index.js",
+  "main": "./lib/index.js",
   "files": [
-    "lib"
+    "dist"
   ],
   "scripts": {
     "prebuild": "rm -rf lib",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "npm run build",
+    "test": "NODE_OPTIONS=\"-r ts-node/register --no-warnings\" node  ./test/index.ts",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",
@@ -29,14 +32,15 @@
   },
   "homepage": "https://github.com/imlinhanchao/fishpi-api-package#readme",
   "dependencies": {
-    "axios": "^0.25.0",
     "form-data": "^4.0.0",
     "reconnecting-websocket": "^4.4.0",
     "ws": "^8.4.2"
   },
   "devDependencies": {
     "@types/node": "^12.20.11",
+    "@types/node-fetch": "^2.6.3",
     "@types/ws": "^8.2.2",
+    "node-fetch": "2",
     "ts-node": "^10.2.1",
     "typescript": "^4.2.4"
   },

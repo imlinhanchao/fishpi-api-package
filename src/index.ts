@@ -1,7 +1,5 @@
 import * as crypto from 'crypto';
-import * as fs from 'fs';
-import * as path from 'path';
-import { isBrowse, request, toMetal } from './utils';
+import { isBrowse, request, setDomain, toMetal } from './utils';
 import {
     ApiResponse, Account, UserInfo, AtUserList, UploadInfo, ApiKey
 } from './typing';
@@ -65,6 +63,10 @@ class FishPi {
         this.article.setToken(this.apiKey);
         this.breezemoon.setToken(this.apiKey);
         this.chat.setToken(this.apiKey);
+    }
+
+    async setDomain(domain: string) {
+        setDomain(domain);
     }
 
     /**
@@ -131,7 +133,7 @@ class FishPi {
                 },
             });
 
-            return rsp.data.data;
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -142,14 +144,20 @@ class FishPi {
      * @param files 要上传的文件，如果是在 Node 使用，则传入文件路径数组，若是在浏览器使用，则传入文件对象数组。
      */   
      async upload(files: Array<File|string>):Promise<ApiResponse<UploadInfo>> {
-        let data:any;
+        let data: any;
+
+        if (!isBrowse && !globalThis.FormData)
+            globalThis.FormData = (await import('form-data')).default as any;
+
         if (isBrowse) {
             data = new FormData();
             files.forEach(f => data.append('file[]', f));
         } else {
-            let FormData = (await import('form-data')).default;
             data = new FormData();
-            files.forEach(f => data.append('file[]', fs.readFileSync(f.toString()), path.basename(f.toString())));
+            files.forEach(f => data.append('file[]', 
+                require('fs').readFileSync(f.toString()), 
+                require('path').basename(f.toString())
+            ));
         }
 
         let rsp;
@@ -170,3 +178,5 @@ class FishPi {
 }
 
 export default FishPi;
+
+export * from './typing';

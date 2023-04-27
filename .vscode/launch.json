@@ -9,7 +9,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
-      "args": ["${relativeFile}"],
+      "args": ["${workspaceRoot}/test/index.ts"],
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
       "envFile": "${workspaceFolder}/.env",
       "cwd": "${workspaceRoot}",

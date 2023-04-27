@@ -36,7 +36,7 @@ class Chat {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp.data;
+            rsp = rsp;
 
             return rsp;
         } catch (e) {
@@ -60,7 +60,7 @@ class Chat {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp.data;
+            rsp = rsp;
             if (param.autoRead) this.markRead(param.user);
 
             return rsp;
@@ -84,7 +84,7 @@ class Chat {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp.data;
+            rsp = rsp;
 
             return rsp;
         } catch (e) {
@@ -106,7 +106,7 @@ class Chat {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp.data;
+            rsp = rsp;
 
             return rsp;
         } catch (e) {
@@ -150,8 +150,8 @@ class Chat {
         return new Promise(async (resolve, reject) => {
             if (this._rwss[user]) return resolve(this._rwss[user]);
             this._rwss[user] = new ReconnectingWebSocket(user ? 
-                `wss://${domain}chat-channel?apiKey=${this._apiKey}&toUser=${user}`
-                : `wss://${domain}user-channel?apiKey=${this._apiKey}`, [], {
+                `wss://${domain}/chat-channel?apiKey=${this._apiKey}&toUser=${user}`
+                : `wss://${domain}/user-channel?apiKey=${this._apiKey}`, [], {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
                     connectionTimeout: 10000

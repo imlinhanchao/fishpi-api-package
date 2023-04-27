@@ -31,7 +31,7 @@ class Breezemoon
                 url: `api/breezemoons?p=${page}&size=${size}`
             });
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -52,7 +52,7 @@ class Breezemoon
                 },
             });
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }

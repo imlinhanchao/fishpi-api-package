@@ -32,11 +32,7 @@ class Comment
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }  
@@ -60,11 +56,7 @@ class Comment
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }  
@@ -82,11 +74,7 @@ class Comment
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }    
@@ -104,11 +92,7 @@ class Comment
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }    
@@ -125,11 +109,7 @@ class Comment
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }  

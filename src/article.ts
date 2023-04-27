@@ -1,6 +1,6 @@
 import { analyzeMetalAttr, request, toMetal } from './utils';
 import { 
-    ApiResponse, ArticlePost, ArticleListType, ArticleDetail, VoteStatus
+    ApiResponse, ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList
 } from './typing';
 
 class Article
@@ -37,11 +37,7 @@ class Article
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -65,11 +61,7 @@ class Article
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -81,42 +73,72 @@ class Article
      * @param tag 指定查询标签，可选
      * @returns 文章列表
      */
-    async list(type:ArticleListType, tag?:string):Promise<ApiResponse<{ articles:Array<ArticleDetail> }>> {
+    async list(
+        { type, page = 1, tag }:
+        { type:ArticleListType, page?: number, tag?:string }
+    ):Promise<ApiResponse<ArticleList>> {
         let rsp;
         try {
             rsp = await request({
-                url: `articles/${tag !== undefined ? `tag/${tag}` : 'recent'}${type}?apiKey=${this._apiKey}`,
+                url: `api/articles/${
+                    tag !== undefined ? `tag/${tag}` : 'recent'
+                }${type}?p=${page}&${
+                    this._apiKey ? `apiKey=${this._apiKey}` : ''
+                }`,
             });         
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
     }
+
+    /**
+     * 查询用户文章列表
+     * @param userName 用户名
+     * @returns 文章列表
+     */
+    async userArticles(
+        { userName, page = 1 }: 
+        { userName: string, page: number }
+    ):Promise<ApiResponse<ArticleList>> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `api/articles/${userName}/articles?p=${page}&${
+                    this._apiKey ? `apiKey=${this._apiKey}` : ''
+                }`,
+            });         
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+   }
     
     /**
      * 获取文章详情
      * @param id 文章id
      * @returns 文章详情
      */
-    async detail(id:string, p=1):Promise<ApiResponse<{ article:ArticleDetail }>> {
+    async detail(id:string, p=1):Promise<ApiResponse<{ article: ArticleDetail }>> {
         let rsp;
         try {
             rsp = await request({
-                url: `article/${id}?apiKey=${this._apiKey}&p=${p}`,
+                url: `api/article/${id}?apiKey=${this._apiKey}&p=${p}`,
             });
 
-            rsp.data.articleAuthor.sysMetal = analyzeMetalAttr(rsp.data.articleAuthor.sysMetal);
+            rsp.articleAuthor.sysMetal = analyzeMetalAttr(rsp.data.articleAuthor.sysMetal);
 
             for(let i = 0; i < rsp.data.articleComments.length; i++) {
-                rsp.data.articleComments[i].sysMetal = analyzeMetalAttr(rsp.data.articleComments[i].sysMetal);
+                rsp.articleComments[i].sysMetal = analyzeMetalAttr(rsp.data.articleComments[i].sysMetal);
             }
 
             for(let i = 0; i < rsp.data.articleNiceComments.length; i++) {
-                rsp.data.articleNiceComments[i].sysMetal = analyzeMetalAttr(rsp.data.articleNiceComments[i].sysMetal);
+                rsp.articleNiceComments[i].sysMetal = analyzeMetalAttr(rsp.data.articleNiceComments[i].sysMetal);
             }
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -139,11 +161,7 @@ class Article
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }    
@@ -159,10 +177,6 @@ class Article
                     apiKey: this._apiKey
                 },
             });
-
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
 
             return rsp.data;
         } catch (e) {

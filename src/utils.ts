@@ -1,11 +1,13 @@
-import axios from 'axios';
-import * as https from 'https';
 import { 
     Metal,
     MetalList
 } from './typing';
 
-const domain = 'fishpi.cn/'
+let domain = 'fishpi.cn'
+
+function setDomain(d: string) {
+  domain = d;
+}
 
 async function request(opt:any) {
     let {
@@ -17,21 +19,33 @@ async function request(opt:any) {
 
     if (!isBrowse) {
         headers['User-Agent'] = `Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36`;
-        headers['Referer'] = `https://${domain}`;
+        headers['Referer'] = `https://${domain}/`;
+    }
+
+    let body = undefined;
+
+    if (!isBrowse && !globalThis.FormData)
+        globalThis.FormData = (await import('form-data')).default as any;
+
+    if (data instanceof FormData) {
+        body = data;
+    }
+    else {
+        body = JSON.stringify(data);
     }
 
     let options = {
         method, headers,
-        httpsAgent: new https.Agent({
-            keepAlive: true,
-            rejectUnauthorized: false,
-        }),
-        data
+        body
     };
 
     let rsp:any;
     try {
-        rsp = await axios(`https://${domain}${url}`, options);
+        rsp = fetch(`https://${domain}/${url}`, options)
+            .then((res: Response) => res.text())
+            .then((res: string) => {
+                try { return JSON.parse(res) } catch(err) { return res }
+            });
         return rsp;
     } catch (err) {
         if ((err as any).response.status === 401) { return (err as any).response; }
@@ -46,8 +60,8 @@ function analyzeMetalAttr(m:any): Metal {
     let src = m.attr;
     m.attr = { src };
     attr.forEach((a:string) => m.attr[a.split('=')[0]] = a.split('=')[1])
-    m.url = `https://fishpi.cn/gen?txt=${m.description}&url=${m.attr.src}`;
-    m.icon = `https://fishpi.cn/gen?txt=&${m.attr.src}`;
+    m.url = `https://${domain}/gen?txt=${m.description}&url=${m.attr.src}`;
+    m.icon = `https://${domain}/gen?txt=&${m.attr.src}`;
     return m;
 }
 
@@ -66,5 +80,5 @@ function toMetal(sysMetal:string):MetalList {
 const isBrowse = typeof window !== 'undefined';
 
 export {
-    request, domain, toMetal, analyzeMetalAttr, isBrowse
+    request, domain, toMetal, analyzeMetalAttr, isBrowse, setDomain
 }

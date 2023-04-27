@@ -60,8 +60,6 @@ class ChatRoom {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp.data;
-
             if (rsp.code != 0) {
                 throw new Error(rsp.msg);
             }
@@ -89,12 +87,6 @@ class ChatRoom {
             let rsp = await request({
                 url: `chat-room/getMessage?oId=${data.oId}&mode=${data.mode}&size=${data.size}&type=${data.type}&apiKey=${this._apiKey}`
             });
-
-            if (rsp.status === 401) { 
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            rsp = rsp.data;
 
             if (rsp.code != 0) {
                 throw new Error(rsp.msg);
@@ -133,11 +125,7 @@ class ChatRoom {
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;            
+            return rsp;            
         } catch (e) {
             throw e;
         }
@@ -159,11 +147,7 @@ class ChatRoom {
                 },
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            return rsp.data;            
+            return rsp;            
         } catch (e) {
             throw e;
         }
@@ -180,7 +164,7 @@ class ChatRoom {
                 url: `cr/raw/${oId}`,
             });
 
-            return rsp.data.replace(/<!--.*?-->/g, '');
+            return rsp.replace(/<!--.*?-->/g, '');
         } catch (e) {
             throw e;
         }
@@ -211,11 +195,7 @@ class ChatRoom {
                         },
                     });
         
-                    if (rsp.status === 401) {
-                        return { code:-1, msg: '登录已失效，请重新登录！' };
-                    }
-        
-                    return rsp.data;            
+                    return rsp;            
                 } catch (e) {
                     throw e;
                 }

@@ -1,6 +1,6 @@
 import { request } from './utils';
 import { 
-    ApiResponse, NoticeCount, NoticeList
+    ApiResponse, NoticeCount, NoticeList, NoticeType
 } from './typing';
 
 class Notice
@@ -30,8 +30,8 @@ class Notice
                 url: `notifications/unread/count?apiKey=${this._apiKey}`,
             });
 
-            rsp.data.userNotifyStatus = rsp.data.userNotifyStatus != 0;
-            return rsp.data;
+            rsp.userNotifyStatus = rsp.userNotifyStatus != 0;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -41,14 +41,14 @@ class Notice
      * 获取消息列表
      * @param type 消息类型
      */
-     async list(type:string):Promise<ApiResponse<NoticeList>> {
+     async list(type: NoticeType | string):Promise<ApiResponse<NoticeList>> {
         let rsp;
         try {
             rsp = await request({
                 url: `api/getNotifications?apiKey=${this._apiKey}&type=${type}`,
             });
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -58,14 +58,14 @@ class Notice
      * 已读指定类型消息
      * @param type 消息类型
      */
-     async makeRead(type:string):Promise<ApiResponse<undefined>> {
+     async makeRead(type: NoticeType | string):Promise<ApiResponse<undefined>> {
         let rsp;
         try {
             rsp = await request({
                 url: `notifications/make-read/${type}?apiKey=${this._apiKey}`,
             });
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -81,7 +81,7 @@ class Notice
                 url: `notifications/all-read?apiKey=${this._apiKey}`,
             });
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }

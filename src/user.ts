@@ -29,11 +29,7 @@ class User
                 url: `api/user?apiKey=${this._apiKey}`
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            if(rsp.data.data) rsp.data.data.sysMetal = toMetal(rsp.data.data.sysMetal);
+            if(rsp.data) rsp.data.sysMetal = toMetal(rsp.data.sysMetal);
 
             return rsp.data;
         } catch (e) {
@@ -51,11 +47,7 @@ class User
                 url: `users/emotions?apiKey=${this._apiKey}`,
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            rsp.data.data = Object.keys(rsp.data.data);
+            rsp.data = Object.keys(rsp.data);
             return rsp.data;
         } catch (e) {
             throw e;
@@ -72,9 +64,7 @@ class User
                 url: `user/liveness?apiKey=${this._apiKey}`
             });
 
-            if (rsp.status === 401) { return -1; }
-
-            return rsp.data.liveness || 0;
+            return rsp.liveness || 0;
         } catch (e) {
             throw e;
         }
@@ -90,9 +80,7 @@ class User
                 url: `user/checkedIn?apiKey=${this._apiKey}`
             });
 
-            if (rsp.status === 401) { return false; }
-
-            return rsp.data.checkedIn || false;
+            return rsp.checkedIn || false;
         } catch (e) {
             throw e;
         }
@@ -108,9 +96,7 @@ class User
                 url: `api/activity/is-collected-liveness?apiKey=${this._apiKey}`
             });
 
-            if (rsp.status === 401) { return false; }
-
-            return rsp.data.isCollectedYesterdayLivenessReward || false;
+            return rsp.isCollectedYesterdayLivenessReward || false;
         } catch (e) {
             throw e;
         }
@@ -126,9 +112,7 @@ class User
                 url: `activity/yesterday-liveness-reward-api?apiKey=${this._apiKey}`
             });
 
-            if (rsp.status === 401) { return 0; }
-
-            return rsp.data.sum || 0;
+            return rsp.sum || 0;
         } catch (e) {
             throw e;
         }
