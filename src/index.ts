@@ -88,7 +88,7 @@ class FishPi {
 
             this.setToken(rsp.data.Key);
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -112,7 +112,7 @@ class FishPi {
             rsp.data.sysMetal = toMetal(rsp.data.sysMetal);
             rsp.data.allMetalOwned= toMetal(rsp.data.allMetalOwned);
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -133,7 +133,24 @@ class FishPi {
                 },
             });
 
-            return rsp.data;
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 获取最近注册的20个用户
+     */
+    async recentRegister(): Promise<ApiResponse<Array<{ userNickname: string; userName: string; }>>> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `api/user/recentReg`,
+                method: 'get',
+            });
+
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -169,7 +186,7 @@ class FishPi {
                 headers: isBrowse ? undefined : data.getHeaders()
             });
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
