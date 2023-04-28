@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatContentType, ChatMessageType, ChatRoomMessage, GestureType, Message, RedPacket, RedPacketInfo 
+    ApiResponse, ChatContentType, ChatMessageType, ChatRoomMessage, GestureType, Message, MuteItem, RedPacket, RedPacketInfo 
 } from './typing';
 
 class ChatRoom {
@@ -168,6 +168,23 @@ class ChatRoom {
                     content: `[barrager]{\"color\":\"${color}\",\"content\":\"${msg}\"}[/barrager]`,
                     apiKey: this._apiKey
                 },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 获取禁言中成员列表（思过崖）
+     */
+    async mutes(): Promise<ApiResponse<Array<MuteItem>>> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `chat-room/si-guo-list`,
+                method: 'get',
             });
 
             return rsp;

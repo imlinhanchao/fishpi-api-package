@@ -2138,3 +2138,25 @@ export interface ChatData {
      */
     receiverUserName: string
 }
+
+/**
+ * 禁言用户信息
+ */
+export interface MuteItem {
+    /**
+     * 解除禁言时间戳
+     */
+    time: number;
+    /**
+     * 用户头像
+     */
+    userAvatarURL: string;
+    /**
+     * 用户名
+     */
+    userName: string;
+    /**
+     * 用户昵称
+     */
+    userNickname: string;
+}
