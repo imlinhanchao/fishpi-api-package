@@ -12,6 +12,7 @@
 - 清风明月；
 - 文章读写；
 - 评论点赞；
+- 私聊功能；
 
 ## 安装
 
@@ -55,4 +56,43 @@ await fish.chatroom.redpacket.send({
     recivers: [];
 })
 
+// 私聊历史获取
+let chatHistory = await fish.chat.get({ user: 'username', autoRead: false })
+// 监听私聊新消息
+fishpi.chat.addListener(({ msg: any }) => {
+    switch (msg.command) {
+        // 私聊未读数更新
+        case 'chatUnreadCountRefresh':
+            if(msg.count > 0) {
+                let unreadMsgs = await fishpi.chat.unread();
+            }
+            else this.users.forEach((u, i) => {
+                this.users[i].unread = 0;
+            });
+            break;
+        // 新私聊消息
+        case 'newIdleChatMessage':
+            // msg 就是新的私聊消息
+            console.log(msg.senderUserName, '说：', notice.preview);
+            break;
+        // 有新的消息通知
+        case 'refreshNotification':
+            console.log('你有新消息【', await fishpi.notice.count(), '】')
+            break;
+    }
+});
+// 监听指定用户的私聊消息
+fishpi.chat.addListener(({ msg: ChatData }) => {
+    console.log(msg.senderUserName, '[', msg.time, ']：', msg.content);
+}, 'username');
+// 给指定用户发私聊消息
+fishpi.chat.send('username', 'Hi~');
+```
+
+## 注意事项
+
+API 库使用 `fetch` 做 API 请求，浏览器环境可以直接使用。在 Node 环境需要安装 `node-fetch` 2.x 版本的库。执行如下代码设置 `fetch` 函数：
+```typescript
+import fetch from 'node-fetch'
+globalThis.fetch = fetch as any;
 ```
