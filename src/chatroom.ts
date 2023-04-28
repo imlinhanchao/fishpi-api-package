@@ -154,6 +154,29 @@ class ChatRoom {
     }
 
     /**
+     * 发送一条弹幕
+     * @param msg 消息内容，支持 Markdown
+     * @param color 弹幕颜色
+     */
+    async barrage(msg:string, color:string='#ffffff'):Promise<ApiResponse<undefined>> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `chat-room/send`,
+                method: 'post',
+                data: {
+                    content: `[barrager]{\"color\":\"${color}\",\"content\":\"${msg}\"}[/barrager]`,
+                    apiKey: this._apiKey
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
      * 获取消息原文（比如 Markdown）
      * @param oId 消息 Id
      */
