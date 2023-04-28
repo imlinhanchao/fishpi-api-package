@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatData, 
+    ApiResponse, ChatData, NoticeMsg, 
 } from './typing';
 
 class Chat {
@@ -119,7 +119,7 @@ class Chat {
      * @param user 指定用户消息监听函数，空为新信息监听
      * @param wsCallback 要移除的函数，若为空，则清空消息监听
      */
-     removeListener(user:string = '', wsCallback:Function) {
+     removeListener(user:string = '', wsCallback: ({ msg }: { msg: NoticeMsg }) => void) {
         if (wsCallback == null) delete this._wsCallbacks[user];
         if (!this._wsCallbacks[user] || this._wsCallbacks[user].indexOf(wsCallback) < 0) return;
         this._wsCallbacks[user].splice(this._wsCallbacks[user].indexOf(wsCallback), 1);
