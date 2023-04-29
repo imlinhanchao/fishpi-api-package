@@ -172,7 +172,11 @@ class ChatRoom {
         }
     }
 
-    async barragePay() {
+    /**
+     * 获取弹幕发送价格
+     * @returns 返回价格`cost`与单位`unit`
+     */
+    async barragePay(): Promise<{ cost: number; unit: string }> {
         let rsp;
         try {
             rsp = await request({
@@ -183,7 +187,7 @@ class ChatRoom {
             let mat = rsp.match(/>发送弹幕每次将花费\s*<b>(\d+)<\/b>\s*([^<]*?)<\/div>/);
             if (mat) {
                 return {
-                    cost: mat[1],
+                    cost: parseInt(mat[1]),
                     unit: mat[2]
                 }
             }
