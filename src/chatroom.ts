@@ -172,6 +172,32 @@ class ChatRoom {
         }
     }
 
+    async barragePay() {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `cr?apiKey=${this._apiKey}`,
+                method: 'get'
+            });
+
+            let mat = rsp.match(/>发送弹幕每次将花费\s*<b>(\d+)<\/b>\s*([^<]*?)<\/div>/);
+            if (mat) {
+                return {
+                    cost: mat[1],
+                    unit: mat[2]
+                }
+            }
+
+            return {
+                cost: 20,
+                unit: '积分'
+            };
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+
     /**
      * 获取禁言中成员列表（思过崖）
      */
