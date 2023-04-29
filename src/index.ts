@@ -86,7 +86,7 @@ class FishPi {
                 },
             });
 
-            this.setToken(rsp.data.Key);
+            this.setToken(rsp.Key);
 
             return rsp;
         } catch (e) {
@@ -99,18 +99,14 @@ class FishPi {
      * 查询指定用户信息
      * @param username 用户名
      */   
-     async user(username:string): Promise<ApiResponse<UserInfo>> {
+     async user(username:string): Promise<UserInfo> {
         try {
             let rsp = await request({
-                url: `user/${username}?apiKey=${this.apiKey}`
+                url: `user/${username}${this.apiKey ? `?apiKey=${this.apiKey}` : ''}`
             });
 
-            if (rsp.status === 401) {
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
-            rsp.data.sysMetal = toMetal(rsp.data.sysMetal);
-            rsp.data.allMetalOwned= toMetal(rsp.data.allMetalOwned);
+            rsp.sysMetal = toMetal(rsp.sysMetal);
+            rsp.allMetalOwned= toMetal(rsp.allMetalOwned);
 
             return rsp;
         } catch (e) {

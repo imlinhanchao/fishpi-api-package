@@ -31,7 +31,7 @@ class User
 
             if(rsp.data) rsp.data.sysMetal = toMetal(rsp.data.sysMetal);
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }
@@ -48,7 +48,7 @@ class User
             });
 
             rsp.data = Object.keys(rsp.data);
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }

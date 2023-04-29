@@ -128,14 +128,14 @@ class Article
                 url: `api/article/${id}?apiKey=${this._apiKey}&p=${p}`,
             });
 
-            rsp.articleAuthor.sysMetal = analyzeMetalAttr(rsp.data.articleAuthor.sysMetal);
+            rsp.article.articleAuthor.sysMetal = analyzeMetalAttr(rsp.article.articleAuthor.sysMetal);
 
-            for(let i = 0; i < rsp.data.articleComments.length; i++) {
-                rsp.articleComments[i].sysMetal = analyzeMetalAttr(rsp.data.articleComments[i].sysMetal);
+            for(let i = 0; i < rsp.article.articleComments.length; i++) {
+                rsp.article.articleComments[i].sysMetal = analyzeMetalAttr(rsp.article.articleComments[i].sysMetal);
             }
 
-            for(let i = 0; i < rsp.data.articleNiceComments.length; i++) {
-                rsp.articleNiceComments[i].sysMetal = analyzeMetalAttr(rsp.data.articleNiceComments[i].sysMetal);
+            for(let i = 0; i < rsp.article.articleNiceComments.length; i++) {
+                rsp.article.articleNiceComments[i].sysMetal = analyzeMetalAttr(rsp.article.articleNiceComments[i].sysMetal);
             }
 
             return rsp;

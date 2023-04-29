@@ -56,10 +56,6 @@ class ChatRoom {
                 url: `chat-room/more?page=${page}&type=${type}&apiKey=${this._apiKey}`
             });
 
-            if (rsp.status === 401) { 
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
             if (rsp.code != 0) {
                 throw new Error(rsp.msg);
             }
