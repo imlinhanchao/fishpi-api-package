@@ -2164,7 +2164,7 @@ export interface MuteItem {
 // 通知消息
 export interface NoticeMsg {
     // 通知类型
-    command: 'refreshNotification' | 'chatUnreadCountRefresh' | 'newIdleChatMessage';
+    command: 'refreshNotification' | 'chatUnreadCountRefresh' | 'newIdleChatMessage' | 'warnBroadcast';
     // 通知接收者用户Id
     userId: string;
     // 私聊内容预览，仅 `newIdleChatMessage` 有信息
@@ -2175,4 +2175,8 @@ export interface NoticeMsg {
     senderUserName?: string;
     // 私聊消息数，仅 `chatUnreadCountRefresh` 有信息
     count?: number;
+    // 全局公告内容，仅 `warnBroadcast` 有信息
+    warnBroadcastText?: string;
+    // 全局公告发布者，仅 `warnBroadcast` 有信息
+    who?: string;
 }
