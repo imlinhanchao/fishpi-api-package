@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatData, NoticeMsg, 
+    ApiResponse, ChatData, ChatRevoke, NoticeMsg, 
 } from './typing';
 
 class Chat {
@@ -36,8 +36,6 @@ class Chat {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp;
-
             return rsp;
         } catch (e) {
             throw e;
@@ -60,7 +58,6 @@ class Chat {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp;
             if (param.autoRead) this.markRead(param.user);
 
             return rsp;
@@ -84,8 +81,6 @@ class Chat {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp;
-
             return rsp;
         } catch (e) {
             throw e;
@@ -106,7 +101,17 @@ class Chat {
                 return { code:-1, msg: '登录已失效，请重新登录！' };
             }
 
-            rsp = rsp;
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    revoke(msgId:string): Promise<{ result: number }> {
+        try {
+            let rsp = request({
+                url: `chat/revoke?apiKey=${this._apiKey}&oId=${msgId}`
+            });
 
             return rsp;
         } catch (e) {
@@ -119,7 +124,7 @@ class Chat {
      * @param user 指定用户消息监听函数，空为新信息监听
      * @param wsCallback 要移除的函数，若为空，则清空消息监听
      */
-     removeListener(user:string = '', wsCallback: ({ msg }: { msg: NoticeMsg }) => void) {
+     removeListener(user:string = '', wsCallback: ({ msg }: { msg: NoticeMsg | ChatRevoke | ChatData }) => void) {
         if (wsCallback == null) delete this._wsCallbacks[user];
         if (!this._wsCallbacks[user] || this._wsCallbacks[user].indexOf(wsCallback) < 0) return;
         this._wsCallbacks[user].splice(this._wsCallbacks[user].indexOf(wsCallback), 1);
@@ -130,7 +135,7 @@ class Chat {
      * @param wsCallback 消息监听函数
      * @param user 指定为用户消息监听函数，空为新信息监听
      */
-     async addListener(wsCallback:Function, user:string = '') {
+     async addListener(wsCallback: ({ msg }: { msg: NoticeMsg | ChatRevoke | ChatData }) => void, user:string = '') {
         if (this._rwss[user]) { 
             if (this._wsCallbacks[user].indexOf(wsCallback) < 0) 
                 this._wsCallbacks[user].push(wsCallback);

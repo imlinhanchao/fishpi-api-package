@@ -2139,6 +2139,11 @@ export interface ChatData {
     receiverUserName: string
 }
 
+export interface ChatRevoke {
+    data: string;
+    type: 'revoke';
+}
+
 /**
  * 禁言用户信息
  */
