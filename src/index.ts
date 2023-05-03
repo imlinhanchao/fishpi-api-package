@@ -10,8 +10,9 @@ import User from './user';
 import Article from './article';
 import Chat from './chat';
 import Breezemoon from './breezemoon';
+import { Finger } from './finger';
 
-class FishPi {
+export default class FishPi {
     /**
      *  请求 API 的 API Key
      */
@@ -44,6 +45,8 @@ class FishPi {
      * 私聊接口对象
      */
     chat: Chat = new Chat();
+
+    
 
     /**
      * 构造一个 API 请求对象
@@ -190,6 +193,9 @@ class FishPi {
 
 }
 
-export default FishPi;
-
+export * from './finger';
 export * from './typing';
+
+export function FingerTo(key: string) {
+    return new Finger(key);
+}

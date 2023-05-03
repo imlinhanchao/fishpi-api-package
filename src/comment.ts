@@ -24,7 +24,7 @@ class Comment
         let rsp;
         try {
             rsp = await request({
-                url: `/comment`,
+                url: `comment`,
                 method: 'post',
                 data: {
                     ...data,
@@ -48,7 +48,7 @@ class Comment
         let rsp;
         try {
             rsp = await request({
-                url: `/comment/${id}`,
+                url: `comment/${id}`,
                 method: 'put',
                 data: {
                     ...data,
@@ -66,7 +66,7 @@ class Comment
         let rsp;
         try {
             rsp = await request({
-                url: `/vote/up/comment`,
+                url: `vote/up/comment`,
                 method: 'post',
                 data: {
                     dataId: id,
@@ -84,7 +84,7 @@ class Comment
         let rsp;
         try {
             rsp = await request({
-                url: `/comment/thank`,
+                url: `comment/thank`,
                 method: 'post',
                 data: {
                     apiKey: this._apiKey,
@@ -102,7 +102,7 @@ class Comment
         let rsp;
         try {
             rsp = await request({
-                url: `/comment/${id}/remove`,
+                url: `comment/${id}/remove`,
                 method: 'post',
                 data: {
                     apiKey: this._apiKey

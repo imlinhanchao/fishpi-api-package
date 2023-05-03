@@ -87,6 +87,17 @@ fishpi.chat.addListener(({ msg: ChatData }) => {
 }, 'username');
 // 给指定用户发私聊消息
 fishpi.chat.send('username', 'Hi~');
+
+// 金手指
+import { Finger, FingerTo } from 'fishpi';
+
+// 一次性金手指
+await FingerTo('GoldenFingerKey').queryLatestLoginIP('username')
+
+// 金手指实例
+const finger = new Finger(apiKey);
+await finger.queryLatestLoginIP('username');
+
 ```
 
 ## 注意事项

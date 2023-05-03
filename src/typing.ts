@@ -531,35 +531,30 @@ export interface RedPacketStatusMsg {
     whoGot: Array<any>
 }
 
-/**
- * 徽章信息
- */
-export interface Metal {
+export class MetalAttr {
     /**
-     * 完整徽章地址（含文字）
+     * 徽标图地址
      */
-    url?: string,
+    url: string = '';
     /**
-     * 徽章地址（不含文字）
+     * 背景色
      */
-    icon?: string,
+    backcolor: string = '';
+    /**
+     * 文字颜色
+     */
+    fontcolor: string = '';
+
+    toString() {
+        return `url=${this.url}&backcolor=${this.backcolor}&fontcolor=${this.fontcolor}`;
+    }
+}
+
+export interface MetalBase {
     /**
      * 徽章属性
      */
-    attr: {
-        /**
-         * 徽标图地址
-         */
-        url: string;
-        /**
-         * 背景色
-         */
-        backcolor: string;
-        /**
-         * 文字颜色
-         */
-        fontcolor: string;
-    } | string;
+    attr: MetalAttr | string;
     /**
      * 徽章名
      */
@@ -572,6 +567,21 @@ export interface Metal {
      * 徽章数据
      */
     data: string;
+}
+
+
+/**
+ * 徽章信息
+ */
+export interface Metal extends MetalBase {
+    /**
+     * 完整徽章地址（含文字）
+     */
+    url?: string,
+    /**
+     * 徽章地址（不含文字）
+     */
+    icon?: string,
     /**
      * 是否佩戴
      */

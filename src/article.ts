@@ -1,4 +1,4 @@
-import { analyzeMetalAttr, request, toMetal } from './utils';
+import { analyzeMetalAttr, request } from './utils';
 import { 
     ApiResponse, ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList
 } from './typing';
@@ -153,7 +153,7 @@ class Article
         let rsp;
         try {
             rsp = await request({
-                url: `/vote/up/article`,
+                url: `vote/up/article`,
                 method: 'post',
                 data: {
                     dataId: id,
@@ -171,7 +171,7 @@ class Article
         let rsp;
         try {
             rsp = await request({
-                url: `/article/thank?articleId=${id}`,
+                url: `article/thank?articleId=${id}`,
                 method: 'post',
                 data: {
                     apiKey: this._apiKey

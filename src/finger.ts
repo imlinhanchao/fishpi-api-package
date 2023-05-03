@@ -1,0 +1,205 @@
+import { MetalBase } from './typing';
+import { analyzeMetalAttr, request } from './utils';
+
+export class Finger
+{
+    private goldFingerKey:string = '';
+
+    constructor(key:string) {
+        if (!key) { return; }
+        this.goldFingerKey = key;
+    }
+
+    /**
+     * 设置金手指
+     * @param key 金手指密钥
+     */
+    setFinger(key:string) {
+        this.goldFingerKey = key;
+    }
+
+    /**
+     * 上传摸鱼大闯关关卡数据
+     * @param userName: 用户在摸鱼派的用户名
+     * @param stage: 关卡数
+     * @param time: 通过此关时间（毫秒级时间戳）
+     */
+    async addMofishScore({ userName, stage, time = (new Date().getTime()) }: { userName: string, stage: string, time: number }) {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `api/games/mofish/score`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName, stage, time,
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }  
+    }
+
+    /**
+     * 查询用户最近登录的IP地址
+     * @param userName: 用户在摸鱼派的用户名
+     */
+    async queryLatestLoginIP(userName: string) {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `user/query/latest-login-iP`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName,
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }  
+    }
+
+    /**
+     * 添加勋章
+     * @param userName: 用户在摸鱼派的用户名
+     * @param metal: 勋章信息
+     */
+    async addMetal(userName: string, metal: MetalBase) {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `user/edit/give-metal`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName, ...metal, attr: metal.attr.toString(),
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }  
+    }
+
+    /**
+     * 删除勋章
+     * @param userName: 用户在摸鱼派的用户名
+     * @param name: 勋章名称
+     */
+    async deleteMetal(userName: string, name: string) {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `user/edit/remove-metal`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName, name,
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }  
+    }
+
+    /**
+     * 删除勋章By userId
+     * @param userId: 用户在摸鱼派的用户ID
+     * @param name: 勋章名称
+     */
+    async deleteMetalByUserId(userId: string, name: string) {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `user/edit/remove-metal-by-user-id`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userId, name,
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }  
+    }
+
+    /**
+     * 查询用户背包
+     * @param userName: 用户在摸鱼派的用户名
+     */
+    async queryUserBag(userName: string) {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `user/query/items`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName,
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }  
+    }
+
+    /**
+     * 调整用户背包
+     * @param userName: 用户在摸鱼派的用户名
+     * @param item: 物品名称
+     * @param sum: 物品数量
+     */
+    async editUserBag(userName: string, item: string, sum: number) {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `user/edit/items`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName, item, sum
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }  
+    }
+
+    /**
+     * 调整用户积分
+     * @param userName: 用户在摸鱼派的用户名
+     * @param point: 积分数量
+     * @param memo: 备注
+     */
+    async editUserPoints(userName: string, point: number, memo: string) {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `user/edit/points`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName, point, memo
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }  
+    }
+}
