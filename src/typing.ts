@@ -593,6 +593,65 @@ export interface Metal extends MetalBase {
  */
 export type MetalList = Array<Metal>
 
+export enum ClientType {
+    /**
+     * 网页端
+     */
+    Web = 'Web',
+    /**
+     * PC 端
+     */
+    PC = 'PC',
+    /**
+     * 移动端聊天室
+     */
+    Mobile = 'Mobile',
+    /**
+     * Windows 客户端
+     */
+    Windows = 'Windows',
+    /**
+     * macOS 客户端
+     */
+    macOS = 'macOS',
+    /**
+     * iOS 客户端
+     */
+    iOS = 'iOS',
+    /**
+     * Android 客户端
+     */
+    Android = 'Android',
+    /**
+     * IDEA 插件
+     */
+    IDEA = 'IDEA',
+    /**
+     * Chrome 插件
+     */
+    Chrome = 'Chrome',
+    /**
+     * Edge 插件
+     */
+    Edge = 'Edge',
+    /**
+     * VSCode 插件
+     */
+    VSCode = 'VSCode',
+    /**
+     * Python 插件
+     */
+    Python = 'Python',
+    /**
+     * Golang 插件
+     */
+    Golang = 'Golang',
+    /**
+     * 其他插件
+     */
+    Other = 'Other',
+}
+
 /**
  * 聊天室消息
  */
@@ -617,6 +676,23 @@ export interface ChatRoomMessage {
      * 用户徽章
      */
     sysMetal: MetalList;
+    /**
+     * 消息来源
+     */
+    client: string;
+    /**
+     * 消息来源解析
+     */
+    via: {
+        /**
+         * 消息来源
+         */
+        client: ClientType | string;
+        /**
+         * 消息来源版本
+         */
+        version: string;
+    }
     /**
      * 消息内容
      */
@@ -777,7 +853,24 @@ export interface ChatMsg {
     /**
      * 消息内容 Markdown
      */
-    md: string
+    md: string,
+    /**
+     * 消息来源
+     */
+    client: string,
+    /**
+     * 消息来源解析
+     */
+    via: {
+        /**
+         * 消息来源
+         */
+        client: ClientType | string,
+        /**
+         * 消息来源版本
+         */
+        version: string,
+    },
 }
 
 /**

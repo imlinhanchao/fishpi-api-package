@@ -77,8 +77,14 @@ function toMetal(sysMetal:string):MetalList {
     }
 }
 
+function clientToVia(client: string) {
+    if (!client) return;
+    const via = client.split('/')
+    return { client: via[0], version: via[1] };
+}
+
 const isBrowse = typeof window !== 'undefined';
 
 export {
-    request, domain, toMetal, analyzeMetalAttr, isBrowse, setDomain
+    request, domain, toMetal, analyzeMetalAttr, isBrowse, setDomain, clientToVia
 }

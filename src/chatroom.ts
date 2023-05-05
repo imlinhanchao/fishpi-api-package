@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { request, domain, toMetal, isBrowse } from './utils';
+import { request, domain, toMetal, isBrowse, clientToVia } from './utils';
 import { 
-    ApiResponse, ChatContentType, ChatMessageType, ChatRoomMessage, GestureType, Message, MuteItem, RedPacket, RedPacketInfo 
+    ApiResponse, ChatContentType, ChatMessageType, ClientType, ChatRoomMessage, GestureType, Message, MuteItem, RedPacket, RedPacketInfo 
 } from './typing';
 
 class ChatRoom {
@@ -64,6 +64,7 @@ class ChatRoom {
             let redpacket;
             (rsp.data as Array<any>).forEach((d, i, data) => {
                 try {
+                    data[i].via = clientToVia(data[i].client)
                     data[i].sysMetal = toMetal(data[i].sysMetal);
                     redpacket = JSON.parse(d.content);
                     if (redpacket.msgType !== 'redPacket') return rsp;
@@ -92,6 +93,7 @@ class ChatRoom {
             let redpacket;
             (rsp.data as Array<any>).forEach((d, i, data) => {
                 try {
+                    data[i].via = clientToVia(data[i].client)
                     data[i].sysMetal = toMetal(data[i].sysMetal);
                     redpacket = JSON.parse(d.content);
                     if (redpacket.msgType !== 'redPacket') return rsp;
@@ -131,7 +133,7 @@ class ChatRoom {
      * 发送一条消息
      * @param msg 消息内容，支持 Markdown
      */
-     async send(msg:string):Promise<ApiResponse<undefined>> {
+     async send(msg:string, clientType: ClientType | string = ClientType.Other, version: string = 'Latest'):Promise<ApiResponse<undefined>> {
         let rsp;
         try {
             rsp = await request({
@@ -139,6 +141,7 @@ class ChatRoom {
                 method: 'post',
                 data: {
                     content: msg,
+                    client: `${clientType}/${version}`,
                     apiKey: this._apiKey
                 },
             });
@@ -334,7 +337,7 @@ class ChatRoom {
                     break;
                 }
                 case 'msg': {
-                    let { oId, time, userName, userNickname, userAvatarURL, content, md } = msg;
+                    let { oId, time, userName, userNickname, userAvatarURL, content, md, client } = msg;
                     try {
                         let data = JSON.parse(content);
                         if (data.msgType === 'redPacket') {
@@ -342,7 +345,7 @@ class ChatRoom {
                             msg.type = 'redPacket'
                         }
                     } catch (e) { }
-                    data = { oId, time, userName, userNickname, userAvatarURL, content, md };
+                    data = { oId, time, userName, userNickname, userAvatarURL, content, md, client, via: clientToVia(client) };
                     break;
                 }
                 case 'redPacketStatus': {
