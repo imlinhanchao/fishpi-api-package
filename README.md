@@ -59,11 +59,11 @@ await fish.chatroom.redpacket.send({
 // 私聊历史获取
 let chatHistory = await fish.chat.get({ user: 'username', autoRead: false })
 // 监听私聊新消息
-fishpi.chat.addListener(({ msg: any }) => {
+fishpi.chat.addListener(async ({ msg }: { msg: NoticeMsg }) => {
     switch (msg.command) {
         // 私聊未读数更新
         case 'chatUnreadCountRefresh':
-            if(msg.count > 0) {
+            if(msg.count! > 0) {
                 let unreadMsgs = await fishpi.chat.unread();
             }
             else this.users.forEach((u, i) => {
@@ -73,7 +73,7 @@ fishpi.chat.addListener(({ msg: any }) => {
         // 新私聊消息
         case 'newIdleChatMessage':
             // msg 就是新的私聊消息
-            console.log(msg.senderUserName, '说：', notice.preview);
+            console.log(msg.senderUserName, '说：', msg.preview);
             break;
         // 有新的消息通知
         case 'refreshNotification':
@@ -82,7 +82,7 @@ fishpi.chat.addListener(({ msg: any }) => {
     }
 });
 // 监听指定用户的私聊消息
-fishpi.chat.addListener(({ msg: ChatData }) => {
+fishpi.chat.addListener(({ msg }: { msg: ChatData }) => {
     console.log(msg.senderUserName, '[', msg.time, ']：', msg.content);
 }, 'username');
 // 给指定用户发私聊消息
