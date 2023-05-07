@@ -32,7 +32,9 @@
   },
   "homepage": "https://github.com/imlinhanchao/fishpi-api-package#readme",
   "dependencies": {
+    "@types/js-md5": "^0.7.0",
     "form-data": "^4.0.0",
+    "js-md5": "^0.7.3",
     "reconnecting-websocket": "^4.4.0",
     "ws": "^8.4.2"
   },

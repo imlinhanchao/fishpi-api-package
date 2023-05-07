@@ -1,4 +1,3 @@
-import * as crypto from 'crypto';
 import { isBrowse, request, setDomain, toMetal } from './utils';
 import {
     ApiResponse, Account, UserInfo, AtUserList, UploadInfo, ApiKey
@@ -11,6 +10,7 @@ import Article from './article';
 import Chat from './chat';
 import Breezemoon from './breezemoon';
 import { Finger } from './finger';
+import md5 from 'js-md5'
 
 export default class FishPi {
     /**
@@ -78,13 +78,12 @@ export default class FishPi {
      */   
     async login(data: Account): Promise<ApiKey> {
         try {
-            let md5 = crypto.createHash('md5');
             let rsp = await request({
                 url: 'api/getKey',
                 method: 'post',
                 data: {
                     nameOrEmail: data.username,
-                    userPassword: md5.update(data.passwd).digest('hex'),
+                    userPassword: md5(data.passwd),
                     mfaCode: data.mfaCode
                 },
             });
