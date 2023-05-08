@@ -2273,22 +2273,40 @@ export interface MuteItem {
     userNickname: string;
 }
 
-// 通知消息
+/**
+ * 通知消息
+ */
 export interface NoticeMsg {
-    // 通知类型
+    /**
+     * 通知类型 
+     */ 
     command: 'refreshNotification' | 'chatUnreadCountRefresh' | 'newIdleChatMessage' | 'warnBroadcast';
-    // 通知接收者用户Id
+    /*
+     * 通知接收者用户Id
+     */
     userId: string;
-    // 私聊内容预览，仅 `newIdleChatMessage` 有信息
+    /**
+     * 私聊内容预览，仅 `newIdleChatMessage` 有信息
+     */
     preview?: string;
-    // 私聊发送者头像，仅 `refreshNotification` 有信息
+    /**
+     * 私聊发送者头像，仅 `refreshNotification` 有信息
+     */
     senderAvatar?: string;
-    // 私聊发送者用户名，仅 `refreshNotification` 有信息
+    /**
+     * 私聊发送者用户名，仅 `refreshNotification` 有信息
+     */
     senderUserName?: string;
-    // 私聊消息数，仅 `chatUnreadCountRefresh` 有信息
+    /**
+     * 私聊消息数，仅 `chatUnreadCountRefresh` 有信息
+     */
     count?: number;
-    // 全局公告内容，仅 `warnBroadcast` 有信息
+    /**
+     * 全局公告内容，仅 `warnBroadcast` 有信息
+     */
     warnBroadcastText?: string;
-    // 全局公告发布者，仅 `warnBroadcast` 有信息
+    /**
+     * 全局公告发布者，仅 `warnBroadcast` 有信息
+     */
     who?: string;
 }
