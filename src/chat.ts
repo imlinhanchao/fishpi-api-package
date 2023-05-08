@@ -169,7 +169,7 @@ class Chat {
             this._rwss[user].onmessage = async (e) => {
                 let data:any = Object.assign({}, e);
                 data.msg = JSON.parse(e.data);
-                this._wsCallbacks[user].forEach(call => call(data));
+                (this._wsCallbacks[user] || []).forEach(call => call(data));
             };
             this._rwss[user].onerror = (e) => {
                 reject(e);

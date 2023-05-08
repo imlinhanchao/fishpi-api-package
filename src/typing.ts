@@ -780,7 +780,7 @@ export interface Message {
     /**
      * 消息内容
      */
-    data: OnlineMsg | discussMsg | RevokeMsg | ChatMsg | RedPacketMessage | RedPacketStatusMsg | BarragerMsg;
+    data: OnlineMsg | discussMsg | RevokeMsg | ChatMsg | RedPacketStatusMsg | BarragerMsg;
 }
 
 export interface BarragerMsg { 
@@ -835,6 +835,10 @@ export interface ChatMsg {
      */
     time: string,
     /**
+     * 用户 Id
+     */
+    userOId: string,
+    /**
      * 发送者用户名
      */
     userName: string,
@@ -849,7 +853,7 @@ export interface ChatMsg {
     /**
      * 消息内容
      */
-    content: string,
+    content: string | RedPacketMessage,
     /**
      * 消息内容 Markdown
      */

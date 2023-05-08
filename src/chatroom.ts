@@ -337,7 +337,7 @@ class ChatRoom {
                     break;
                 }
                 case 'msg': {
-                    let { oId, time, userName, userNickname, userAvatarURL, content, md, client } = msg;
+                    let { userOId, oId, time, userName, userNickname, userAvatarURL, content, md, client } = msg;
                     try {
                         let data = JSON.parse(content);
                         if (data.msgType === 'redPacket') {
@@ -345,7 +345,7 @@ class ChatRoom {
                             msg.type = 'redPacket'
                         }
                     } catch (e) { }
-                    data = { oId, time, userName, userNickname, userAvatarURL, content, md, client, via: clientToVia(client) };
+                    data = { userOId, oId, time, userName, userNickname, userAvatarURL, content, md, client, via: clientToVia(client) };
                     break;
                 }
                 case 'redPacketStatus': {
