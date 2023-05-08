@@ -148,7 +148,7 @@ export default class FishPi {
                 method: 'post',
                 data: {
                     userAppRole: data.role,
-                    userPassword: data.passwd,
+                    userPassword: md5(data.passwd),
                     userId: data.userId
                 }
             });
