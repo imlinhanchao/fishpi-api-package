@@ -66,9 +66,6 @@ fishpi.chat.addListener(async ({ msg }: { msg: NoticeMsg }) => {
             if(msg.count! > 0) {
                 let unreadMsgs = await fishpi.chat.unread();
             }
-            else this.users.forEach((u, i) => {
-                this.users[i].unread = 0;
-            });
             break;
         // 新私聊消息
         case 'newIdleChatMessage':
