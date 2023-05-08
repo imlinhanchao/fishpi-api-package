@@ -226,6 +226,50 @@ export interface Account {
     mfaCode?: string;
 }
 
+/**
+ * 注册信息
+ */
+export interface PreRegisterInfo {
+    /**
+     * 用户名
+     */
+    username: string;
+    /**
+     * 手机号
+     */
+    phone: string;
+    /**
+     * 邀请码
+     */
+    invitecode?: string;
+    /**
+     * 验证码
+     */
+    captcha: string;
+}
+
+/**
+ * 注册信息
+ */
+export interface RegisterInfo {
+    /**
+     * 用户角色
+     */
+    role: string;
+    /**
+     * 用户密码
+     */
+    passwd: string;
+    /**
+     * 用户 Id
+     */
+    userId: string;
+    /**
+     * 邀请人用户名
+     */
+    r?: string;
+}
+
 export enum UserAppRole {
     /**
      * 黑客

@@ -1,6 +1,6 @@
 import { isBrowse, request, setDomain, toMetal } from './utils';
 import {
-    ApiResponse, Account, UserInfo, AtUserList, UploadInfo, ApiKey
+    ApiResponse, Account, UserInfo, AtUserList, UploadInfo, ApiKey, PreRegisterInfo, RegisterInfo
 } from './typing';
 import ChatRoom from './chatroom';
 import Notice from './notice';
@@ -96,6 +96,68 @@ export default class FishPi {
         }
     }
 
+    /**
+     * 预注册账号
+     * @param data 用户信息
+     * @returns 
+     */
+    async preRegister(data: PreRegisterInfo): Promise<ApiResponse<undefined>> {
+        try {
+            let rsp = await request({
+                url: 'register',
+                method: 'post',
+                data: {
+                    userName: data.username,
+                    userPhone: data.phone,
+                    invitecode: data.invitecode,
+                    captcha: data.captcha,
+                }
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 验证手机验证码
+     * @param code 验证码
+     * @returns 
+     */
+    async verify(code: string): Promise<{ code: number; userId: number; msg: string }> {
+        try {
+            let rsp = await request({
+                url: 'verify?code='+code,
+                method: 'get'
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 注册账号
+     */
+    async register(data: RegisterInfo): Promise<ApiResponse<undefined>> {
+        try {
+            let rsp = await request({
+                url: `register2${data.r ? `?r=${data.r}` : ''}`,
+                method: 'post',
+                data: {
+                    userAppRole: data.role,
+                    userPassword: data.passwd,
+                    userId: data.userId
+                }
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
 
     /**
      * 查询指定用户信息
