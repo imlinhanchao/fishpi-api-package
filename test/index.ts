@@ -30,7 +30,7 @@ async function test(apiKey: string) {
 
     // chatroom.ts
     console.dir(await fish.chatroom.more());
-    fish.chatroom.addListener((ev:any) => console.dir(ev));
+    fish.chatroom.addListener(({ msg }) => console.dir(msg));
     fish.chatroom.send('试试~');
 }
 

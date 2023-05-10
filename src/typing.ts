@@ -1,3 +1,5 @@
+import { WebSocketEventMap } from "reconnecting-websocket/dist/events";
+
 /**
  * Api 响应
  */
@@ -816,11 +818,11 @@ export enum ChatRoomMessageType {
 /**
  * 聊天室消息
  */
-export interface Message {
+export interface Message extends MessageEvent {
     /**
      * 消息类型，
      */
-    interface: ChatRoomMessageType | string;
+    type: ChatRoomMessageType | string;
     /**
      * 消息内容
      */

@@ -44,7 +44,7 @@ let emojis = await fish.emoji.get();
 let defaultEmoji = fish.emoji.default;
 
 // 监听聊天室消息
-fish.chatroom.addListener((ev:any) => console.dir(ev));
+fish.chatroom.addListener(({ msg }) => console.dir(msg));
 // 向聊天室发送信息（需要登录）
 await fish.chatroom.send('Hello World!');
 // 向聊天室发送红包

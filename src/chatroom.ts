@@ -292,7 +292,7 @@ class ChatRoom {
      * 添加聊天室消息监听函数
      * @param wsCallback 消息监听函数
      */
-     async addListener(wsCallback: (msg: Message) => void, error=(ev: any) => {}, close=(ev: any) => {}) {
+     async addListener(wsCallback: (event: { msg: Message }) => void, error=(ev: any) => {}, close=(ev: any) => {}) {
         if (this._rws !== null) { 
             if (this._wsCallbacks.indexOf(wsCallback) < 0) 
                 this._wsCallbacks.push(wsCallback);
@@ -354,7 +354,7 @@ class ChatRoom {
                     break;
                 }
             }
-            this._wsCallbacks.forEach(call => call(Object.assign({ msg: { type: msg.type, data } }, e )));
+            this._wsCallbacks.forEach(call => call(Object.assign({ ...e, msg: { type: msg.type, data } } )));
         };
         this._rws.onerror = error || ((e) => {
             console.error(e);
