@@ -899,7 +899,7 @@ export interface ChatMsg {
     /**
      * 消息内容
      */
-    content: string | RedPacketMessage,
+    content: string | RedPacket,
     /**
      * 消息内容 Markdown
      */
