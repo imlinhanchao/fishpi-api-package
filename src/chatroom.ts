@@ -48,6 +48,11 @@ class ChatRoom {
         this._apiKey = apiKey;
     }
 
+    /**
+     * 设置当前来源类型
+     * @param client 来源类型
+     * @param version 版本号
+     */
     setVia(client:ClientType | string, version:string) {
         this._client = client;
         this._version = version;
