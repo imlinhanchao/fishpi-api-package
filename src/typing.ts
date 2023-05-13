@@ -693,6 +693,14 @@ export enum ClientType {
      */
     Golang = 'Golang',
     /**
+     * 小冰机器人
+     */
+    IceNet = 'IceNet',
+    /**
+     * 凌机器人
+     */
+    ElvesOnline = 'ElvesOnline',
+    /**
      * 其他插件
      */
     Other = 'Other',
