@@ -193,7 +193,7 @@ export default class FishPi {
                 },
             });
 
-            return rsp;
+            return rsp.data || [];
         } catch (e) {
             throw e;
         }
@@ -202,7 +202,7 @@ export default class FishPi {
     /**
      * 获取最近注册的20个用户
      */
-    async recentRegister(): Promise<ApiResponse<Array<{ userNickname: string; userName: string; }>>> {
+    async recentRegister(): Promise<Array<{ userNickname: string; userName: string; }>> {
         let rsp;
         try {
             rsp = await request({
@@ -210,7 +210,7 @@ export default class FishPi {
                 method: 'get',
             });
 
-            return rsp;
+            return rsp.data || [];
         } catch (e) {
             throw e;
         }
