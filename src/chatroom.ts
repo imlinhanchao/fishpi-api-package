@@ -11,6 +11,8 @@ class ChatRoom {
     private _rws:ReconnectingWebSocket | null = null;
     private _wsTimer:NodeJS.Timeout | null = null;
     private _wsCallbacks:Array<Function> = [];
+    private _client:ClientType | string = ClientType.Other;
+    private _version:string = 'Latest';
 
     constructor(token:string='') {
         if (!token) { return; }
@@ -44,6 +46,11 @@ class ChatRoom {
      */
     setToken(apiKey:string) {
         this._apiKey = apiKey;
+    }
+
+    setVia(client:ClientType | string, version:string) {
+        this._client = client;
+        this._version = version;
     }
 
     /**
@@ -133,7 +140,7 @@ class ChatRoom {
      * 发送一条消息
      * @param msg 消息内容，支持 Markdown
      */
-     async send(msg:string, clientType: ClientType | string = ClientType.Other, version: string = 'Latest'):Promise<ApiResponse<undefined>> {
+     async send(msg:string, clientType?: ClientType | string, version?: string):Promise<ApiResponse<undefined>> {
         let rsp;
         try {
             rsp = await request({
@@ -141,7 +148,7 @@ class ChatRoom {
                 method: 'post',
                 data: {
                     content: msg,
-                    client: `${clientType}/${version}`,
+                    client: `${clientType || this._client}/${version || this._version}`,
                     apiKey: this._apiKey
                 },
             });
