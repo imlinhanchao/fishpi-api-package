@@ -128,14 +128,14 @@ class Article
                 url: `api/article/${id}?apiKey=${this._apiKey}&p=${p}`,
             });
 
-            rsp.article.articleAuthor.sysMetal = analyzeMetalAttr(rsp.article.articleAuthor.sysMetal);
+            rsp.data.article.articleAuthor.sysMetal = analyzeMetalAttr(rsp.data.article.articleAuthor.sysMetal);
 
-            for(let i = 0; i < rsp.article.articleComments.length; i++) {
-                rsp.article.articleComments[i].sysMetal = analyzeMetalAttr(rsp.article.articleComments[i].sysMetal);
+            for(let i = 0; i < rsp.data.article.articleComments.length; i++) {
+                rsp.data.article.articleComments[i].sysMetal = analyzeMetalAttr(rsp.data.article.articleComments[i].sysMetal);
             }
 
-            for(let i = 0; i < rsp.article.articleNiceComments.length; i++) {
-                rsp.article.articleNiceComments[i].sysMetal = analyzeMetalAttr(rsp.article.articleNiceComments[i].sysMetal);
+            for(let i = 0; i < rsp.data.article.articleNiceComments.length; i++) {
+                rsp.data.article.articleNiceComments[i].sysMetal = analyzeMetalAttr(rsp.data.article.articleNiceComments[i].sysMetal);
             }
 
             return rsp;
@@ -147,13 +147,14 @@ class Article
     /**
      * 点赞/取消点赞文章
      * @param id 文章id
+     * @param type 点赞类型
      * @returns 文章点赞状态
      */
-    async vote(id:string):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
+    async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
         let rsp;
         try {
             rsp = await request({
-                url: `vote/up/article`,
+                url: `vote/${type}/article`,
                 method: 'post',
                 data: {
                     dataId: id,
@@ -178,7 +179,7 @@ class Article
                 },
             });
 
-            return rsp.data;
+            return rsp;
         } catch (e) {
             throw e;
         }    

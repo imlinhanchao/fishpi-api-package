@@ -62,11 +62,11 @@ class Comment
         }  
     }
 
-    async vote(id:string):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
+    async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
         let rsp;
         try {
             rsp = await request({
-                url: `vote/up/comment`,
+                url: `vote/${type}/comment`,
                 method: 'post',
                 data: {
                     dataId: id,

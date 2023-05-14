@@ -7,6 +7,7 @@ import Notice from './notice';
 import Emoji from './emoji';
 import User from './user';
 import Article from './article';
+import Comment from './comment';
 import Chat from './chat';
 import Breezemoon from './breezemoon';
 import { Finger } from './finger';
@@ -38,6 +39,10 @@ export default class FishPi {
      */
     article: Article = new Article();
     /**
+     *  评论接口对象
+     */
+    comment: Comment = new Comment();
+    /**
      *  清风明月对象
      */
     breezemoon: Breezemoon = new Breezemoon();
@@ -64,6 +69,7 @@ export default class FishPi {
         this.emoji.setToken(this.apiKey);
         this.account.setToken(this.apiKey);
         this.article.setToken(this.apiKey);
+        this.comment.setToken(this.apiKey);
         this.breezemoon.setToken(this.apiKey);
         this.chat.setToken(this.apiKey);
     }
