@@ -32,10 +32,6 @@ class Chat {
                 url: `chat/get-list?apiKey=${this._apiKey}`
             });
 
-            if (rsp.status === 401) { 
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
             return rsp;
         } catch (e) {
             throw e;
@@ -53,10 +49,6 @@ class Chat {
             let rsp = await request({
                 url: `chat/get-message?apiKey=${this._apiKey}&toUser=${param.user}&page=${param.page}&pageSize=${param.size}`
             });
-
-            if (rsp.status === 401) { 
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
 
             if (param.autoRead) this.markRead(param.user);
 
@@ -77,10 +69,6 @@ class Chat {
                 url: `chat/mark-as-read?apiKey=${this._apiKey}&fromUser=${user}`
             });
 
-            if (rsp.status === 401) { 
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
-
             return rsp;
         } catch (e) {
             throw e;
@@ -96,10 +84,6 @@ class Chat {
             let rsp = await request({
                 url: `chat/has-unread?apiKey=${this._apiKey}`
             });
-
-            if (rsp.status === 401) { 
-                return { code:-1, msg: '登录已失效，请重新登录！' };
-            }
 
             return rsp;
         } catch (e) {

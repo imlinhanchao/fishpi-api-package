@@ -30,7 +30,7 @@ class Notice
                 url: `notifications/unread/count?apiKey=${this._apiKey}`,
             });
 
-            rsp.userNotifyStatus = rsp.userNotifyStatus != 0;
+            rsp.data.userNotifyStatus = rsp.data.userNotifyStatus != 0;
             return rsp;
         } catch (e) {
             throw e;
