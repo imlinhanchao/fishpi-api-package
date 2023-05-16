@@ -298,7 +298,9 @@ class ChatRoom {
      * @param close 关闭回调
      * @returns 返回 Open Event
      */
-    async reconnect({ timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }) {
+    async reconnect(
+        { timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: 
+        { timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
         return new Promise(async (resolve, reject) => {
             if (this._rws) return resolve(this._rws.reconnect());
             this._rws = new ReconnectingWebSocket(
@@ -384,7 +386,8 @@ class ChatRoom {
      * @param error 错误回调
      * @param close 关闭回调
      */
-     async addListener(wsCallback: (event: { msg: Message }) => void, { timeout=10, error=(ev: any) => {}, close=(ev: any) => {}}) {
+     async addListener(wsCallback: (event: { msg: Message }) => void, 
+        { timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: { timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
         if (this._rws !== null) { 
             if (this._wsCallbacks.indexOf(wsCallback) < 0) 
                 this._wsCallbacks.push(wsCallback);
