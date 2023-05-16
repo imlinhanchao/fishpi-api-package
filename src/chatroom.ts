@@ -292,25 +292,9 @@ class ChatRoom {
     }
 
     /**
-     * 移除聊天室消息监听函数
-     * @param wsCallback 消息监听函数
+     * 重连聊天室
      */
-     removeListener(wsCallback:Function) {
-        if (this._wsCallbacks.indexOf(wsCallback) < 0) return;
-        this._wsCallbacks.splice(this._wsCallbacks.indexOf(wsCallback), 1);
-    }
-
-    /**
-     * 添加聊天室消息监听函数
-     * @param wsCallback 消息监听函数
-     */
-     async addListener(wsCallback: (event: { msg: Message }) => void, error=(ev: any) => {}, close=(ev: any) => {}) {
-        if (this._rws !== null) { 
-            if (this._wsCallbacks.indexOf(wsCallback) < 0) 
-                this._wsCallbacks.push(wsCallback);
-            return;
-        }
-        this._wsCallbacks.push(wsCallback);
+    async reconnect(error=(ev: any) => {}, close=(ev: any) => {}) {
         this._rws = new ReconnectingWebSocket(
             `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`, [], {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -374,6 +358,29 @@ class ChatRoom {
         this._rws.onclose = close || ((e) => {
             console.log(e);
         });
+    }
+
+    /**
+     * 移除聊天室消息监听函数
+     * @param wsCallback 消息监听函数
+     */
+     removeListener(wsCallback:Function) {
+        if (this._wsCallbacks.indexOf(wsCallback) < 0) return;
+        this._wsCallbacks.splice(this._wsCallbacks.indexOf(wsCallback), 1);
+    }
+
+    /**
+     * 添加聊天室消息监听函数
+     * @param wsCallback 消息监听函数
+     */
+     async addListener(wsCallback: (event: { msg: Message }) => void, error=(ev: any) => {}, close=(ev: any) => {}) {
+        if (this._rws !== null) { 
+            if (this._wsCallbacks.indexOf(wsCallback) < 0) 
+                this._wsCallbacks.push(wsCallback);
+            return;
+        }
+        this._wsCallbacks.push(wsCallback);
+        await this.reconnect(error, close);
     }
 }
 
