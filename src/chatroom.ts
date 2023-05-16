@@ -293,70 +293,78 @@ class ChatRoom {
 
     /**
      * 重连聊天室
+     * @param timeout 超时时间
+     * @param error 错误回调
+     * @param close 关闭回调
+     * @returns 返回 Open Event
      */
-    async reconnect(error=(ev: any) => {}, close=(ev: any) => {}) {
-        this._rws = new ReconnectingWebSocket(
-            `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`, [], {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
-                connectionTimeout: 10000
-            }
-        );
-
-        this._rws.onopen = (e) => {
-            if(this._wsTimer) { clearInterval(this._wsTimer); }
-            this._wsTimer = setInterval(() => {
-                this._rws?.send('-hb-');
-            }, 1000 * 60 * 3);
-        };
-        this._rws.onmessage = async (e) => {
-            let msg = JSON.parse(e.data);
-            let data:any | null = null;
-            switch(msg.type) {
-                case 'online': {
-                    this._onlines = msg.users;
-                    this._discusse = msg.discussing;
-                    data = this._onlines;
-                    break;
+    async reconnect({ timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }) {
+        return new Promise(async (resolve, reject) => {
+            if (this._rws) return resolve(this._rws.reconnect());
+            this._rws = new ReconnectingWebSocket(
+                `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`, [], {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
+                    connectionTimeout: 1000 * timeout
                 }
-                case 'discussChanged': {
-                    data = msg.newDiscuss;
-                    break;
+            );
+    
+            this._rws.onopen = (e) => {
+                if(this._wsTimer) { clearInterval(this._wsTimer); }
+                this._wsTimer = setInterval(() => {
+                    this._rws?.send('-hb-');
+                }, 1000 * 60 * 3);
+                resolve(e);
+            };
+            this._rws.onmessage = async (e) => {
+                let msg = JSON.parse(e.data);
+                let data:any | null = null;
+                switch(msg.type) {
+                    case 'online': {
+                        this._onlines = msg.users;
+                        this._discusse = msg.discussing;
+                        data = this._onlines;
+                        break;
+                    }
+                    case 'discussChanged': {
+                        data = msg.newDiscuss;
+                        break;
+                    }
+                    case 'revoke': {
+                        data = msg.oId;
+                        break;
+                    }
+                    case 'barrager': {
+                        let { barragerContent, userAvatarURL, userAvatarURL20, userNickname, barragerColor, userName, userAvatarURL210, userAvatarURL48 } = msg;
+                        data = { barragerContent, userAvatarURL, userAvatarURL20, userNickname, barragerColor, userName, userAvatarURL210, userAvatarURL48 };
+                        break;
+                    }
+                    case 'msg': {
+                        let { userOId, oId, time, userName, userNickname, userAvatarURL, content, md, client } = msg;
+                        try {
+                            let data = JSON.parse(content);
+                            if (data.msgType === 'redPacket') {
+                                content = data;
+                                msg.type = 'redPacket'
+                            }
+                        } catch (e) { }
+                        data = { userOId, oId, time, userName, userNickname, userAvatarURL, content, md, client, via: clientToVia(client) };
+                        break;
+                    }
+                    case 'redPacketStatus': {
+                        let { oId, count, got, whoGive, whoGot } = msg;
+                        data = { oId, count, got, whoGive, whoGot };
+                        break;
+                    }
                 }
-                case 'revoke': {
-                    data = msg.oId;
-                    break;
-                }
-                case 'barrager': {
-                    let { barragerContent, userAvatarURL, userAvatarURL20, userNickname, barragerColor, userName, userAvatarURL210, userAvatarURL48 } = msg;
-                    data = { barragerContent, userAvatarURL, userAvatarURL20, userNickname, barragerColor, userName, userAvatarURL210, userAvatarURL48 };
-                    break;
-                }
-                case 'msg': {
-                    let { userOId, oId, time, userName, userNickname, userAvatarURL, content, md, client } = msg;
-                    try {
-                        let data = JSON.parse(content);
-                        if (data.msgType === 'redPacket') {
-                            content = data;
-                            msg.type = 'redPacket'
-                        }
-                    } catch (e) { }
-                    data = { userOId, oId, time, userName, userNickname, userAvatarURL, content, md, client, via: clientToVia(client) };
-                    break;
-                }
-                case 'redPacketStatus': {
-                    let { oId, count, got, whoGive, whoGot } = msg;
-                    data = { oId, count, got, whoGive, whoGot };
-                    break;
-                }
-            }
-            this._wsCallbacks.forEach(call => call(Object.assign({ ...e, msg: { type: msg.type, data } } )));
-        };
-        this._rws.onerror = error || ((e) => {
-            console.error(e);
-        });
-        this._rws.onclose = close || ((e) => {
-            console.log(e);
+                this._wsCallbacks.forEach(call => call(Object.assign({ ...e, msg: { type: msg.type, data } } )));
+            };
+            this._rws.onerror = error || ((e) => {
+                console.error(e);
+            });
+            this._rws.onclose = close || ((e) => {
+                console.log(e);
+            });
         });
     }
 
@@ -372,15 +380,18 @@ class ChatRoom {
     /**
      * 添加聊天室消息监听函数
      * @param wsCallback 消息监听函数
+     * @param timeout 超时时间
+     * @param error 错误回调
+     * @param close 关闭回调
      */
-     async addListener(wsCallback: (event: { msg: Message }) => void, error=(ev: any) => {}, close=(ev: any) => {}) {
+     async addListener(wsCallback: (event: { msg: Message }) => void, { timeout=10, error=(ev: any) => {}, close=(ev: any) => {}}) {
         if (this._rws !== null) { 
             if (this._wsCallbacks.indexOf(wsCallback) < 0) 
                 this._wsCallbacks.push(wsCallback);
             return;
         }
         this._wsCallbacks.push(wsCallback);
-        await this.reconnect(error, close);
+        await this.reconnect({ timeout, error, close });
     }
 }
 
