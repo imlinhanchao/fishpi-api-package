@@ -22,6 +22,7 @@ class User
 
     /**
      * 返回登录账户信息，需要先登录或设置有效的 api key
+     * @returns 用户信息
      */   
      async info(): Promise<ApiResponse<UserInfo>> {
         try {
@@ -39,6 +40,7 @@ class User
 
     /**
      * 查询登录用户常用表情
+     * @returns 常用表情列表
      */   
     async emotions():Promise<ApiResponse<Array<string>>> {
         let rsp;
@@ -56,6 +58,7 @@ class User
 
     /**
      * 查询登录用户当前活跃度，请求频率请控制在 30 ~ 60 秒一次
+     * @returns 活跃度
      */   
     async liveness():Promise<number> {
         if (!this._apiKey) { return 0; }
@@ -72,6 +75,7 @@ class User
 
     /**
      * 检查登录用户是否已经签到
+     * @returns 是否已经签到
      */   
     async isCheckIn():Promise<boolean> {
         if (!this._apiKey) { return false; }
@@ -88,6 +92,7 @@ class User
 
     /**
      * 检查登录用户是否已经领取昨日活跃奖励
+     * @returns 是否已经领取昨日活跃奖励
      */   
     async isCollectedLiveness():Promise<boolean> {
         if (!this._apiKey) { return false; }
@@ -104,6 +109,7 @@ class User
 
     /**
      * 领取昨日活跃度奖励
+     * @returns sum 领取的奖励积分
      */   
     async rewardLiveness():Promise<number> {
         if (!this._apiKey) { return 0; }
@@ -113,6 +119,32 @@ class User
             });
 
             return rsp.sum || 0;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 转账
+     * @param userName 转账目标用户名
+     * @param amount 转账金额
+     * @param memo 转账备注
+     * @returns code 0 为成功，失败则有 msg
+     */
+    async transfer(userName:string, amount:number, memo:string):Promise<{code?: number, msg?: string}> {
+        try {
+            let rsp = await request({
+                method: 'POST',
+                url: `point/transfer`,
+                data: {
+                    apiKey: this._apiKey,
+                    userName,
+                    amount,
+                    memo
+                }
+            });
+
+            return rsp;
         } catch (e) {
             throw e;
         }
