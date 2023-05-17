@@ -1,7 +1,8 @@
-import { analyzeMetalAttr, request } from './utils';
+import { analyzeMetalAttr, domain, isBrowse, request } from './utils';
 import { 
-    ApiResponse, ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList
+    ApiResponse, ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList, ArticleType
 } from './typing';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 class Article
 {
@@ -183,6 +184,52 @@ class Article
         } catch (e) {
             throw e;
         }    
+    }
+
+    async heat(id:string):Promise<number> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `api/article/heat/${id}`,
+                method: 'post',
+                data: {
+                    apiKey: this._apiKey
+                },
+            });
+
+            if (rsp.code !== 0) throw new Error(rsp.msg)
+
+            return rsp.articleHeat;
+        } catch (e) {
+            throw e;
+        }    
+    }
+
+    /**
+     * 添加文章监听器
+     * @param id 文章id
+     * @param type 文章类型
+     * @param callback 监听回调
+     */
+    async addListener({ id, type=0 }: { id: string, type: ArticleType }, callback:(ev: any) => void) {
+        const rws = new ReconnectingWebSocket(
+            `wss://${domain}//article-channel?articleId=${id}&articleType=${type}`, [], {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
+                connectionTimeout: 10000
+            }
+        );
+
+        rws.onopen = (e) => {
+        };
+        rws.onmessage = callback;
+        rws.onerror = ((e) => {
+            console.error(e);
+        });
+        rws.onclose = ((e) => {
+            console.log(e);
+        });
+        return rws
     }
 }
 
