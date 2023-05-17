@@ -204,7 +204,7 @@ export class Finger
     }
 
     /**
-     * 查询用户积分
+     * 查询用户当前活跃度
      * @param userName: 用户在摸鱼派的用户名
      */
     async getLiveness(userName: string): Promise<number> {
@@ -228,7 +228,8 @@ export class Finger
     }
 
     /**
-     * 查询用户昨日活跃度
+     * 查询用户昨日活跃度奖励
+     * @param userName: 用户在摸鱼派的用户名
      */
     async getYesterDayLivenessReward(userName: string): Promise<number> {
         let rsp;
