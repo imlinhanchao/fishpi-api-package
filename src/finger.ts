@@ -202,4 +202,47 @@ export class Finger
             throw e;
         }  
     }
+
+    /**
+     * 查询用户积分
+     * @param userName: 用户在摸鱼派的用户名
+     */
+    async getLiveness(userName: string): Promise<number> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `user/liveness`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName,
+                },
+            });
+
+            return rsp.liveness;
+        } catch (e) {
+            throw e;
+        }  
+    }
+
+    /**
+     * 查询用户昨日活跃度
+     */
+    async getYesterDayLivenessReward(userName: string): Promise<number> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `activity/yesterday-liveness-reward-api`,
+                method: 'post',
+                data: {
+                    goldFingerKey: this.goldFingerKey,
+                    userName,
+                },
+            });
+
+            return rsp.sum;
+        } catch (e) {
+            throw e;
+        }  
+    }
 }
