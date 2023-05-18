@@ -242,11 +242,8 @@ class Article
         let rsp;
         try {
             rsp = await request({
-                url: `api/article/heat/${id}`,
-                method: 'post',
-                data: {
-                    apiKey: this._apiKey
-                },
+                url: `api/article/heat/${id}?apiKey=${this._apiKey}`,
+                method: 'get',
             });
 
             if (rsp.code !== 0) throw new Error(rsp.msg)
