@@ -91,6 +91,10 @@ class Chat {
         }
     }
 
+    /**
+     * 撤回私聊消息
+     * @param msgId 消息 ID
+     */
     revoke(msgId:string): Promise<{ result: number }> {
         try {
             let rsp = request({

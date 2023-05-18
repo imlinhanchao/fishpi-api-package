@@ -20,6 +20,10 @@ class Comment
         this._apiKey = token;
     }
 
+    /**
+     * 发布评论
+     * @param data 评论信息
+     */
     async send(data:CommentPost): Promise<ApiResponse<undefined>> {
         let rsp;
         try {
@@ -38,6 +42,11 @@ class Comment
         }  
     }
 
+    /**
+     * 更新评论
+     * @param id 评论 Id
+     * @param data 评论信息
+     */
     async update(id:string, data:CommentPost): Promise<{ 
         code:number, 
         msg?:string, 
@@ -62,6 +71,11 @@ class Comment
         }  
     }
 
+    /**
+     * 评论点赞
+     * @param id 评论 Id
+     * @param type 点赞类型
+     */
     async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
         let rsp;
         try {
@@ -80,6 +94,10 @@ class Comment
         }    
     }
 
+    /**
+     * 评论感谢
+     * @param id 评论 Id
+     */
     async thank(id:string):Promise<ApiResponse<undefined>> {
         let rsp;
         try {
@@ -98,6 +116,10 @@ class Comment
         }    
     }
 
+    /**
+     * 删除评论
+     * @param id 评论 Id
+     */
     async remove(id:string): Promise<{ code:number, msg?:string, commentId?:string}> {
         let rsp;
         try {

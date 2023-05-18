@@ -1586,6 +1586,25 @@ export enum PublicStatus {
 }
 
 /**
+ * 投票状态，点赞与否
+ */
+export enum VoteStatus {
+    /**
+     * 未投票
+     */
+    normal = -1,
+    /**
+     * 点赞
+     */
+    up = 0,
+    /**
+     * 点踩
+     */
+    down = 1,
+}
+
+
+/**
  * 是否状态
  */
 export enum YesNoStatus {
@@ -1874,6 +1893,9 @@ export interface ArticleAuthor {
     sysMetal?: MetalList,
 }
 
+/**
+ * 文章详情
+ */
 export interface ArticleDetail {
     /**
      * 是否在列表展示
@@ -2068,11 +2090,11 @@ export interface ArticleDetail {
      */
     articleRewardPoint?: number,
     /**
-     * 是否已关注
+     * 是否已收藏
      */
     isFollowing?: boolean,
     /**
-     * 是否关注
+     * 是否已关注
      */
     isWatching?: boolean,
     /**
@@ -2080,7 +2102,7 @@ export interface ArticleDetail {
      */
     isMyArticle?: boolean,
     /**
-     * 是否感谢
+     * 是否已感谢
      */
     thanked?: boolean,
     /**
@@ -2108,9 +2130,9 @@ export interface ArticleDetail {
      */
     articleImg1URL?: string,
     /**
-     * 文章点赞数
+     * 文章点赞状态
      */
-    articleVote?: number,
+    articleVote?: VoteStatus,
     /**
      * 文章随机数
      */
@@ -2174,44 +2196,146 @@ export interface ArticleDetail {
     articleNiceComments?: Array<ArticleComment>,
 }
 
+/**
+ * 文章评论
+ */
 export interface ArticleComment {
+    /**
+     * 是否优评
+     */
     commentNice: boolean,
+    /**
+     * 评论创建时间字符串
+     */
     commentCreateTimeStr: string,
+    /**
+     * 评论作者 id
+     */
     commentAuthorId: string,
+    /**
+     * 评论分数
+     */
     commentScore: number,
+    /**
+     * 评论创建时间
+     */
     commentCreateTime: string,
+    /**
+     * 评论作者头像
+     */
     commentAuthorURL: string,
-    commentVote: number,
+    /**
+     * 评论状态
+     */
+    commentVote: VoteStatus,
+    /**
+     * 评论引用数
+     */
     commentRevisionCount: number,
+    /**
+     * 评论经过时间
+     */
     timeAgo: string,
+    /**
+     * 回复评论 id
+     */
     commentOriginalCommentId: string,
+    /**
+     * 徽章
+     */
     sysMetal: MetalList,
+    /**
+     * 点赞数
+     */
     commentGoodCnt: number,
+    /**
+     * 评论是否可见
+     */
     commentVisible: YesNoStatus,
+    /**
+     * 文章 id
+     */
     commentOnArticleId: string,
+    /**
+     * 评论感谢数
+     */
     rewardedCnt: number,
+    /**
+     * 评论地址
+     */
     commentSharpURL: string,
+    /**
+     * 是否匿名
+     */
     commentAnonymous: boolean,
+    /**
+     * 评论回复数
+     */
     commentReplyCnt: number,
+    /**
+     * 评论 id
+     */
     oId: string,
+    /**
+     * 评论内容
+     */
     commentContent: string,
-    commentStatus: number,
+    /**
+     * 评论状态
+     */
+    commentStatus: ArticleStatus,
+    /**
+     * 评论作者
+     */
     commenter: CommentAuthor,
+    /**
+     * 评论作者用户名
+     */
     commentAuthorName: string,
+    /**
+     * 评论感谢数
+     */
     commentThankCnt: number,
+    /**
+     * 评论点踩数
+     */
     commentBadCnt: number,
+    /**
+     * 是否已感谢
+     */
     rewarded: boolean,
+    /**
+     * 评论作者头像
+     */
     commentAuthorThumbnailURL: string,
+    /**
+     * 评论音频地址
+     */
     commentAudioURL: string,
+    /**
+     * 评论是否采纳，1 表示采纳
+     */
     commentQnAOffered: number,
 }
 
+/**
+ * 文章列表
+ */
 export interface ArticleList {
+    /**
+     * 文章列表
+     */
     articles: Array<ArticleDetail>;
+    /**
+     * 分页信息
+     */
     pagination: {
         paginationPageCount: number;
         paginationPageNums: Array<number>;
     };
+    /**
+     * 标签信息，仅查询标签下文章列表有效
+     */
     tag?: ArticleTag;
 };
 
@@ -2333,7 +2457,13 @@ export interface ChatData {
     receiverUserName: string
 }
 
+/**
+ * 私聊撤回消息
+ */
 export interface ChatRevoke {
+    /**
+     * 消息 Id
+     */
     data: string;
     type: 'revoke';
 }
