@@ -358,6 +358,10 @@ class ChatRoom {
                         data = { oId, count, got, whoGive, whoGot };
                         break;
                     }
+                    case 'customMessage': {
+                        data = msg.message;
+                        break;
+                    }
                 }
                 this._wsCallbacks.forEach(call => call(Object.assign({ ...e, msg: { type: msg.type, data } } )));
             };
@@ -371,10 +375,17 @@ class ChatRoom {
     }
 
     /**
+     * 清除聊天室监听
+     */
+    clearListener() {
+        this._wsCallbacks = [];
+    }
+
+    /**
      * 移除聊天室消息监听函数
      * @param wsCallback 消息监听函数
      */
-     removeListener(wsCallback:Function) {
+     removeListener(wsCallback: (event: { msg: Message }) => void) {
         if (this._wsCallbacks.indexOf(wsCallback) < 0) return;
         this._wsCallbacks.splice(this._wsCallbacks.indexOf(wsCallback), 1);
     }

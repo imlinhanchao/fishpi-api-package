@@ -821,6 +821,10 @@ export enum ChatRoomMessageType {
      * 弹幕
      */
     barrager = 'barrager',
+    /**
+     * 自定义消息
+     */
+    custom = 'customMessage',
 }
 
 /**
@@ -834,23 +838,52 @@ export interface Message extends MessageEvent {
     /**
      * 消息内容
      */
-    data: OnlineMsg | discussMsg | RevokeMsg | ChatMsg | RedPacketStatusMsg | BarragerMsg;
+    data: OnlineMsg | discussMsg | RevokeMsg | ChatMsg | RedPacketStatusMsg | BarragerMsg | CustomMsg;
 }
 
-export interface BarragerMsg { 
-    barragerContent: string,
-    userAvatarURL: string,
-    userAvatarURL20: string,
-    userNickname: string,
-    barragerColor: string,
+export type CustomMsg = string;
+
+/**
+ * 弹幕消息
+ */
+export interface BarragerMsg {
+    /**
+     * 用户名
+     */
     userName: string,
-    userAvatarURL210: string,
+    /**
+     * 用户昵称
+     */
+    userNickname: string,
+    /**
+     * 弹幕内容
+     */
+    barragerContent: string,
+    /**
+     * 弹幕颜色
+     */
+    barragerColor: string,
+    /**
+     * 用户头像地址
+     */
+    userAvatarURL: string,
+    /**
+     * 用户头像地址 20x20
+     */
+    userAvatarURL20: string,
+    /**
+     * 用户头像地址 48x48
+     */
     userAvatarURL48 : string,
+    /**
+     * 用户头像地址 210x210
+     */
+    userAvatarURL210: string,
 }
 
 /**
-* 在线用户消息
-*/
+ * 在线用户消息
+ */
 export type OnlineMsg = Array<{
     /**
      * 用户首页
@@ -867,18 +900,18 @@ export type OnlineMsg = Array<{
 }>
 
 /**
-* 主题修改消息，主题内容
-*/
+ * 主题修改消息，主题内容
+ */
 export type discussMsg = string
 
 /**
-* 撤回消息，被撤回消息的 oId
-*/
+ * 撤回消息，被撤回消息的 oId
+ */
 export type RevokeMsg = string
 
 /**
-* 聊天消息
-*/
+ * 聊天消息
+ */
 export interface ChatMsg {
     /**
      * 消息 oId
