@@ -169,6 +169,10 @@ class Article
         }    
     }
 
+    /**
+     * 感谢文章
+     * @param id 文章id
+     */
     async thank(id:string):Promise<ApiResponse<undefined>> {
         let rsp;
         try {
@@ -186,6 +190,54 @@ class Article
         }    
     }
 
+    /**
+     * 收藏/取消收藏文章
+     * @param id 文章id
+     */
+    async follow(followingId:string):Promise<ApiResponse<undefined>> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `follow/article`,
+                method: 'post',
+                data: {
+                    apiKey: this._apiKey,
+                    followingId
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }    
+    }
+
+    /**
+     * 关注/取消关注文章
+     * @param id 文章id
+     */
+    async watch(followingId:string):Promise<ApiResponse<undefined>> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `follow/article-watch`,
+                method: 'post',
+                data: {
+                    apiKey: this._apiKey,
+                    followingId
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }    
+    }
+
+    /**
+     * 获取文章在线人数
+     * @param id 文章id
+     */
     async heat(id:string):Promise<number> {
         let rsp;
         try {
