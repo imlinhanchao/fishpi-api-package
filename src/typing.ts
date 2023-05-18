@@ -1413,10 +1413,6 @@ export enum ReportType {
  */
 export interface Report {
     /**
-     * API Key，登录取得
-     */
-    apiKey: string;
-    /**
      * 举报对象的 oId
      */
     reportDataId: string;
