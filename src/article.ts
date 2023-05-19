@@ -246,7 +246,7 @@ class Article
                 method: 'get',
             });
 
-            if (rsp.code !== 0) throw new Error(rsp.msg)
+            if (rsp.code) throw new Error(rsp.msg)
 
             return rsp.articleHeat;
         } catch (e) {
@@ -262,7 +262,7 @@ class Article
      */
     async addListener({ id, type=0 }: { id: string, type: ArticleType }, callback:(ev: any) => void) {
         const rws = new ReconnectingWebSocket(
-            `wss://${domain}//article-channel?articleId=${id}&articleType=${type}`, [], {
+            `wss://${domain}/article-channel?articleId=${id}&articleType=${type}`, [], {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
                 connectionTimeout: 10000
