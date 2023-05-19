@@ -262,7 +262,7 @@ class Article
      */
     async addListener({ id, type=0 }: { id: string, type: ArticleType }, callback:(ev: any) => void) {
         const rws = new ReconnectingWebSocket(
-            `wss://${domain}/article-channel?articleId=${id}&articleType=${type}`, [], {
+            `wss://${domain}/article-channel?articleId=${id}&articleType=${type}&apiKey=${this._apiKey}`, [], {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
                 connectionTimeout: 10000
