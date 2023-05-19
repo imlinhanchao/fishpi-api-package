@@ -2523,3 +2523,34 @@ export interface NoticeMsg {
      */
     who?: string;
 }
+
+export interface Log {
+    /**
+     * 操作时间
+     */
+    key1: string;
+    /**
+     * IP
+     */
+    key2: string;
+    /**
+     * 内容
+     */
+    data: string;
+    /**
+     * 是否公开
+     */
+    public: boolean;
+    /**
+     * 操作类型
+     */
+    key3: string;
+    /**
+     * 唯一标识
+     */
+    oId: string;
+    /**
+     * 类型
+     */
+    type: string;
+}

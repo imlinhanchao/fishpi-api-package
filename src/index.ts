@@ -1,6 +1,6 @@
 import { isBrowse, request, setDomain, toMetal } from './utils';
 import {
-    ApiResponse, Account, UserInfo, AtUserList, UploadInfo, ApiKey, PreRegisterInfo, RegisterInfo, Report
+    ApiResponse, Account, UserInfo, AtUserList, UploadInfo, ApiKey, PreRegisterInfo, RegisterInfo, Report, Log
 } from './typing';
 import ChatRoom from './chatroom';
 import Notice from './notice';
@@ -235,6 +235,27 @@ export default class FishPi {
                     apiKey: this.apiKey,
                     ...data,
                 }
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 获取操作日志
+     * @param page 页码
+     * @param pageSize 每页数量
+     */
+    async log({
+        page = 1,
+        pageSize = 30,
+    }): Promise<ApiResponse<Log[]>> {
+        try {
+            let rsp = await request({
+                url: `/logs/more?page=${page}&pageSize=${pageSize}`,
+                method: 'get',
             });
 
             return rsp;
