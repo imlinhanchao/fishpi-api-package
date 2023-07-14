@@ -43,7 +43,7 @@ class Chat {
      * @param param 消息参数
      * @returns 私聊消息列表
      */
-    async get(param:{ user:string, page: 1, size: 20, autoRead: true }):Promise<ApiResponse<Array<ChatData>>> {
+    async get(param:{ user:string, page?: number, size?: number, autoRead?: boolean }):Promise<ApiResponse<Array<ChatData>>> {
         try {
             param = Object.assign({ page: 1, size: 20, autoRead: true }, param);
             let rsp = await request({
