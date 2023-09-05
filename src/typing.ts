@@ -596,23 +596,23 @@ export class MetalAttr {
     }
 }
 
-export interface MetalBase {
+export class MetalBase {
     /**
      * 徽章属性
      */
-    attr: MetalAttr | string;
+    attr: MetalAttr | string = new MetalAttr();
     /**
      * 徽章名
      */
-    name: string,
+    name: string = '';
     /**
      * 徽章描述
      */
-    description: string;
+    description: string = '';
     /**
      * 徽章数据
      */
-    data: string;
+    data: string = '';
 }
 
 
@@ -2074,7 +2074,7 @@ export interface ArticleDetail {
      */
     articleCommentable?: boolean,
     /**
-     * 是否开启打赏
+     * 是否已打赏
      */
     rewarded?: boolean,
     /**
