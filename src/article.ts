@@ -214,7 +214,7 @@ class Article
 
     /**
      * 关注/取消关注文章
-     * @param id 文章id
+     * @param followingId 文章id
      */
     async watch(followingId:string):Promise<ApiResponse<undefined>> {
         let rsp;
@@ -225,6 +225,27 @@ class Article
                 data: {
                     apiKey: this._apiKey,
                     followingId
+                },
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }    
+    }
+
+    /**
+     * 打赏文章
+     * @param id 文章id
+     */
+    async reward(id:string):Promise<ApiResponse<undefined>> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `article/reward?articleId=${id}`,
+                method: 'post',
+                data: {
+                    apiKey: this._apiKey,
                 },
             });
 
