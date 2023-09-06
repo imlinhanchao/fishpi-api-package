@@ -1,4 +1,5 @@
 import { WebSocketEventMap } from "reconnecting-websocket/dist/events";
+import { domain } from "./utils";
 
 /**
  * Api 响应
@@ -613,6 +614,14 @@ export class MetalBase {
      * 徽章数据
      */
     data: string = '';
+
+    toUrl(includeText: boolean = true) {
+        let url = `https://${domain}/gen?txt=${this.description}&${this.attr.toString()}`;
+        if (!includeText) {
+            url = `https://${domain}/gen?txt=&${this.attr.toString()}`;
+        }
+        return url;
+    }
 }
 
 
