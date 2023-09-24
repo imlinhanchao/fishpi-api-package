@@ -615,6 +615,14 @@ export class MetalBase {
      */
     data: string = '';
 
+    constructor(metal?: MetalBase) {
+        if (!metal) { return; }
+        this.attr = Object.assign(new MetalAttr(), metal.attr);
+        this.name = metal.name;
+        this.description = metal.description;
+        this.data = metal.data;
+    }
+
     toUrl(includeText: boolean = true) {
         let url = `https://${domain}/gen?txt=${this.description}&${this.attr.toString()}`;
         if (!includeText) {

@@ -71,6 +71,7 @@ export class Finger
      */
     async addMetal(userName: string, metal: MetalBase) {
         let rsp;
+        metal = new MetalBase(metal);
         try {
             rsp = await request({
                 url: `user/edit/give-metal`,
