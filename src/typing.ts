@@ -624,7 +624,7 @@ export class MetalBase {
     }
 
     toUrl(includeText: boolean = true) {
-        let url = `https://${domain}/gen?txt=${this.description}&${this.attr.toString()}`;
+        let url = `https://${domain}/gen?txt=${this.name}&${this.attr.toString()}`;
         if (!includeText) {
             url = `https://${domain}/gen?txt=&${this.attr.toString()}`;
         }
