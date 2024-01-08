@@ -1,45 +1,5 @@
-import { WebSocketEventMap } from "reconnecting-websocket/dist/events";
 import { domain } from "./utils";
 
-/**
- * Api 响应
- */
-export interface ApiResponse<T> {
-    /**
-     * 请求状态
-     */
-    code?: number;
-    /**
-     * 请求状态
-     */
-    result?: number;
-    /**
-     * 请求信息
-     */
-    msg?: string;
-    /**
-     * 请求数据
-     */
-    data?: T
-}
-
-/**
- * ApiKey 响应
- */
-export interface ApiKey {
-    /**
-     * 请求状态
-     */
-    code: number;
-    /**
-     * 消息
-     */
-    msg: string;
-    /**
-     * Api Key
-     */
-    Key: string
-}
 
 /**
  * 数据类型
@@ -214,33 +174,33 @@ export enum DataType {
 /**
  * 登录信息
  */
-export interface Account {
+export class Account {
     /**
      * 用户名
      */
-    username: string;
+    username: string = '';
     /**
      * 密码
      */
-    passwd: string;
+    passwd: string = '';
     /**
      * 二次验证码，非必填
      */
-    mfaCode?: string;
+    mfaCode?: string = '';
 }
 
 /**
  * 注册信息
  */
-export interface PreRegisterInfo {
+export class PreRegisterInfo {
     /**
      * 用户名
      */
-    username: string;
+    username: string = '';
     /**
      * 手机号
      */
-    phone: string;
+    phone: string = '';
     /**
      * 邀请码
      */
@@ -248,25 +208,25 @@ export interface PreRegisterInfo {
     /**
      * 验证码
      */
-    captcha: string;
+    captcha: string = '';
 }
 
 /**
  * 注册信息
  */
-export interface RegisterInfo {
+export class RegisterInfo {
     /**
      * 用户角色
      */
-    role: string;
+    role: string = '';
     /**
      * 用户密码
      */
-    passwd: string;
+    passwd: string = '';
     /**
      * 用户 Id
      */
-    userId: string;
+    userId: string = '';
     /**
      * 邀请人用户名
      */
@@ -287,84 +247,84 @@ export enum UserAppRole {
 /**
  * 用户信息
  */
-export interface UserInfo {
+export class UserInfo {
     /**
      * 用户 id
      */
-    oId: string;
+    oId: string = '';
     /**
      * 用户编号
      */
-    userNo: string;
+    userNo: string = '';
     /**
      * 用户名
      */
-    userName: string;
+    userName: string = '';
     /**
      * 昵称
      */
-    userNickname: string;
+    userNickname: string = '';
     /**
      * 首页地址
      */
-    userURL: string;
+    userURL: string = '';
     /**
      * 所在城市
      */
-    userCity: string,
+    userCity: string = '';
     /**
      * 签名
      */
-    userIntro: string;
+    userIntro: string = '';
     /**
      * 是否在线
      */
-    userOnlineFlag: boolean,
+    userOnlineFlag: boolean = false;
     /**
      * 用户积分
      */
-    userPoint: number;
+    userPoint: number = 0;
     /**
      * 用户组
      */
-    userRole: string;
+    userRole: string = '';
     /**
      * 角色
      */
-    userAppRole: UserAppRole;
+    userAppRole: UserAppRole = UserAppRole.Hack;
     /**
      * 用户头像地址
      */
-    userAvatarURL: string;
+    userAvatarURL: string = '';
     /**
      * 用户卡片背景
      */
-    cardBg: string;
+    cardBg: string = '';
     /**
      * 用户关注数
      */
-    followingUserCount: number;
+    followingUserCount: number = 0;
     /**
      * 用户被关注数
      */
-    followerCount: number;
+    followerCount: number = 0;
     /**
      * 在线时长，单位分钟
      */
-    onlineMinute: number;
+    onlineMinute: number = 0;
     /**
      * 是否已经关注，未登录则为 `hide`
      */
-    canFollow: 'hide' | 'no' | 'yes';
+    canFollow: 'hide' | 'no' | 'yes' = 'hide';
     /**
      * 用户所有勋章列表，包含未佩戴
      */
-    allMetalOwned: MetalList;
+    allMetalOwned: MetalList = [];
 
     /**
      * 用户勋章列表
      */
-    sysMetal: MetalList;
+    sysMetal: MetalList = [];
 }
 
 /**
@@ -414,23 +374,23 @@ export enum RedPacketType {
 /**
  * 红包数据
  */
-export interface RedPacket {
+export class RedPacket {
     /**
      * 红包类型
      */
-    type: RedPacketType;
+    type: RedPacketType= RedPacketType.Random;
     /**
      * 红包积分
      */
-    money: number;
+    money: number = 32;
     /**
      * 红包个数
      */
-    count: number;
+    count: number = 1;
     /**
      * 祝福语
      */
-    msg: string;
+    msg: string = '摸鱼者，事竟成';
     /**
      * 接收者，专属红包有效
      */
@@ -444,138 +404,140 @@ export interface RedPacket {
 /**
  * 红包领取者信息
  */
-export interface RedPacketGot {
+export class RedPacketGot {
     /**
      * 用户 id
      */
-    userId: string;
+    userId: string = '';
     /**
      * 用户名
      */
-    userName: string;
+    userName: string = '';
     /**
      * 用户头像
      */
-    avatar: string;
+    avatar: string = '';
     /**
      * 领取到的积分
      */
-    userMoney: number;
+    userMoney: number = 0;
     /**
      * 领取积分时间
      */
-    time: string;
+    time: string = '';
 }
 
 /**
  * 红包历史信息
  */
-export interface RedPacketMessage {
+export class RedPacketMessage {
     /**
      * 消息类型，固定为 redPacket
      */
-    msgType: string;
+    msgType: string = '';
     /**
      * 红包数
      */
-    count: number;
+    count: number = 0;
     /**
      * 领取数
      */
-    got: number;
+    got: number = 0;
     /**
      * 内含积分
      */
-    money: number;
+    money: number = 0;
     /**
      * 祝福语
      */
-    msg: string;
+    msg: string = '';
     /**
      * 发送者 id
      */
-    senderId: string;
+    senderId: string = '';
     /**
      * 红包类型
      */
-    interface: string;
+    interface: string = '';
     /**
      * 接收者，专属红包有效
      */
-    recivers: Array<string>;
+    recivers: Array<string> = [];
     /**
      * 已领取者列表
      */
-    who: Array<RedPacketGot>
+    who: Array<RedPacketGot> = [];
+}
+
+export class RedPacketBase {
+    /**
+     * 数量
+     */
+    count: number = 0;
+    /**
+     * 猜拳类型
+     */
+    gesture?: GestureType;
+    /**
+     * 领取数
+     */
+    got: number = 0;
+    /**
+     * 祝福语
+     */
+    msg: string = '';
+    /**
+     * 发送者用户名
+     */
+    userName: string = '';
+    /**
+     * 用户头像
+     */
+    userAvatarURL: string = '';
 }
 
 /**
  * 红包信息
  */
-export interface RedPacketInfo {
+export class RedPacketInfo {
     /**
      * 红包基本信息
      */
-    info: {
-        /**
-         * 数量
-         */
-        count: number;
-        /**
-         * 猜拳类型
-         */
-        gesture?: GestureType;
-        /**
-         * 领取数
-         */
-        got: number;
-        /**
-         * 祝福语
-         */
-        msg: string;
-        /**
-         * 发送者用户名
-         */
-        userName: string;
-        /**
-         * 用户头像
-         */
-        userAvatarURL: string;
-    };
+    info = new RedPacketBase();
     /**
      * 接收者，专属红包有效
      */
-    recivers: Array<string>;
+    recivers: Array<string> = [];
     /**
      * 已领取者列表
      */
-    who: Array<RedPacketGot>;
+    who: Array<RedPacketGot> = [];
 }
 
 /**
  * 红包状态信息
  */
-export interface RedPacketStatusMsg {
+export class RedPacketStatusMsg {
     /**
      * 对应红包消息 oId
      */
-    oId: string,
+    oId: string = '';
     /**
      * 红包个数
      */
-    count: number,
+    count: number = 0;
     /**
      * 已领取数量
      */
-    got: number,
+    got: number = 0;
     /**
      * 发送者信息
      */
-    whoGive: any,
+    whoGive: any;
     /**
      * 领取者信息
      */
-    whoGot: Array<any>
+    whoGot: Array<any> = []
 }
 
 export class MetalAttr {
@@ -636,19 +598,19 @@ export class MetalBase {
 /**
  * 徽章信息
  */
-export interface Metal extends MetalBase {
+export class Metal extends MetalBase {
     /**
      * 完整徽章地址（含文字）
      */
-    url?: string,
+    url?: string;
     /**
      * 徽章地址（不含文字）
      */
-    icon?: string,
+    icon?: string;
     /**
      * 是否佩戴
      */
-    enable: boolean;
+    enable: boolean = true;
 }
 
 /**
@@ -723,55 +685,57 @@ export enum ClientType {
     Other = 'Other',
 }
 
-/**
- * 聊天室消息
- */
-export interface ChatRoomMessage {
-    /**
-     * 消息 Id
-     */
-    oId: string;
-    /**
-     * 发送者用户名
-     */
-    userName: string;
-    /**
-     * 用户昵称
-     */
-    userNickname: string;
-    /**
-     * 用户头像
-     */
-    userAvatarURL: string;
-    /**
-     * 用户徽章
-     */
-    sysMetal: MetalList;
+export class ChatRoomSource {
     /**
      * 消息来源
      */
-    client: string;
+    client: ClientType | string = ClientType.Other;
+    /**
+     * 消息来源版本
+     */
+    version: string = 'latest';
+}
+
+/**
+ * 聊天室消息
+ */
+export class ChatRoomMessage {
+    /**
+     * 消息 Id
+     */
+    oId: string = '';
+    /**
+     * 发送者用户名
+     */
+    userName: string = '';
+    /**
+     * 用户昵称
+     */
+    userNickname: string = '';
+    /**
+     * 用户头像
+     */
+    userAvatarURL: string = '';
+    /**
+     * 用户徽章
+     */
+    sysMetal: MetalList = [];
+    /**
+     * 消息来源
+     */
+    client: string = '';
     /**
      * 消息来源解析
      */
-    via: {
-        /**
-         * 消息来源
-         */
-        client: ClientType | string;
-        /**
-         * 消息来源版本
-         */
-        version: string;
-    }
+    via = new ChatRoomSource();
     /**
      * 消息内容
      */
-    content: string | RedPacketMessage;
+    content: string | RedPacketMessage = new RedPacketMessage();
     /**
      * 发送时间
      */
-    time: string;
+    time: string = '';
 }
 
 /**
@@ -863,58 +827,60 @@ export type CustomMsg = string;
 /**
  * 弹幕消息
  */
-export interface BarragerMsg {
+export class BarragerMsg {
     /**
      * 用户名
      */
-    userName: string,
+    userName: string = '';
     /**
      * 用户昵称
      */
-    userNickname: string,
+    userNickname: string = '';
     /**
      * 弹幕内容
      */
-    barragerContent: string,
+    barragerContent: string = '';
     /**
      * 弹幕颜色
      */
-    barragerColor: string,
+    barragerColor: string = '';
     /**
      * 用户头像地址
      */
-    userAvatarURL: string,
+    userAvatarURL: string = '';
     /**
      * 用户头像地址 20x20
      */
-    userAvatarURL20: string,
+    userAvatarURL20: string = '';
     /**
      * 用户头像地址 48x48
      */
-    userAvatarURL48 : string,
+    userAvatarURL48: string = '';
     /**
      * 用户头像地址 210x210
      */
-    userAvatarURL210: string,
+    userAvatarURL210: string = '';
+}
+
+export class OnlineInfo {
+    /**
+     * 用户首页
+     */
+    homePage: string = '';
+    /**
+     * 用户头像
+     */
+    userAvatarURL: string = '';
+    /**
+     * 用户名
+     */
+    userName: string = '';
 }
 
 /**
  * 在线用户消息
  */
-export type OnlineMsg = Array<{
-    /**
-     * 用户首页
-     */
-    homePage: string,
-    /**
-     * 用户头像
-     */
-    userAvatarURL: string,
-    /**
-     * 用户名
-     */
-    userName: string,
-}>
+export type OnlineMsg = OnlineInfo[]
 
 /**
  * 主题修改消息，主题内容
@@ -929,84 +895,77 @@ export type RevokeMsg = string
 /**
  * 聊天消息
  */
-export interface ChatMsg {
+export class ChatMsg {
     /**
      * 消息 oId
      */
-    oId: string,
+    oId: string = '';
     /**
      * 消息发送时间
      */
-    time: string,
+    time: string = '';
     /**
      * 用户 Id
      */
-    userOId: string,
+    userOId: string = '';
     /**
      * 发送者用户名
      */
-    userName: string,
+    userName: string = '';
     /**
      * 发送者昵称
      */
-    userNickname: string,
+    userNickname: string = '';
     /**
      * 发送者头像
      */
-    userAvatarURL: string,
+    userAvatarURL: string = '';
     /**
      * 消息内容
      */
-    content: string | RedPacket,
+    content: string | RedPacket = '';
     /**
      * 消息内容 Markdown
      */
-    md: string,
+    md: string = ''
     /**
      * 消息来源
      */
-    client: string,
+    client: string = '';
     /**
      * 消息来源解析
      */
-    via: {
-        /**
-         * 消息来源
-         */
-        client: ClientType | string,
-        /**
-         * 消息来源版本
-         */
-        version: string,
-    },
+    via = new ChatRoomSource();
+}
+
+export class AtUser {
+    /**
+     * 用户名
+     */
+    userName: string = '';
+    /**
+     * 用户头像
+     */
+    userAvatarURL: string = '';
+    /**
+     * 全小写用户名
+     */
+    userNameLowerCase: string = '';
 }
 
 /**
  * @ 用户列表
  */
-export type AtUserList = Array<{
-    /**
-     * 用户名
-     */
-    userName: string;
-    /**
-     * 用户头像
-     */
-    userAvatarURL: string;
-    /**
-     * 全小写用户名
-     */
-    userNameLowerCase: string;
-}>
+export type AtUserList = AtUser[];
 
 /**
  * 上传文件响应
  */
-export interface UploadInfo {
+export class UploadInfo {
     /**
      * 上传失败文件
      */
-    errFiles: Array<string>;
+    errFiles: Array<string> = [];
     /**
      * 上传成功文件
      */
@@ -1015,7 +974,7 @@ export interface UploadInfo {
          * Key 是文件名，value 为地址
          */
         [key: string]: string;
-    }
+    } = {};
 }
 
 
@@ -1061,304 +1020,300 @@ export type NoticeList = Array<NoticePoint | NoticeComment | NoticeAt | NoticeFo
 /**
  * 通知数
  */
-export interface NoticeCount {
-    /**
-     * 请求结果，成功为 0
-     */
-    code: number;
+export class  NoticeCount {
     /**
      * 用户是否启用 Web 通知
      */
-    userNotifyStatus: boolean;
+    userNotifyStatus: boolean = true;
     /**
      * 未读通知数
      */
-    unreadNotificationCnt: number;
+    unreadNotificationCnt: number = 0;
     /**
      * 未读回复通知数
      */
-    unreadReplyNotificationCnt: number;
+    unreadReplyNotificationCnt: number = 0;
     /**
      * 未读积分通知数
      */
-    unreadPointNotificationCnt: number;
+    unreadPointNotificationCnt: number = 0;
     /**
      * 未读 @ 通知数
      */
-    unreadAtNotificationCnt: number;
+    unreadAtNotificationCnt: number = 0;
     /**
      * 未读同城通知数
      */
-    unreadBroadcastNotificationCnt: number;
+    unreadBroadcastNotificationCnt: number = 0;
     /**
      * 未读系统通知数
      */
-    unreadSysAnnounceNotificationCnt: number;
+    unreadSysAnnounceNotificationCnt: number = 0;
     /**
      * 未读关注者通知数
      */
-    unreadNewFollowerNotificationCnt: number;
+    unreadNewFollowerNotificationCnt: number = 0;
     /**
      * 未读关注通知数
      */
-    unreadFollowingNotificationCnt: number;
+    unreadFollowingNotificationCnt: number = 0;
     /**
      * 未读评论通知数
      */
-    unreadCommentedNotificationCnt: number;
+    unreadCommentedNotificationCnt: number = 0;
 }
 
 /**
  * 积分通知
  */
-export interface NoticePoint {
+export class NoticePoint {
     /**
      * 通知 id
      */
-    oId: string;
+    oId: string = '';
     /**
      * 数据 id
      */
-    dataId: string;
+    dataId: string = '';
     /**
      * 用户 id
      */
-    userId: string;
+    userId: string = '';
     /**
      * 数据类型
      */
-    dataType: DataType;
+    dataType: DataType = DataType.at;
     /**
      * 通知描述
      */
-    description: string;
+    description: string = '';
     /**
      * 是否已读
      */
-    hasRead: boolean
+    hasRead: boolean = true;
     /**
      * 创建日期
      */
-    createTime: string;
+    createTime: string = '';
 }
 
 /**
  * 评论/回帖通知
  */
-export interface NoticeComment {
+export class NoticeComment {
     /**
      * 通知 id
      */
-    oId: string;
+    oId: string = '';
     /**
      * 文章标题
      */
-    commentArticleTitle: string;
+    commentArticleTitle: string = '';
     /**
      * 文章作者
      */
-    commentAuthorName: string;
+    commentAuthorName: string = '';
     /**
      * 作者头像
      */
-    commentAuthorThumbnailURL: string;
+    commentAuthorThumbnailURL: string = '';
     /**
      * 文章类型
      */
-    commentArticleType: number;
+    commentArticleType: number = 0;
     /**
      * 是否精选
      */
-    commentArticlePerfect: number;
+    commentArticlePerfect: number = 0;
     /**
      * 评论内容
      */
-    commentContent: string;
+    commentContent: string = '';
     /**
      * 评论地址
      */
-    commentSharpURL: string;
+    commentSharpURL: string = '';
     /**
      * 是否已读
      */
-    hasRead: boolean;
+    hasRead: boolean = true;
     /**
      * 评论时间
      */
-    commentCreateTime: string;
+    commentCreateTime: string = '';
 }
 
 /**
  * 提到我通知
  */
-export interface NoticeAt {
+export class NoticeAt {
     /**
      * 通知 id
      */
-    oId: string;
+    oId: string = '';
     /**
      * 数据类型
      */
-    dataType: DataType;
+    dataType: DataType = DataType.at;
     /**
      * 用户名
      */
-    userName: string;
+    userName: string = '';
     /**
      * 用户头像
      */
-    userAvatarURL: string;
+    userAvatarURL: string = '';
     /**
      * 通知内容
      */
-    content: string;
+    content: string = '';
     /**
      * 是否已读
      */
-    hasRead: boolean;
+    hasRead: boolean = true;
     /**
      * 创建时间
      */
-    createTime: string;
+    createTime: string = '';
 }
 
 /**
  * 我关注的通知
  */
-export interface NoticeFollow {
+export class NoticeFollow {
     /**
      * 通知 Id
      */
-    oId: string;
+    oId: string = '';
     /**
      * 文章地址
      */
-    url: string;
+    url: string = '';
     /**
      * 数据类型
      */
-    dataType: DataType;
+    dataType: DataType = DataType.at;
     /**
      * 文章标题
      */
-    articleTitle: string;
+    articleTitle: string = '';
     /**
      * 作者
      */
-    authorName: string;
+    authorName: string = '';
     /**
      * 通知内容
      */
-    content: string;
+    content: string = '';
     /**
      * 是否评论
      */
-    isComment: boolean;
+    isComment: boolean = false;
     /**
      * 作者头像
      */
-    thumbnailURL: string;
+    thumbnailURL: string = '';
     /**
      * 文章评论数
      */
-    articleCommentCount: number;
+    articleCommentCount: number = 0;
     /**
      * 是否精选
      */
-    articlePerfect: number;
+    articlePerfect: number = 0;
     /**
      * 文章标签列表
      */
-    articleTagObjs: Array<ArticleTag>;
+    articleTagObjs: Array<ArticleTag> = [];
     /**
      * 文章标签
      */
-    articleTags: string;
+    articleTags: string = '';
     /**
      * 文章类型
      */
-    articleType: number;
+    articleType: number = 0;
     /**
      * 是否已读
      */
-    hasRead: boolean;
+    hasRead: boolean = true;
     /**
      * 通知创建时间
      */
-    createTime: string;
+    createTime: string = '';
 }
 
 /**
  * 系统通知数据
  */
-export interface NoticeSystem {
+export class NoticeSystem {
     /**
      * 消息的 oId
      */
-    oId: string;
+    oId: string = '';
     /**
      * 用户 Id
      */
-    userId: string;
+    userId: string = '';
     /**
      * 数据 Id
      */
-    dataId: string;
+    dataId: string = '';
     /**
      * 数据类型
      */
-    dataType: DataType;
+    dataType: DataType = DataType.at;
     /**
      * 消息描述
      */
-    description: string;
+    description: string = '';
     /**
      * 是否已读
      */
-    hasRead: boolean;
+    hasRead: boolean = true;
     /**
      * 创建日期
      */
-    createTime: string;
+    createTime: string = '';
 }
 
-export interface BreezemoonContent {
+export class BreezemoonContent {
     /**
      * 发布者用户名
      */
-    breezemoonAuthorName: string;
+    breezemoonAuthorName: string = '';
     /**
      * 最后更新时间
      */
-    breezemoonUpdated: string;
+    breezemoonUpdated: string = '';
     /**
      * 清风明月ID
      */
-    oId: string;
+    oId: string = '';
     /**
      * 创建时间
      */
-    breezemoonCreated: string;
+    breezemoonCreated: string = '';
     /**
      * 发布者头像URL
      */
-    breezemoonAuthorThumbnailURL48: string;
+    breezemoonAuthorThumbnailURL48: string = '';
     /**
      * 发布时间
      */
-    timeAgo: string;
+    timeAgo: string = '';
     /**
      * 正文
      */
-    breezemoonContent: string;
+    breezemoonContent: string = '';
     /**
      * 创建时间
      */
-    breezemoonCreateTime: string;
+    breezemoonCreateTime: string = '';
     /**
      * 发布城市（可能为空，请注意做判断）
      */
-    breezemoonCity: string;
+    breezemoonCity: string = '';
 }
 
 /**
@@ -1428,23 +1383,23 @@ export enum ReportType {
 /**
  * 举报接口数据
  */
-export interface Report {
+export class Report {
     /**
      * 举报对象的 oId
      */
-    reportDataId: string;
+    reportDataId: string = '';
     /**
      * 举报数据的类型
      */
-    reportDataType: ReportDataType;
+    reportDataType: ReportDataType = ReportDataType.article;
     /**
      * 举报的类型
      */
-    reportType: ReportType;
+    reportType: ReportType = ReportType.advertise;
     /**
      * 举报的理由
      */
-    reportMemo: string;
+    reportMemo: string = '';
 }
 
 /**
@@ -1461,133 +1416,133 @@ export enum ArticleType {
 /**
  * 发帖信息
  */
-export interface ArticlePost {
+export class ArticlePost {
     /**
      * 帖子标题
      */
-    articleTitle: string;
+    articleTitle: string = '';
     /**
      * 帖子内容
      */
-    articleContent: string;
+    articleContent: string = '';
     /**
      * 帖子标签
      */
-    articleTags: string;
+    articleTags: string = '';
     /**
      * 是否允许评论
      */
-    articleCommentable: boolean,
+    articleCommentable: boolean = true;
     /**
      * 是否帖子关注者
      */
-    articleNotifyFollowers: boolean,
+    articleNotifyFollowers: boolean = false;
     /**
      * 帖子类型
      */
-    articleType: ArticleType,
+    articleType: ArticleType = ArticleType.Normal;
     /**
      * 是否在列表展示
      */
-    articleShowInList: 0 | 1,
+    articleShowInList: 0 | 1 = 1;
     /**
      * 打赏内容
      */
-    articleRewardContent?: string,
+    articleRewardContent?: string;
     /**
      * 打赏积分
      */
-    articleRewardPoint?: string,
+    articleRewardPoint?: string;
     /**
      * 是否匿名
      */
-    articleAnonymous?: boolean,
+    articleAnonymous?: boolean;
     /**
      * 提问悬赏积分
      */
-    articleQnAOfferPoint?: number
+    articleQnAOfferPoint?: number;
 }
 
 /**
  * 文章标签
  */
-export interface ArticleTag {
+export class ArticleTag {
     /**
      * 标签 id
      */
-    oId: string;
+    oId: string = '';
     /**
      * 标签名
      */
-    tagTitle: string;
+    tagTitle: string = '';
     /**
      * 标签描述
      */
-    tagDescription: string;
+    tagDescription: string = '';
     /**
      * icon 地址
      */
-    tagIconPath: string;
+    tagIconPath: string = '';
     /**
      * 标签地址
      */
-    tagURI: string;
+    tagURI: string = '';
     /**
      * 标签自定义 CSS
      */
-    tagCSS: string;
+    tagCSS: string = '';
     /**
      * 反对数
      */
-    tagBadCnt: number;
+    tagBadCnt: number = 0;
     /**
      * 标签回帖计数
      */
-    tagCommentCount: number;
+    tagCommentCount: number = 0;
     /**
      * 关注数
      */
-    tagFollowerCount: number;
+    tagFollowerCount: number = 0;
     /**
      * 点赞数
      */
-    tagGoodCnt: number;
+    tagGoodCnt: number = 0;
     /**
      * 引用计数
      */
-    tagReferenceCount: number;
+    tagReferenceCount: number = 0;
     /**
      * 标签相关链接计数
      */
-    tagLinkCount: number;
+    tagLinkCount: number = 0;
     /**
      * 标签 SEO 描述
      */
-    tagSeoDesc: string;
+    tagSeoDesc: string = '';
     /**
      * 标签关键字
      */
-    tagSeoKeywords: string;
+    tagSeoKeywords: string = '';
     /**
      * 标签 SEO 标题
      */
-    tagSeoTitle: string;
+    tagSeoTitle: string = '';
     /**
      * 标签广告内容
      */
-    tagAd: string;
+    tagAd: string = '';
     /**
      * 是否展示广告
      */
-    tagShowSideAd: 0 | 1;
+    tagShowSideAd: 0 | 1 = 0;
     /**
      * 标签状态
      */
-    tagStatus: 0 | 1;
+    tagStatus: 0 | 1 = 0;
     /**
      * 标签随机数
      */
-    tagRandomDouble: number;
+    tagRandomDouble: number = 0;
 }
 
 /**
@@ -1644,708 +1599,702 @@ export enum ArticleStatus {
 }
 
 /**
- * 评论者信息
- */
-export type CommentAuthor = ArticleAuthor;
-
-/**
  * 文章作者信息
  */
-export interface ArticleAuthor {
+export class Author {
     /**
      * 用户是否在线
      */
-    userOnlineFlag: boolean,
+    userOnlineFlag: boolean = false;
     /**
      * 用户在线时长
      */
-    onlineMinute: number,
+    onlineMinute: number = 0;
     /**
      * 是否公开积分列表
      */
-    userPointStatus: PublicStatus,
+    userPointStatus: PublicStatus = PublicStatus.Public;
     /**
      * 是否公开关注者列表
      */
-    userFollowerStatus: PublicStatus,
+    userFollowerStatus: PublicStatus = PublicStatus.Public;
     /**
      * 用户完成新手指引步数
      */
-    userGuideStep: number,
+    userGuideStep: number = 0;
     /**
      * 是否公开在线状态
      */
-    userOnlineStatus: PublicStatus,
+    userOnlineStatus: PublicStatus = PublicStatus.Public;
     /**
      * 上次登录日期
      */
-    userCurrentCheckinStreakStart: number,
+    userCurrentCheckinStreakStart: number = 0;
     /**
      * 是否聊天室图片自动模糊
      */
-    chatRoomPictureStatus: boolean,
+    chatRoomPictureStatus: boolean = false;
     /**
      * 用户标签
      */
-    userTags: string,
+    userTags: string = '';
     /**
      * 是否公开回帖列表
      */
-    userCommentStatus: PublicStatus,
+    userCommentStatus: PublicStatus = PublicStatus.Public;
     /**
      * 用户时区
      */
-    userTimezone: string,
+    userTimezone: string = '';
     /**
      * 用户个人主页
      */
-    userURL: string,
+    userURL: string = '';
     /**
      * 是否启用站外链接跳转页面
      */
-    userForwardPageStatus: boolean,
+    userForwardPageStatus: boolean = false;
     /**
      * 是否公开 UA 信息
      */
-    userUAStatus: PublicStatus,
+    userUAStatus: PublicStatus = PublicStatus.Public;
     /**
      * 自定义首页跳转地址
      */
-    userIndexRedirectURL: string,
+    userIndexRedirectURL: string = '';
     /**
      * 最近发帖时间
      */
-    userLatestArticleTime: number,
+    userLatestArticleTime: number = 0;
     /**
      * 标签计数
      */
-    userTagCount: number,
+    userTagCount: number = 0;
     /**
      * 昵称
      */
-    userNickname: string,
+    userNickname: string = '';
     /**
      * 回帖浏览模式
      */
-    userListViewMode: 0 | 1,
+    userListViewMode: 0 | 1 = 0;
     /**
      * 最长连续签到
      */
-    userLongestCheckinStreak: number,
+    userLongestCheckinStreak: number = 0;
     /**
      * 用户头像类型
      */
-    userAvatarType: number,
+    userAvatarType: number = 0;
     /**
      * 用户确认邮件发送时间
      */
-    userSubMailSendTime: number,
+    userSubMailSendTime: number = 0;
     /**
      * 用户最后更新时间
      */
-    userUpdateTime: number,
+    userUpdateTime: number = 0;
     /**
      * userSubMailStatus
      */
-    userSubMailStatus: YesNoStatus,
+    userSubMailStatus: YesNoStatus = YesNoStatus.No;
     /**
      * 是否加入积分排行
      */
-    userJoinPointRank: YesNoStatus,
+    userJoinPointRank: YesNoStatus = YesNoStatus.No;
     /**
      * 用户最后登录时间
      */
-    userLatestLoginTime: number,
+    userLatestLoginTime: number = 0;
     /**
      * 应用角色
      */
-    userAppRole: number,
+    userAppRole: number = 0;
     /**
      * 头像查看模式
      */
-    userAvatarViewMode: number,
+    userAvatarViewMode: number = 0;
     /**
      * 用户状态
      */
-    userStatus: number,
+    userStatus: number = 0;
     /**
      * 用户上次最长连续签到日期
      */
-    userLongestCheckinStreakEnd: number,
+    userLongestCheckinStreakEnd: number = 0;
     /**
      * 是否公开关注帖子列表
      */
-    userWatchingArticleStatus: PublicStatus,
+    userWatchingArticleStatus: PublicStatus = PublicStatus.Public;
     /**
      * 上次回帖时间
      */
-    userLatestCmtTime: number,
+    userLatestCmtTime: number = 0;
     /**
      * 用户省份
      */
-    userProvince: string,
+    userProvince: string = '';
     /**
      * 用户当前连续签到计数
      */
-    userCurrentCheckinStreak: number,
+    userCurrentCheckinStreak: number = 0;
     /**
      * 用户编号
      */
-    userNo: number,
+    userNo: number = 0;
     /**
      * 用户头像
      */
-    userAvatarURL: string,
+    userAvatarURL: string = '';
     /**
      * 是否公开关注标签列表
      */
-    userFollowingTagStatus: PublicStatus,
+    userFollowingTagStatus: PublicStatus = PublicStatus.Public;
     /**
      * 用户语言
      */
-    userLanguage: string,
+    userLanguage: string = '';
     /**
      * 是否加入消费排行
      */
-    userJoinUsedPointRank: YesNoStatus,
+    userJoinUsedPointRank: YesNoStatus = YesNoStatus.No;
     /**
      * 上次签到日期
      */
-    userCurrentCheckinStreakEnd: number,
+    userCurrentCheckinStreakEnd: number = 0;
     /**
      * 是否公开收藏帖子列表
      */
-    userFollowingArticleStatus: PublicStatus,
+    userFollowingArticleStatus: PublicStatus = PublicStatus.Public;
     /**
      * 是否启用键盘快捷键
      */
-    userKeyboardShortcutsStatus: YesNoStatus,
+    userKeyboardShortcutsStatus: YesNoStatus = YesNoStatus.No;
     /**
      * 是否回帖后自动关注帖子
      */
-    userReplyWatchArticleStatus: YesNoStatus,
+    userReplyWatchArticleStatus: YesNoStatus = YesNoStatus.No;
     /**
      * 回帖浏览模式
      */
-    userCommentViewMode: number,
+    userCommentViewMode: number = 0;
     /**
      * 是否公开清风明月列表
      */
-    userBreezemoonStatus: PublicStatus,
+    userBreezemoonStatus: PublicStatus = PublicStatus.Public;
     /**
      * 用户上次签到时间
      */
-    userCheckinTime: number,
+    userCheckinTime: number = 0;
     /**
      * 用户消费积分
      */
-    userUsedPoint: number,
+    userUsedPoint: number = 0;
     /**
      * 是否公开帖子列表
      */
-    userArticleStatus: PublicStatus,
+    userArticleStatus: PublicStatus = PublicStatus.Public;
     /**
      * 用户积分
      */
-    userPoint: number,
+    userPoint: number = 0;
     /**
      * 用户回帖数量
      */
-    userCommentCount: number,
+    userCommentCount: number = 0;
     /**
      * 用户个性签名
      */
-    userIntro: string,
+    userIntro: string = '';
     /**
      * 移动端主题
      */
-    userMobileSkin: string,
+    userMobileSkin: string = '';
     /**
      * 分页每页条目
      */
-    userListPageSize: number,
+    userListPageSize: number = 0;
     /**
      * 文章 Id
      */
-    oId: string,
+    oId: string = '';
     /**
      * 用户名
      */
-    userName: string,
+    userName: string = '';
     /**
      * 是否公开 IP 地理信息
      */
-    userGeoStatus: PublicStatus,
+    userGeoStatus: PublicStatus = PublicStatus.Public;
     /**
      * 最长连续签到起始日
      */
-    userLongestCheckinStreakStart: number,
+    userLongestCheckinStreakStart: number = 0;
     /**
      * 用户主题
      */
-    userSkin: string,
+    userSkin: string = '';
     /**
      * 是否启用 Web 通知
      */
-    userNotifyStatus: YesNoStatus,
+    userNotifyStatus: YesNoStatus = YesNoStatus.No;
     /**
      * 公开关注用户列表
      */
-    userFollowingUserStatus: PublicStatus,
+    userFollowingUserStatus: PublicStatus = PublicStatus.Public;
     /**
      * 文章数
      */
-    userArticleCount: number,
+    userArticleCount: number = 0;
     /**
      * 用户角色
      */
-    userRole: string,
+    userRole: string = '';
     /**
      * 徽章
      */
-    sysMetal?: MetalList,
+    sysMetal?: MetalList;
+}
+
+export class Pagination {
+    /**
+     * 评论分页数
+     */
+    paginationPageCount: string = '';
+    /**
+     * 建议分页页码
+     */
+    paginationPageNums: Array<number> = [];
 }
 
 /**
  * 文章详情
  */
-export interface ArticleDetail {
+export class ArticleDetail {
     /**
      * 是否在列表展示
      */
-    articleShowInList: boolean,
+    articleShowInList: boolean = true;
     /**
      * 文章创建时间
      */
-    articleCreateTime: string,
+    articleCreateTime: string = '';
     /**
      * 发布者Id
      */
-    articleAuthorId: string,
+    articleAuthorId: string = '';
     /**
      * 反对数
      */
-    articleBadCnt: number,
+    articleBadCnt: number = 0;
     /**
      * 文章最后修改时间
      */
-    articleLatestCmtTime: string,
+    articleLatestCmtTime: string = '';
     /**
      * 赞同数
      */
-    articleGoodCnt: number,
+    articleGoodCnt: number = 0;
     /**
      * 悬赏积分
      */
-    articleQnAOfferPoint: number,
+    articleQnAOfferPoint: number = 0;
     /**
      * 作者头像缩略图
      */
-    articleThumbnailURL: string,
+    articleThumbnailURL: string = '';
     /**
      * 置顶序号
      */
-    articleStickRemains: number,
+    articleStickRemains: number = 0;
     /**
      * 发布时间简写
      */
-    timeAgo: string,
+    timeAgo: string = '';
     /**
      * 文章更新时间
      */
-    articleUpdateTimeStr: string,
+    articleUpdateTimeStr: string = '';
     /**
      * 作者用户名
      */
-    articleAuthorName: string,
+    articleAuthorName: string = '';
     /**
      * 文章类型
      */
-    articleType: ArticleType,
+    articleType: ArticleType = ArticleType.Normal;
     /**
      * 是否悬赏
      */
-    offered: boolean,
+    offered: boolean = false;
     /**
      * 文章创建时间字符串
      */
-    articleCreateTimeStr: string,
+    articleCreateTimeStr: string = '';
     /**
      * 文章浏览数
      */
-    articleViewCount: number,
+    articleViewCount: number = 0;
     /**
      * 作者头像缩略图
      */
-    articleAuthorThumbnailURL20: string,
+    articleAuthorThumbnailURL20: string = '';
     /**
      * 关注数
      */
-    articleWatchCnt: number,
+    articleWatchCnt: number = 0;
     /**
      * 文章预览内容
      */
-    articlePreviewContent: string,
+    articlePreviewContent: string = '';
     /**
      * 文章标题
      */
-    articleTitleEmoj: string,
+    articleTitleEmoj: string = '';
     /**
      * 文章标题
      */
-    articleTitleEmojUnicode: string,
+    articleTitleEmojUnicode: string = '';
     /**
      * 文章标题
      */
-    articleTitle: string,
+    articleTitle: string = '';
     /**
      * 作者头像缩略图
      */
-    articleAuthorThumbnailURL48: string,
+    articleAuthorThumbnailURL48: string = '';
     /**
      * 文章评论数
      */
-    articleCommentCount: number,
+    articleCommentCount: number = 0;
     /**
      * 收藏数
      */
-    articleCollectCnt: number,
+    articleCollectCnt: number = 0;
     /**
      * 文章最后评论者
      */
-    articleLatestCmterName: string,
+    articleLatestCmterName: string = '';
     /**
      * 文章标签
      */
-    articleTags: string,
+    articleTags: string = '';
     /**
      * 文章 id
      */
-    oId: string,
+    oId: string = '';
     /**
      * 最后评论时间简写
      */
-    cmtTimeAgo: string,
+    cmtTimeAgo: string = '';
     /**
      * 是否置顶
      */
-    articleStick: number,
+    articleStick: number = 0;
     /**
      * 文章标签信息
      */
-    articleTagObjs: Array<ArticleTag>,
+    articleTagObjs: Array<ArticleTag> = [];
     /**
      * 文章最后评论时间
      */
-    articleLatestCmtTimeStr: string,
+    articleLatestCmtTimeStr: string = '';
     /**
      * 是否匿名
      */
-    articleAnonymous: boolean,
+    articleAnonymous: boolean = false;
     /**
      * 文章感谢数
      */
-    articleThankCnt: number,
+    articleThankCnt: number = 0;
     /**
      * 文章更新时间
      */
-    articleUpdateTime: string,
+    articleUpdateTime: string = '';
     /**
      * 文章状态
      */
-    articleStatus: ArticleStatus,
+    articleStatus: ArticleStatus = ArticleStatus.Normal;
     /**
      * 文章点击数
      */
-    articleHeat: number,
+    articleHeat: number = 0;
     /**
      * 文章是否优选
      */
-    articlePerfect: boolean,
+    articlePerfect: boolean = false;
     /**
      * 作者头像缩略图
      */
-    articleAuthorThumbnailURL210: string,
+    articleAuthorThumbnailURL210: string = '';
     /**
      * 文章固定链接
      */
-    articlePermalink: string,
+    articlePermalink: string = '';
     /**
      * 作者用户信息
      */
-    articleAuthor: ArticleAuthor,
+    articleAuthor: Author = new Author();
     /**
      * 文章感谢数
      */
-    thankedCnt?: number,
+    thankedCnt?: number;
     /**
      * 文章匿名浏览量
      */
-    articleAnonymousView?: number,
+    articleAnonymousView?: number;
     /**
      * 文章浏览量简写
      */
-    articleViewCntDisplayFormat?: string,
+    articleViewCntDisplayFormat?: string;
     /**
      * 文章是否启用评论
      */
-    articleCommentable?: boolean,
+    articleCommentable?: boolean;
     /**
      * 是否已打赏
      */
-    rewarded?: boolean,
+    rewarded?: boolean;
     /**
      * 打赏人数
      */
-    rewardedCnt?: number,
+    rewardedCnt?: number;
     /**
      * 文章打赏积分
      */
-    articleRewardPoint?: number,
+    articleRewardPoint?: number;
     /**
      * 是否已收藏
      */
-    isFollowing?: boolean,
+    isFollowing?: boolean;
     /**
      * 是否已关注
      */
-    isWatching?: boolean,
+    isWatching?: boolean;
     /**
      * 是否是我的文章
      */
-    isMyArticle?: boolean,
+    isMyArticle?: boolean;
     /**
      * 是否已感谢
      */
-    thanked?: boolean,
+    thanked?: boolean;
     /**
      * 编辑器类型
      */
-    articleEditorType?: number,
+    articleEditorType?: number;
     /**
      * 文章音频地址
      */
-    articleAudioURL?: string,
+    articleAudioURL?: string;
     /**
      * 文章目录 HTML
      */
-    articleToC?: string,
+    articleToC?: string;
     /**
      * 文章内容 HTML
      */
-    articleContent?: string,
+    articleContent?: string;
     /**
      * 文章内容 Markdown
      */
-    articleOriginalContent?: string,
+    articleOriginalContent?: string;
     /**
      * 文章缩略图
      */
-    articleImg1URL?: string,
+    articleImg1URL?: string;
     /**
      * 文章点赞状态
      */
-    articleVote?: VoteStatus,
+    articleVote?: VoteStatus;
     /**
      * 文章随机数
      */
-    articleRandomDouble?: number,
+    articleRandomDouble?: number;
     /**
      * 作者签名
      */
-    articleAuthorIntro?: string,
+    articleAuthorIntro?: string;
     /**
      * 发布城市
      */
-    articleCity?: string,
+    articleCity?: string;
     /**
      * 发布者 IP
      */
-    articleIP?: string,
+    articleIP?: string;
     /**
      * 作者首页地址
      */
-    articleAuthorURL?: string,
+    articleAuthorURL?: string;
     /**
      * 推送 Email 推送顺序
      */
-    articlePushOrder?: number,
+    articlePushOrder?: number;
     /**
      * 打赏内容
      */
-    articleRewardContent?: string,
+    articleRewardContent?: string;
     /**
      * reddit分数
      */
-    redditScore?: string,
+    redditScore?: string;
     /**
      * 评论分页信息
      */
-    pagination?: {
-        /**
-         * 评论分页数
-         */
-        paginationPageCount: string,
-        /**
-         * 建议分页页码
-         */
-        paginationPageNums: Array<number>,
-    },
+    pagination?: Pagination;
     /**
      * 评论是否可见
      */
-    discussionViewable: boolean,
+    discussionViewable: boolean = true;
     /**
      * 文章修改次数
      */
-    articleRevisionCount: number,
+    articleRevisionCount: number = 0;
     /**
      * 文章的评论
      */
-    articleComments?: Array<ArticleComment>,
+    articleComments?: Array<ArticleComment>;
     /**
      * 文章最佳评论
      */
-    articleNiceComments?: Array<ArticleComment>,
+    articleNiceComments?: Array<ArticleComment>;
 }
 
 /**
  * 文章评论
  */
-export interface ArticleComment {
+export class ArticleComment {
     /**
      * 是否优评
      */
-    commentNice: boolean,
+    commentNice: boolean = false;
     /**
      * 评论创建时间字符串
      */
-    commentCreateTimeStr: string,
+    commentCreateTimeStr: string = '';
     /**
      * 评论作者 id
      */
-    commentAuthorId: string,
+    commentAuthorId: string = '';
     /**
      * 评论分数
      */
-    commentScore: number,
+    commentScore: number = 0;
     /**
      * 评论创建时间
      */
-    commentCreateTime: string,
+    commentCreateTime: string = '';
     /**
      * 评论作者头像
      */
-    commentAuthorURL: string,
+    commentAuthorURL: string = '';
     /**
      * 评论状态
      */
-    commentVote: VoteStatus,
+    commentVote: VoteStatus = VoteStatus.normal;
     /**
      * 评论引用数
      */
-    commentRevisionCount: number,
+    commentRevisionCount: number = 0;
     /**
      * 评论经过时间
      */
-    timeAgo: string,
+    timeAgo: string = '';
     /**
      * 回复评论 id
      */
-    commentOriginalCommentId: string,
+    commentOriginalCommentId: string = '';
     /**
      * 徽章
      */
-    sysMetal: MetalList,
+    sysMetal: MetalList = [];
     /**
      * 点赞数
      */
-    commentGoodCnt: number,
+    commentGoodCnt: number = 0;
     /**
      * 评论是否可见
      */
-    commentVisible: YesNoStatus,
+    commentVisible: YesNoStatus = YesNoStatus.No;
     /**
      * 文章 id
      */
-    commentOnArticleId: string,
+    commentOnArticleId: string = '';
     /**
      * 评论感谢数
      */
-    rewardedCnt: number,
+    rewardedCnt: number = 0;
     /**
      * 评论地址
      */
-    commentSharpURL: string,
+    commentSharpURL: string = '';
     /**
      * 是否匿名
      */
-    commentAnonymous: boolean,
+    commentAnonymous: boolean = false;
     /**
      * 评论回复数
      */
-    commentReplyCnt: number,
+    commentReplyCnt: number = 0;
     /**
      * 评论 id
      */
-    oId: string,
+    oId: string = '';
     /**
      * 评论内容
      */
-    commentContent: string,
+    commentContent: string = '';
     /**
      * 评论状态
      */
-    commentStatus: ArticleStatus,
+    commentStatus: ArticleStatus = ArticleStatus.Normal;
     /**
      * 评论作者
      */
-    commenter: CommentAuthor,
+    commenter: Author = new Author();
     /**
      * 评论作者用户名
      */
-    commentAuthorName: string,
+    commentAuthorName: string = '';
     /**
      * 评论感谢数
      */
-    commentThankCnt: number,
+    commentThankCnt: number = 0;
     /**
      * 评论点踩数
      */
-    commentBadCnt: number,
+    commentBadCnt: number = 0;
     /**
      * 是否已感谢
      */
-    rewarded: boolean,
+    rewarded: boolean = false;
     /**
      * 评论作者头像
      */
-    commentAuthorThumbnailURL: string,
+    commentAuthorThumbnailURL: string = '';
     /**
      * 评论音频地址
      */
-    commentAudioURL: string,
+    commentAudioURL: string = '';
     /**
      * 评论是否采纳，1 表示采纳
      */
-    commentQnAOffered: number,
+    commentQnAOffered: number = 0;
 }
 
 /**
  * 文章列表
  */
-export interface ArticleList {
+export class ArticleList {
     /**
      * 文章列表
      */
-    articles: Array<ArticleDetail>;
+    articles: Array<ArticleDetail> = [];
     /**
      * 分页信息
      */
-    pagination: {
-        paginationPageCount: number;
-        paginationPageNums: Array<number>;
-    };
+    pagination = new Pagination();
     /**
      * 标签信息，仅查询标签下文章列表有效
      */
@@ -2393,128 +2342,128 @@ export enum VoteStatus {
     Unvote = -1
 }
 
-export interface CommentPost {
+export class CommentPost {
     /**
      * 文章 Id
      */
-    articleId: string,
+    articleId: string = '';
     /**
      * 是否匿名评论
      */
-    commentAnonymous: boolean,
+    commentAnonymous: boolean = false;
     /**
      * 评论是否楼主可见
      */
-    commentVisible: boolean,
+    commentVisible: boolean = true;
     /**
      * 评论内容
      */
-    commentContent: string,
+    commentContent: string = '';
     /**
      * 回复评论 Id
      */
-    commentOriginalCommentId?: string,
+    commentOriginalCommentId?: string;
 }
 
 /**
  * 私聊内容
  */
-export interface ChatData {
+export class ChatData {
     /**
      * 接收者 Id
      */
-    toId: string,
+    toId: string = '';
     /**
      * 预览内容
      */
-    preview: string,
+    preview: string = '';
     /**
      * 消息用户 Session
      */
-    user_session: string,
+    user_session: string = '';
     /**
      * 发送者头像
      */
-    senderAvatar: string,
+    senderAvatar: string = '';
     /**
      * 消息 Markdown
      */
-    markdown: string,
+    markdown: string = '';
     /**
      * 接收者头像
      */
-    receiverAvatar: string,
+    receiverAvatar: string = '';
     /**
      * 消息 Id
      */
-    oId: string,
+    oId: string = '';
     /**
      * 发送时间
      */
-    time: string,
+    time: string = '';
     /**
      * 来源 Id
      */
-    fromId: string,
+    fromId: string = '';
     /**
      * 发送者用户名
      */
-    senderUserName: string,
+    senderUserName: string = '';
     /**
      * 消息内容 HTML
      */
-    content: string,
+    content: string = '';
     /**
      * 接收者用户名
      */
-    receiverUserName: string
+    receiverUserName: string = '';
 }
 
 /**
  * 私聊撤回消息
  */
-export interface ChatRevoke {
+export class ChatRevoke {
     /**
      * 消息 Id
      */
-    data: string;
-    type: 'revoke';
+    data: string = '';
+    type: 'revoke' = 'revoke';
 }
 
 /**
  * 禁言用户信息
  */
-export interface MuteItem {
+export class MuteItem {
     /**
      * 解除禁言时间戳
      */
-    time: number;
+    time: number = 0;
     /**
      * 用户头像
      */
-    userAvatarURL: string;
+    userAvatarURL: string = '';
     /**
      * 用户名
      */
-    userName: string;
+    userName: string = '';
     /**
      * 用户昵称
      */
-    userNickname: string;
+    userNickname: string = '';
 }
 
 /**
  * 通知消息
  */
-export interface NoticeMsg {
+export class NoticeMsg {
     /**
      * 通知类型 
      */ 
-    command: 'refreshNotification' | 'chatUnreadCountRefresh' | 'newIdleChatMessage' | 'warnBroadcast';
+    command: 'refreshNotification' | 'chatUnreadCountRefresh' | 'newIdleChatMessage' | 'warnBroadcast' = 'refreshNotification';
     /*
      * 通知接收者用户Id
      */
-    userId: string;
+    userId: string = '';
     /**
      * 私聊内容预览，仅 `newIdleChatMessage` 有信息
      */
@@ -2541,33 +2490,33 @@ export interface NoticeMsg {
     who?: string;
 }
 
-export interface Log {
+export class Log {
     /**
      * 操作时间
      */
-    key1: string;
+    key1: string = '';
     /**
      * IP
      */
-    key2: string;
+    key2: string = '';
     /**
      * 内容
      */
-    data: string;
+    data: string = '';
     /**
      * 是否公开
      */
-    public: boolean;
+    public: boolean = true;
     /**
      * 操作类型
      */
-    key3: string;
+    key3: string = '';
     /**
      * 唯一标识
      */
-    oId: string;
+    oId: string = '';
     /**
      * 类型
      */
-    type: string;
+    type: string = '';
 }

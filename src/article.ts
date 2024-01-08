@@ -1,6 +1,6 @@
 import { analyzeMetalAttr, domain, isBrowse, request } from './utils';
 import { 
-    ApiResponse, ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList, ArticleType
+    ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList, ArticleType
 } from './typing';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
@@ -26,7 +26,7 @@ class Article
      * @param data 文章信息
      * @returns 发布成功返回文章Id (articleId)
      */
-    async post(data:ArticlePost):Promise<{ code:number, msg?:string, articleId?:string }> {
+    async post(data:ArticlePost):Promise<string> {
         let rsp;
         try {
             rsp = await request({
@@ -37,8 +37,10 @@ class Article
                     apiKey: this._apiKey
                 },
             });
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
-            return rsp;
+            return rsp.articleId;
         } catch (e) {
             throw e;
         }
@@ -50,7 +52,7 @@ class Article
      * @param data 文章信息
      * @returns 更新成功返回文章Id (articleId)
      */
-    async update(id:string, data:ArticlePost):Promise<{ code:number, msg?:string, articleId?:string }> {
+    async update(id:string, data:ArticlePost):Promise<string> {
         let rsp;
         try {
             rsp = await request({
@@ -61,8 +63,10 @@ class Article
                     apiKey: this._apiKey
                 },
             });
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
-            return rsp;
+            return rsp.articleId;
         } catch (e) {
             throw e;
         }
@@ -77,7 +81,7 @@ class Article
     async list(
         { type, page = 1, tag }:
         { type:ArticleListType, page?: number, tag?:string }
-    ):Promise<ApiResponse<ArticleList>> {
+    ):Promise<ArticleList> {
         let rsp;
         try {
             rsp = await request({
@@ -87,8 +91,10 @@ class Article
                     this._apiKey ? `apiKey=${this._apiKey}` : ''
                 }`,
             });         
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
-            return rsp;
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -102,7 +108,7 @@ class Article
     async userArticles(
         { userName, page = 1 }: 
         { userName: string, page: number }
-    ):Promise<ApiResponse<ArticleList>> {
+    ):Promise<ArticleList> {
         let rsp;
         try {
             rsp = await request({
@@ -110,8 +116,10 @@ class Article
                     this._apiKey ? `apiKey=${this._apiKey}` : ''
                 }`,
             });         
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
-            return rsp;
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -122,12 +130,14 @@ class Article
      * @param id 文章id
      * @returns 文章详情
      */
-    async detail(id:string, p=1):Promise<ApiResponse<{ article: ArticleDetail }>> {
+    async detail(id:string, p=1):Promise<ArticleDetail> {
         let rsp;
         try {
             rsp = await request({
                 url: `api/article/${id}?apiKey=${this._apiKey}&p=${p}`,
             });
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
             rsp.data.article.articleAuthor.sysMetal = analyzeMetalAttr(rsp.data.article.articleAuthor.sysMetal);
 
@@ -139,7 +149,7 @@ class Article
                 rsp.data.article.articleNiceComments[i].sysMetal = analyzeMetalAttr(rsp.data.article.articleNiceComments[i].sysMetal);
             }
 
-            return rsp;
+            return rsp.data.article;
         } catch (e) {
             throw e;
         }
@@ -151,7 +161,7 @@ class Article
      * @param type 点赞类型
      * @returns 文章点赞状态
      */
-    async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
+    async vote(id:string, type:'up' | 'down'):Promise<VoteStatus> {
         let rsp;
         try {
             rsp = await request({
@@ -162,8 +172,10 @@ class Article
                     apiKey: this._apiKey
                 },
             });
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
-            return rsp;
+            return rsp.type;
         } catch (e) {
             throw e;
         }    
@@ -173,7 +185,7 @@ class Article
      * 感谢文章
      * @param id 文章id
      */
-    async thank(id:string):Promise<ApiResponse<undefined>> {
+    async thank(id:string):Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -183,8 +195,8 @@ class Article
                     apiKey: this._apiKey
                 },
             });
-
-            return rsp;
+            
+            if (rsp.code) throw new Error(rsp.msg);
         } catch (e) {
             throw e;
         }    
@@ -194,7 +206,7 @@ class Article
      * 收藏/取消收藏文章
      * @param id 文章id
      */
-    async follow(followingId:string):Promise<ApiResponse<undefined>> {
+    async follow(followingId:string):Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -205,8 +217,8 @@ class Article
                     followingId
                 },
             });
-
-            return rsp;
+            
+            if (rsp.code) throw new Error(rsp.msg);
         } catch (e) {
             throw e;
         }    
@@ -216,7 +228,7 @@ class Article
      * 关注/取消关注文章
      * @param followingId 文章id
      */
-    async watch(followingId:string):Promise<ApiResponse<undefined>> {
+    async watch(followingId:string):Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -228,7 +240,7 @@ class Article
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg);
         } catch (e) {
             throw e;
         }    
@@ -238,7 +250,7 @@ class Article
      * 打赏文章
      * @param id 文章id
      */
-    async reward(id:string):Promise<ApiResponse<undefined>> {
+    async reward(id:string):Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -249,7 +261,7 @@ class Article
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg);
         } catch (e) {
             throw e;
         }    

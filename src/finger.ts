@@ -36,6 +36,8 @@ export class Finger
                 },
             });
 
+            if (rsp.code) throw new Error(rsp.msg)
+
             return rsp;
         } catch (e) {
             throw e;
@@ -58,7 +60,9 @@ export class Finger
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
+
+            return rsp.data;
         } catch (e) {
             throw e;
         }  
@@ -81,6 +85,8 @@ export class Finger
                     userName, ...metal, attr: metal.attr.toString(),
                 },
             });
+
+            if (rsp.code) throw new Error(rsp.msg)
 
             return rsp;
         } catch (e) {
@@ -105,6 +111,8 @@ export class Finger
                 },
             });
 
+            if (rsp.code) throw new Error(rsp.msg)
+
             return rsp;
         } catch (e) {
             throw e;
@@ -128,6 +136,8 @@ export class Finger
                 },
             });
 
+            if (rsp.code) throw new Error(rsp.msg)
+
             return rsp;
         } catch (e) {
             throw e;
@@ -150,6 +160,8 @@ export class Finger
                 },
             });
 
+            if (rsp.code) throw new Error(rsp.msg)
+ 
             return rsp;
         } catch (e) {
             throw e;
@@ -173,6 +185,8 @@ export class Finger
                     userName, item, sum
                 },
             });
+
+            if (rsp.code) throw new Error(rsp.msg)
 
             return rsp;
         } catch (e) {
@@ -198,6 +212,8 @@ export class Finger
                 },
             });
 
+            if (rsp.code) throw new Error(rsp.msg)
+ 
             return rsp;
         } catch (e) {
             throw e;

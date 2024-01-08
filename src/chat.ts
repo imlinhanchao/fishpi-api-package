@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
-    ApiResponse, ChatData, ChatRevoke, NoticeMsg, 
+    ChatData, ChatRevoke, NoticeMsg, 
 } from './typing';
 
 class Chat {
@@ -26,13 +26,15 @@ class Chat {
      * 获取有私聊用户列表第一条消息
      * @returns 私聊消息列表
      */
-    async list():Promise<ApiResponse<Array<ChatData>>> {
+    async list():Promise<ChatData[]> {
         try {
             let rsp = await request({
                 url: `chat/get-list?apiKey=${this._apiKey}`
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
+
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -43,14 +45,15 @@ class Chat {
      * @param param 消息参数
      * @returns 私聊消息列表
      */
-    async get(param:{ user:string, page?: number, size?: number, autoRead?: boolean }):Promise<ApiResponse<Array<ChatData>>> {
+    async get({ user, page= 1, size= 20, autoRead= true }:{ user:string, page?: number, size?: number, autoRead?: boolean }):Promise<ChatData[]> {
         try {
-            param = Object.assign({ page: 1, size: 20, autoRead: true }, param);
             let rsp = await request({
-                url: `chat/get-message?apiKey=${this._apiKey}&toUser=${param.user}&page=${param.page}&pageSize=${param.size}`
+                url: `chat/get-message?apiKey=${this._apiKey}&toUser=${user}&page=${page}&pageSize=${size}`
             });
 
-            if (param.autoRead) this.markRead(param.user);
+            if (rsp.code) throw new Error(rsp.msg)
+
+            if (autoRead) this.markRead(user);
 
             return rsp;
         } catch (e) {
@@ -63,13 +66,13 @@ class Chat {
      * @param user 用户名
      * @returns 执行结果
      */
-    async markRead(user:string):Promise<ApiResponse<undefined>> {
+    async markRead(user:string):Promise<void> {
         try {
             let rsp = await request({
                 url: `chat/mark-as-read?apiKey=${this._apiKey}&fromUser=${user}`
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
         } catch (e) {
             throw e;
         }
@@ -79,13 +82,15 @@ class Chat {
      * 获取未读消息
      * @returns 未读消息列表
      */
-    async unread():Promise<ApiResponse<ChatData>> {
+    async unread():Promise<ChatData> {
         try {
             let rsp = await request({
                 url: `chat/has-unread?apiKey=${this._apiKey}`
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
+
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -95,13 +100,15 @@ class Chat {
      * 撤回私聊消息
      * @param msgId 消息 ID
      */
-    revoke(msgId:string): Promise<{ result: number }> {
+    async revoke(msgId:string): Promise<number> {
         try {
-            let rsp = request({
+            let rsp = await request({
                 url: `chat/revoke?apiKey=${this._apiKey}&oId=${msgId}`
             });
+            
+            if (rsp.code) throw new Error(rsp.msg)
 
-            return rsp;
+            return rsp.result;
         } catch (e) {
             throw e;
         }

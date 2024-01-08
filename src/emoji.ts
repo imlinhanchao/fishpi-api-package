@@ -3,7 +3,7 @@ import { request, domain } from './utils';
 class Emoji
 {
     private _apiKey:string = '';
-    private _emojis:Array<string> = [];
+    private _emojis:string[] = [];
 
     constructor(token:string='') {
         if (!token) { return; }
@@ -203,7 +203,7 @@ class Emoji
         }
     }
 
-    async get():Promise<Array<string>> {
+    async get():Promise<string[]> {
         let rsp;
         try {
             rsp = await request({
@@ -214,6 +214,8 @@ class Emoji
                     apiKey: this._apiKey
                 },
             });
+
+            if (rsp.code) throw new Error(rsp.msg)
 
             this._emojis = JSON.parse(rsp.data);            
             return this._emojis.concat([]);
@@ -226,7 +228,7 @@ class Emoji
      * 设置表情包列表
      * @param data 所有表情包图像列表
      */
-    async set (data:Array<string>) {
+    async set (data:string[]) {
         let rsp;
         try {
             rsp = await request({
@@ -238,14 +240,16 @@ class Emoji
                     apiKey: this._apiKey
                 },
             });
-    
+
+            if (rsp.code) throw new Error(rsp.msg)
+
             return rsp;            
         } catch (e) {
             throw e;
         }
     }
 
-    async append(url:string):Promise<Array<string>> {
+    async append(url:string):Promise<string[]> {
         let emojis = this._emojis.length > 0 ? this._emojis : await this.get();
         if (emojis.indexOf(url) >= 0) throw(new Error('表情包已存在'));
         emojis.push(url);
@@ -254,7 +258,7 @@ class Emoji
         return emojis.concat([]);
     }
 
-    async remove(url:string):Promise<Array<string>> {
+    async remove(url:string):Promise<string[]> {
         let emojis = this._emojis.length > 0 ? this._emojis : await this.get();
         if (emojis.indexOf(url) < 0) return emojis;
         emojis.splice(emojis.indexOf(url), 1);

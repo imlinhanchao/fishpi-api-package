@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse, clientToVia } from './utils';
 import { 
-    ApiResponse, ChatContentType, ChatMessageType, ClientType, ChatRoomMessage, GestureType, Message, MuteItem, RedPacket, RedPacketInfo 
+    ChatContentType, ChatMessageType, ClientType, ChatRoomMessage, GestureType, Message, MuteItem, RedPacket, RedPacketInfo 
 } from './typing';
 
 class ChatRoom {
@@ -62,7 +62,7 @@ class ChatRoom {
      * 查询聊天室历史消息
      * @param page 消息页码
      */
-    async more(page=1, type=ChatContentType.HTML):Promise<ApiResponse<Array<ChatRoomMessage>>> {
+    async more(page=1, type=ChatContentType.HTML):Promise<ChatRoomMessage[]> {
         try {
             let rsp = await request({
                 url: `chat-room/more?page=${page}&type=${type}&apiKey=${this._apiKey}`
@@ -85,16 +85,18 @@ class ChatRoom {
                 } catch (e) {}
             })
 
-            return rsp;
+            return rsp.data;
         } catch (e) {
             throw e;
         }
     }
 
-    async get(data:{ oId:string, mode:ChatMessageType.Context, size:25, type:ChatContentType.HTML }):Promise<ApiResponse<Array<ChatRoomMessage>>> {
+    async get({
+        oId, mode, size=25, type
+    }:{ oId:string, mode:ChatMessageType.Context, size:number, type:ChatContentType.HTML }):Promise<ChatRoomMessage[]> {
         try {
             let rsp = await request({
-                url: `chat-room/getMessage?oId=${data.oId}&mode=${data.mode}&size=${data.size}&type=${data.type}&apiKey=${this._apiKey}`
+                url: `chat-room/getMessage?oId=${oId}&mode=${mode}&size=${size}&type=${type}&apiKey=${this._apiKey}`
             });
 
             if (rsp.code != 0) {
@@ -103,7 +105,7 @@ class ChatRoom {
 
             if (!rsp.data) return rsp;
             let redpacket;
-            (rsp.data as Array<any>).forEach((d, i, data) => {
+            (rsp.data as any[]).forEach((d, i, data) => {
                 try {
                     data[i].via = clientToVia(data[i].client)
                     data[i].sysMetal = toMetal(data[i].sysMetal);
@@ -114,7 +116,7 @@ class ChatRoom {
                 } catch (e) {}
             })
 
-            return rsp;
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -124,7 +126,7 @@ class ChatRoom {
      * 撤回消息，普通成员 24 小时内可撤回一条自己的消息，纪律委员/OP/管理员角色可以撤回任意人消息
      * @param oId 消息 Id
      */
-     async revoke(oId:string):Promise<ApiResponse<undefined>> {
+     async revoke(oId:string):Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -135,7 +137,7 @@ class ChatRoom {
                 },
             });
 
-            return rsp;            
+            if (rsp.code) throw new Error(rsp.msg)
         } catch (e) {
             throw e;
         }
@@ -145,7 +147,7 @@ class ChatRoom {
      * 发送一条消息
      * @param msg 消息内容，支持 Markdown
      */
-     async send(msg:string, clientType?: ClientType | string, version?: string):Promise<ApiResponse<undefined>> {
+     async send(msg:string, clientType?: ClientType | string, version?: string):Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -158,7 +160,7 @@ class ChatRoom {
                 },
             });
 
-            return rsp;            
+            if (rsp.code) throw new Error(rsp.msg)
         } catch (e) {
             throw e;
         }
@@ -169,7 +171,7 @@ class ChatRoom {
      * @param msg 消息内容，支持 Markdown
      * @param color 弹幕颜色
      */
-    async barrage(msg:string, color:string='#ffffff'):Promise<ApiResponse<undefined>> {
+    async barrage(msg:string, color:string='#ffffff'):Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -181,7 +183,7 @@ class ChatRoom {
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
         } catch (e) {
             throw e;
         }
@@ -220,7 +222,7 @@ class ChatRoom {
     /**
      * 获取禁言中成员列表（思过崖）
      */
-    async mutes(): Promise<ApiResponse<Array<MuteItem>>> {
+    async mutes(): Promise<MuteItem[]> {
         let rsp;
         try {
             rsp = await request({
@@ -228,7 +230,9 @@ class ChatRoom {
                 method: 'get',
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
+ 
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -244,6 +248,8 @@ class ChatRoom {
             rsp = await request({
                 url: `cr/raw/${oId}`,
             });
+
+            if (rsp.code) throw new Error(rsp.msg)
 
             return rsp.replace(/<!--.*?-->/g, '');
         } catch (e) {
@@ -263,7 +269,7 @@ class ChatRoom {
              * @param oId 红包消息 Id
              * @param gesture 猜拳类型
              */
-            async open(oId:string, gesture?:GestureType):Promise<ApiResponse<RedPacketInfo>> {
+            async open(oId:string, gesture?:GestureType):Promise<RedPacketInfo> {
                 let rsp;
                 try {
                     rsp = await request({
@@ -275,8 +281,10 @@ class ChatRoom {
                             apiKey
                         },
                     });
+
+                    if (rsp.code) throw new Error(rsp.msg)
         
-                    return rsp;            
+                    return rsp.data;            
                 } catch (e) {
                     throw e;
                 }

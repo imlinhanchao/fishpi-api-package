@@ -1,6 +1,6 @@
 import { request } from './utils';
 import { 
-    ApiResponse, BreezemoonContent
+    BreezemoonContent
 } from './typing';
 
 class Breezemoon
@@ -25,13 +25,15 @@ class Breezemoon
      * @param page 消息页码
      * @param size 每页个数
      */
-    async list(page=1, size=20):Promise<{code:number,breezemoons:Array<BreezemoonContent>}> {
+    async list(page=1, size=20):Promise<BreezemoonContent[]> {
         try {
             let rsp = await request({
                 url: `api/breezemoons?p=${page}&size=${size}`
             });
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
-            return rsp;
+            return rsp.breezemoons;
         } catch (e) {
             throw e;
         }
@@ -41,7 +43,7 @@ class Breezemoon
      * 发送清风明月
      * @param content 内容
      */
-     async send(content:string):Promise<ApiResponse<undefined>> {
+     async send(content:string):Promise<void> {
         try {
             let rsp = await request({
                 url: `breezemoon`,
@@ -52,7 +54,7 @@ class Breezemoon
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg);
         } catch (e) {
             throw e;
         }

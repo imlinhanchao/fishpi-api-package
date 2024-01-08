@@ -1,6 +1,6 @@
 import { request } from './utils';
 import { 
-    ApiResponse, CommentPost, VoteStatus, 
+    CommentPost, VoteStatus, 
 } from './typing';
 
 class Comment
@@ -24,7 +24,7 @@ class Comment
      * 发布评论
      * @param data 评论信息
      */
-    async send(data:CommentPost): Promise<ApiResponse<undefined>> {
+    async send(data:CommentPost): Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -36,7 +36,7 @@ class Comment
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
         } catch (e) {
             throw e;
         }  
@@ -47,13 +47,7 @@ class Comment
      * @param id 评论 Id
      * @param data 评论信息
      */
-    async update(id:string, data:CommentPost): Promise<{ 
-        code:number, 
-        msg?:string, 
-        /**
-         * 评论内容 HTML
-         */
-        commentContent?:string}> {
+    async update(id:string, data:CommentPost): Promise<string> {
         let rsp;
         try {
             rsp = await request({
@@ -65,7 +59,9 @@ class Comment
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
+
+            return rsp.commentContent;
         } catch (e) {
             throw e;
         }  
@@ -76,7 +72,7 @@ class Comment
      * @param id 评论 Id
      * @param type 点赞类型
      */
-    async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
+    async vote(id:string, type:'up' | 'down'):Promise<VoteStatus> {
         let rsp;
         try {
             rsp = await request({
@@ -88,7 +84,9 @@ class Comment
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
+
+            return rsp.type
         } catch (e) {
             throw e;
         }    
@@ -98,7 +96,7 @@ class Comment
      * 评论感谢
      * @param id 评论 Id
      */
-    async thank(id:string):Promise<ApiResponse<undefined>> {
+    async thank(id:string):Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -110,7 +108,7 @@ class Comment
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
         } catch (e) {
             throw e;
         }    
@@ -120,7 +118,7 @@ class Comment
      * 删除评论
      * @param id 评论 Id
      */
-    async remove(id:string): Promise<{ code:number, msg?:string, commentId?:string}> {
+    async remove(id:string): Promise<string> {
         let rsp;
         try {
             rsp = await request({
@@ -131,7 +129,9 @@ class Comment
                 },
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg)
+
+            return rsp.commentId;
         } catch (e) {
             throw e;
         }  

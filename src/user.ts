@@ -1,6 +1,6 @@
 import { request, toMetal } from './utils';
 import { 
-    ApiResponse, UserInfo
+    UserInfo
 } from './typing';
 
 class User
@@ -24,15 +24,17 @@ class User
      * 返回登录账户信息，需要先登录或设置有效的 api key
      * @returns 用户信息
      */   
-     async info(): Promise<ApiResponse<UserInfo>> {
+     async info(): Promise<UserInfo> {
         try {
             let rsp = await request({
                 url: `api/user?apiKey=${this._apiKey}`
             });
+            
+            if (rsp.code != 0) throw new Error(rsp.msg);
 
-            if(rsp.data) rsp.data.sysMetal = toMetal(rsp.data.sysMetal);
+            if (rsp.data) rsp.data.sysMetal = toMetal(rsp.data.sysMetal);
 
-            return rsp;
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -42,15 +44,17 @@ class User
      * 查询登录用户常用表情
      * @returns 常用表情列表
      */   
-    async emotions():Promise<ApiResponse<Array<string>>> {
+    async emotions():Promise<Array<string>> {
         let rsp;
         try {
             rsp = await request({
                 url: `users/emotions?apiKey=${this._apiKey}`,
             });
+            
+            if (rsp.code != 0) throw new Error(rsp.msg);
 
             rsp.data = Object.keys(rsp.data);
-            return rsp;
+            return rsp.data;
         } catch (e) {
             throw e;
         }
@@ -66,6 +70,8 @@ class User
             let rsp = await request({
                 url: `user/liveness?apiKey=${this._apiKey}`
             });
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
             return rsp.liveness || 0;
         } catch (e) {
@@ -83,6 +89,8 @@ class User
             let rsp = await request({
                 url: `user/checkedIn?apiKey=${this._apiKey}`
             });
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
             return rsp.checkedIn || false;
         } catch (e) {
@@ -100,6 +108,8 @@ class User
             let rsp = await request({
                 url: `api/activity/is-collected-liveness?apiKey=${this._apiKey}`
             });
+            
+            if (rsp.code) throw new Error(rsp.msg);
 
             return rsp.isCollectedYesterdayLivenessReward || false;
         } catch (e) {
@@ -118,6 +128,8 @@ class User
                 url: `activity/yesterday-liveness-reward-api?apiKey=${this._apiKey}`
             });
 
+            if (rsp.code) throw new Error(rsp.msg);
+
             return rsp.sum || 0;
         } catch (e) {
             throw e;
@@ -131,7 +143,7 @@ class User
      * @param memo 转账备注
      * @returns code 0 为成功，失败则有 msg
      */
-    async transfer(userName:string, amount:number, memo:string):Promise<{code?: number, msg?: string}> {
+    async transfer(userName:string, amount:number, memo:string):Promise<void> {
         try {
             let rsp = await request({
                 method: 'POST',
@@ -144,7 +156,7 @@ class User
                 }
             });
 
-            return rsp;
+            if (rsp.code) throw new Error(rsp.msg);
         } catch (e) {
             throw e;
         }
