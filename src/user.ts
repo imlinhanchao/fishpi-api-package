@@ -1,9 +1,9 @@
 import { request, toMetal } from './utils';
 import { 
     UserInfo
-} from './typing';
+} from './types';
 
-class User
+export class User
 {
     private _apiKey:string = '';
 

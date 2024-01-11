@@ -1,9 +1,9 @@
 import { request } from './utils';
 import { 
     CommentPost, VoteStatus, 
-} from './typing';
+} from './types';
 
-class Comment
+export class Comment
 {
     private _apiKey:string = '';
 

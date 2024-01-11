@@ -1,6 +1,6 @@
 import { request, domain } from './utils';
 
-class Emoji
+export class Emoji
 {
     private _apiKey:string = '';
     private _emojis:string[] = [];

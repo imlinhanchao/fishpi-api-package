@@ -2,9 +2,9 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse } from './utils';
 import { 
     ChatData, ChatRevoke, NoticeMsg, 
-} from './typing';
+} from './types';
 
-class Chat {
+export class Chat {
     private _apiKey:string = '';
     private _rwss:{ [key: string]: ReconnectingWebSocket } = {};
     private _wsCallbacks:{ [key: string]: Array<Function> } = {};

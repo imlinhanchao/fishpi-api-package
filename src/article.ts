@@ -1,10 +1,10 @@
 import { analyzeMetalAttr, domain, isBrowse, request } from './utils';
 import { 
     ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList, ArticleType
-} from './typing';
+} from './types';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
-class Article
+export class Article
 {
     private _apiKey:string = '';
 

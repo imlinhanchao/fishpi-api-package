@@ -2,9 +2,9 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse, clientToVia } from './utils';
 import { 
     ChatContentType, ChatMessageType, ClientType, ChatRoomMessage, GestureType, Message, MuteItem, RedPacket, RedPacketInfo 
-} from './typing';
+} from './types';
 
-class ChatRoom {
+export class ChatRoom {
     private _apiKey:string = '';
     private _discusse:string = '';
     private _onlines:Array<any>=[];

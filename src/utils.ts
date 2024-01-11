@@ -1,7 +1,7 @@
 import { 
     Metal,
     MetalList
-} from './typing';
+} from './types';
 
 let domain = 'fishpi.cn'
 

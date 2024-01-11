@@ -1,9 +1,9 @@
 import { request } from './utils';
 import { 
     BreezemoonContent
-} from './typing';
+} from './types';
 
-class Breezemoon
+export class Breezemoon
 {
     private _apiKey:string = '';
 

@@ -1,9 +1,9 @@
 import { request } from './utils';
 import { 
     NoticeCount, NoticeList, NoticeType
-} from './typing';
+} from './types';
 
-class Notice
+export class Notice
 {
     private _apiKey:string = '';
 

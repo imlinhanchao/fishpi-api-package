@@ -1,4 +1,4 @@
-import { MetalBase } from './typing';
+import { MetalBase, UserBag, UserIP } from './types';
 import { analyzeMetalAttr, request } from './utils';
 
 export class Finger
@@ -24,7 +24,7 @@ export class Finger
      * @param stage: 关卡数
      * @param time: 通过此关时间（毫秒级时间戳）
      */
-    async addMofishScore({ userName, stage, time = (new Date().getTime()) }: { userName: string, stage: string, time: number }) {
+    async addMofishScore({ userName, stage, time = (new Date().getTime()) }: { userName: string, stage: string, time: number }): Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -37,8 +37,6 @@ export class Finger
             });
 
             if (rsp.code) throw new Error(rsp.msg)
-
-            return rsp;
         } catch (e) {
             throw e;
         }  
@@ -48,7 +46,7 @@ export class Finger
      * 查询用户最近登录的IP地址
      * @param userName: 用户在摸鱼派的用户名
      */
-    async queryLatestLoginIP(userName: string) {
+    async queryLatestLoginIP(userName: string): Promise<UserIP> {
         let rsp;
         try {
             rsp = await request({
@@ -73,7 +71,7 @@ export class Finger
      * @param userName: 用户在摸鱼派的用户名
      * @param metal: 勋章信息
      */
-    async addMetal(userName: string, metal: MetalBase) {
+    async addMetal(userName: string, metal: MetalBase): Promise<void> {
         let rsp;
         metal = new MetalBase(metal);
         try {
@@ -87,8 +85,6 @@ export class Finger
             });
 
             if (rsp.code) throw new Error(rsp.msg)
-
-            return rsp;
         } catch (e) {
             throw e;
         }  
@@ -99,7 +95,7 @@ export class Finger
      * @param userName: 用户在摸鱼派的用户名
      * @param name: 勋章名称
      */
-    async deleteMetal(userName: string, name: string) {
+    async deleteMetal(userName: string, name: string): Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -112,8 +108,6 @@ export class Finger
             });
 
             if (rsp.code) throw new Error(rsp.msg)
-
-            return rsp;
         } catch (e) {
             throw e;
         }  
@@ -124,7 +118,7 @@ export class Finger
      * @param userId: 用户在摸鱼派的用户ID
      * @param name: 勋章名称
      */
-    async deleteMetalByUserId(userId: string, name: string) {
+    async deleteMetalByUserId(userId: string, name: string): Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -137,8 +131,6 @@ export class Finger
             });
 
             if (rsp.code) throw new Error(rsp.msg)
-
-            return rsp;
         } catch (e) {
             throw e;
         }  
@@ -148,7 +140,7 @@ export class Finger
      * 查询用户背包
      * @param userName: 用户在摸鱼派的用户名
      */
-    async queryUserBag(userName: string) {
+    async queryUserBag(userName: string): Promise<UserBag> {
         let rsp;
         try {
             rsp = await request({
@@ -174,7 +166,7 @@ export class Finger
      * @param item: 物品名称
      * @param sum: 物品数量
      */
-    async editUserBag(userName: string, item: string, sum: number) {
+    async editUserBag(userName: string, item: string, sum: number): Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -187,8 +179,6 @@ export class Finger
             });
 
             if (rsp.code) throw new Error(rsp.msg)
-
-            return rsp;
         } catch (e) {
             throw e;
         }  
@@ -200,7 +190,7 @@ export class Finger
      * @param point: 积分数量
      * @param memo: 备注
      */
-    async editUserPoints(userName: string, point: number, memo: string) {
+    async editUserPoints(userName: string, point: number, memo: string): Promise<void> {
         let rsp;
         try {
             rsp = await request({
@@ -213,8 +203,6 @@ export class Finger
             });
 
             if (rsp.code) throw new Error(rsp.msg)
- 
-            return rsp;
         } catch (e) {
             throw e;
         }  
@@ -268,3 +256,5 @@ export class Finger
         }  
     }
 }
+
+export default Finger;

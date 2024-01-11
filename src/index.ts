@@ -1,19 +1,12 @@
 import { isBrowse, request, setDomain, toMetal } from './utils';
 import {
-    Account, UserInfo, AtUserList, UploadInfo, PreRegisterInfo, RegisterInfo, Report, Log
-} from './typing';
-import ChatRoom from './chatroom';
-import Notice from './notice';
-import Emoji from './emoji';
-import User from './user';
-import Article from './article';
-import Comment from './comment';
-import Chat from './chat';
-import Breezemoon from './breezemoon';
-import { Finger } from './finger';
+    Account, UserInfo, AtUserList, UploadInfo, PreRegisterInfo, RegisterInfo, Report, Log,
+    ChatRoom, Notice, Emoji, User, Article, Comment, Chat, Breezemoon, Finger,
+} from './';
+
 import md5 from 'js-md5'
 
-export default class FishPi {
+export class FishPi {
     /**
      *  请求 API 的 API Key
      */
@@ -46,23 +39,23 @@ export default class FishPi {
      *  清风明月对象
      */
     breezemoon: Breezemoon = new Breezemoon();
-     /**
-     * 私聊接口对象
-     */
+    /**
+    * 私聊接口对象
+    */
     chat: Chat = new Chat();
 
-    
+
 
     /**
      * 构造一个 API 请求对象
      * @param token 接口 API Key，没有可以传空
      */
-    constructor(token: string='') {
+    constructor(token: string = '') {
         if (!token) { return; }
         this.setToken(token);
     }
 
-    async setToken(apiKey: string) {
+    async setToken (apiKey: string) {
         this.apiKey = apiKey;
         this.chatroom.setToken(this.apiKey);
         this.notice.setToken(this.apiKey);
@@ -74,15 +67,15 @@ export default class FishPi {
         this.chat.setToken(this.apiKey);
     }
 
-    async setDomain(domain: string) {
+    async setDomain (domain: string) {
         setDomain(domain);
     }
 
     /**
      * 登录账号返回 API Key
      * @param data 用户账密
-     */   
-    async login(data: Account): Promise<string> {
+     */
+    async login (data: Account): Promise<string> {
         try {
             let rsp = await request({
                 url: 'api/getKey',
@@ -109,7 +102,7 @@ export default class FishPi {
      * @param data 用户信息
      * @returns 
      */
-    async preRegister(data: PreRegisterInfo): Promise<void> {
+    async preRegister (data: PreRegisterInfo): Promise<void> {
         try {
             let rsp = await request({
                 url: 'register',
@@ -133,10 +126,10 @@ export default class FishPi {
      * @param code 验证码
      * @returns 
      */
-    async verify(code: string): Promise<number> {
+    async verify (code: string): Promise<number> {
         try {
             let rsp = await request({
-                url: 'verify?code='+code,
+                url: 'verify?code=' + code,
                 method: 'get'
             });
 
@@ -151,7 +144,7 @@ export default class FishPi {
     /**
      * 注册账号
      */
-    async register(data: RegisterInfo): Promise<void> {
+    async register (data: RegisterInfo): Promise<void> {
         try {
             let rsp = await request({
                 url: `register2${data.r ? `?r=${data.r}` : ''}`,
@@ -172,8 +165,8 @@ export default class FishPi {
     /**
      * 查询指定用户信息
      * @param username 用户名
-     */   
-     async user(username:string): Promise<UserInfo | undefined> {
+     */
+    async user (username: string): Promise<UserInfo | undefined> {
         try {
             let rsp = await request({
                 url: `user/${username}${this.apiKey ? `?apiKey=${this.apiKey}` : ''}`
@@ -182,7 +175,7 @@ export default class FishPi {
             if (rsp.code != 0) return;
 
             rsp.sysMetal = toMetal(rsp.sysMetal);
-            rsp.allMetalOwned= toMetal(rsp.allMetalOwned);
+            rsp.allMetalOwned = toMetal(rsp.allMetalOwned);
 
             return rsp;
         } catch (e) {
@@ -193,8 +186,8 @@ export default class FishPi {
     /**
      * 用户名联想，通常用于 @ 列表
      * @param username 用户名
-     */   
-     async names(name: string): Promise<AtUserList> {
+     */
+    async names (name: string): Promise<AtUserList> {
         let rsp;
         try {
             rsp = await request({
@@ -214,7 +207,7 @@ export default class FishPi {
     /**
      * 获取最近注册的20个用户
      */
-    async recentRegister(): Promise<{ userNickname: string; userName: string; }[]> {
+    async recentRegister (): Promise<{ userNickname: string; userName: string; }[]> {
         let rsp;
         try {
             rsp = await request({
@@ -232,7 +225,7 @@ export default class FishPi {
      * 举报
      * @param data 举报信息
      */
-    async report(data: Report): Promise<void> {
+    async report (data: Report): Promise<void> {
         try {
             let rsp = await request({
                 url: `report`,
@@ -256,7 +249,7 @@ export default class FishPi {
      * @param page 页码
      * @param pageSize 每页数量
      */
-    async log({
+    async log ({
         page = 1,
         pageSize = 30,
     }): Promise<Log[]> {
@@ -265,7 +258,7 @@ export default class FishPi {
                 url: `/logs/more?page=${page}&pageSize=${pageSize}`,
                 method: 'get',
             });
-            
+
             if (rsp.code != 0) throw new Error(rsp.msg);
 
             return rsp.data;
@@ -277,8 +270,8 @@ export default class FishPi {
     /**
      * 上传文件
      * @param files 要上传的文件，如果是在 Node 使用，则传入文件路径数组，若是在浏览器使用，则传入文件对象数组。
-     */   
-    async upload(files: Array<File|string>):Promise<UploadInfo> {
+     */
+    async upload (files: Array<File | string>): Promise<UploadInfo> {
         let data: any;
 
         if (!isBrowse && !globalThis.FormData)
@@ -289,8 +282,8 @@ export default class FishPi {
             files.forEach(f => data.append('file[]', f));
         } else {
             data = new FormData();
-            files.forEach(f => data.append('file[]', 
-                require('fs').readFileSync(f.toString()), 
+            files.forEach(f => data.append('file[]',
+                require('fs').readFileSync(f.toString()),
                 require('path').basename(f.toString())
             ));
         }
@@ -303,7 +296,7 @@ export default class FishPi {
                 data,
                 headers: isBrowse ? undefined : data.getHeaders()
             });
-            
+
             if (rsp.code != 0) throw new Error(rsp.msg);
 
             return rsp.data;
@@ -314,9 +307,20 @@ export default class FishPi {
 
 }
 
-export * from './finger';
-export * from './typing';
+export { default as ChatRoom } from './chatroom';
+export { default as Notice } from './notice';
+export { default as Emoji } from './emoji';
+export { default as User } from './user';
+export { default as Article } from './article';
+export { default as Comment } from './comment';
+export { default as Chat } from './chat';
+export { default as Breezemoon } from './breezemoon';
+export { default as Finger } from './finger';
 
-export function FingerTo(key: string) {
+export * from './types';
+
+export function FingerTo (key: string) {
     return new Finger(key);
 }
+
+export default FishPi;
