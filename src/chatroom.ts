@@ -263,7 +263,7 @@ class ChatRoom {
              * @param oId 红包消息 Id
              * @param gesture 猜拳类型
              */
-            async open(oId:string, gesture?:GestureType):Promise<ApiResponse<RedPacketInfo>> {
+            async open(oId:string, gesture?:GestureType):Promise<RedPacketInfo> {
                 let rsp;
                 try {
                     rsp = await request({
