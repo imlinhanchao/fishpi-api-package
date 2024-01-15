@@ -44,8 +44,6 @@ export class FishPi {
     */
     chat: Chat = new Chat();
 
-
-
     /**
      * 构造一个 API 请求对象
      * @param token 接口 API Key，没有可以传空
