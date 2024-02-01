@@ -139,7 +139,7 @@ class Chat {
      * @param user 私聊用户名
      * @returns Websocket 连接对象
      */
-    connect(user:string):Promise<ReconnectingWebSocket> {
+    connect(user:string, { onclose }: { onclose?: (e: any) => void } = {}):Promise<ReconnectingWebSocket> {
         return new Promise(async (resolve, reject) => {
             if (this._rwss[user]) return resolve(this._rwss[user]);
             this._rwss[user] = new ReconnectingWebSocket(user ? 
@@ -162,9 +162,9 @@ class Chat {
             this._rwss[user].onerror = (e) => {
                 reject(e);
             };
-            this._rwss[user].onclose = (e) => {
-                delete this._rwss[user];
-            };
+            this._rwss[user].onclose = onclose ?? ((e) => {
+                console.log(`[Chat] ${user} 连接已关闭`, e);
+            });
         })
     }
 
