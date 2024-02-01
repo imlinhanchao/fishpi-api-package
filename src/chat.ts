@@ -8,6 +8,7 @@ class Chat {
     private _apiKey:string = '';
     private _rwss:{ [key: string]: ReconnectingWebSocket } = {};
     private _wsCallbacks:{ [key: string]: Array<Function> } = {};
+    private timer:NodeJS.Timeout | null = null;
 
     constructor(token:string='') {
         if (!token) { return; }
@@ -123,7 +124,7 @@ class Chat {
      * @param wsCallback 消息监听函数
      * @param user 指定为用户消息监听函数，空为新信息监听
      */
-     async addListener(wsCallback: ({ msg }: { msg: NoticeMsg | ChatRevoke | ChatData }) => void, user:string = '') {
+     async addListener(wsCallback: ({ msg }: { msg: NoticeMsg | ChatRevoke | ChatData }) => void, user:string = '', onclose?: (e: any) => void) {
         if (this._rwss[user]) { 
             if (this._wsCallbacks[user].indexOf(wsCallback) < 0) 
                 this._wsCallbacks[user].push(wsCallback);
@@ -131,7 +132,16 @@ class Chat {
         }
         this._wsCallbacks[user] = this._wsCallbacks[user] || []
         this._wsCallbacks[user].push(wsCallback);
-        this.connect(user);
+        this.connect(user, { onclose });
+    }
+
+    /**
+     * 重新连接用户私聊频道
+     * @param user 私聊用户名
+     */
+    reconnect(user:string = '', onclose?: (e: any) => void) {
+        if (this._rwss[user]) this._rwss[user].reconnect();
+        else this.connect(user, { onclose });
     }
 
     /**
@@ -139,7 +149,7 @@ class Chat {
      * @param user 私聊用户名
      * @returns Websocket 连接对象
      */
-    connect(user:string, { onclose }: { onclose?: (e: any) => void } = {}):Promise<ReconnectingWebSocket> {
+    private connect(user:string, { onclose }: { onclose?: (e: any) => void } = {}):Promise<ReconnectingWebSocket> {
         return new Promise(async (resolve, reject) => {
             if (this._rwss[user]) return resolve(this._rwss[user]);
             this._rwss[user] = new ReconnectingWebSocket(user ? 
@@ -152,6 +162,12 @@ class Chat {
             );
     
             this._rwss[user].onopen = (e) => {
+                if (user === '') {
+                    if (this.timer) clearInterval(this.timer);
+                    this.timer = setInterval(() => {
+                        this._rwss[user].send('-hd-');
+                    }, 30000);
+                }
                 resolve(this._rwss[user])
             };
             this._rwss[user].onmessage = async (e) => {
@@ -164,6 +180,10 @@ class Chat {
             };
             this._rwss[user].onclose = onclose ?? ((e) => {
                 console.log(`[Chat] ${user} 连接已关闭`, e);
+                if (user === '') {
+                    if (this.timer) clearInterval(this.timer);
+                    this.timer = null;
+                }
             });
         })
     }
