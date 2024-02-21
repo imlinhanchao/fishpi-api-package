@@ -199,7 +199,7 @@ class ChatRoom {
                 method: 'get'
             });
 
-            let mat = rsp.match(/>发送弹幕每次将花费\s*<b>([-0-9]+)<\/b>\s*([^<]*?)<\/div>/);
+            let mat = rsp.match(/barragerCost">([-0-9]+)<\/span><\/b>\s*<span id="barragerUnit">([^<]*?)<\//);
             if (mat) {
                 return {
                     cost: parseInt(mat[1]),
