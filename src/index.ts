@@ -285,6 +285,7 @@ export default class FishPi {
             ));
         }
 
+        data.append('apiKey', this.apiKey);
         let rsp;
         try {
             rsp = await request({
