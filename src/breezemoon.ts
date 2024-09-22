@@ -1,6 +1,7 @@
 import { request } from './utils';
 import { 
-    ApiResponse, BreezemoonContent
+    ApiResponse, BreezemoonContent,
+    BreezemoonList
 } from './typing';
 
 class Breezemoon
@@ -29,6 +30,23 @@ class Breezemoon
         try {
             let rsp = await request({
                 url: `api/breezemoons?p=${page}&size=${size}`
+            });
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 获取清风明月列表
+     * @param page 消息页码
+     * @param size 每页个数
+     */
+    async listByUser(user: string, page=1, size=20):Promise<ApiResponse<BreezemoonList>> {
+        try {
+            let rsp = await request({
+                url: `api/user/${user}breezemoons?p=${page}&size=${size}&apiKey=${this._apiKey}`
             });
 
             return rsp;

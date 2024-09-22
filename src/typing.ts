@@ -732,6 +732,10 @@ export interface ChatRoomMessage {
      */
     oId: string;
     /**
+     * 发送用户 Id
+     */
+    userOId: string;
+    /**
      * 发送者用户名
      */
     userName: string;
@@ -1320,6 +1324,23 @@ export interface NoticeSystem {
      * 创建日期
      */
     createTime: string;
+}
+
+/**
+ * 用户清风明月列表
+ */
+export interface BreezemoonList {
+    /**
+     * 分页信息
+     */
+    pagination: {
+        paginationPageCount: number;
+        paginationPageNums: Array<number>;
+    };
+    /**
+     * 清风明月列表
+     */
+    breezemoons: Array<BreezemoonContent>;
 }
 
 export interface BreezemoonContent {
@@ -1939,7 +1960,7 @@ export interface ArticleDetail {
      */
     articleQnAOfferPoint: number,
     /**
-     * 作者头像缩略图
+     * 文章缩略图
      */
     articleThumbnailURL: string,
     /**
@@ -2382,7 +2403,7 @@ export enum ArticleListType {
 /**
  * 点赞类型
  */
-export enum VoteStatus {
+export enum VoteType {
     /**
      * 点赞
      */

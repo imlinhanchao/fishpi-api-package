@@ -1,6 +1,6 @@
 import { request } from './utils';
 import { 
-    ApiResponse, CommentPost, VoteStatus, 
+    ApiResponse, CommentPost, VoteType, 
 } from './typing';
 
 class Comment
@@ -76,7 +76,7 @@ class Comment
      * @param id 评论 Id
      * @param type 点赞类型
      */
-    async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
+    async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteType }> {
         let rsp;
         try {
             rsp = await request({

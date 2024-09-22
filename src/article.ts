@@ -1,6 +1,6 @@
 import { analyzeMetalAttr, domain, isBrowse, request } from './utils';
 import { 
-    ApiResponse, ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList, ArticleType
+    ApiResponse, ArticlePost, ArticleListType, ArticleDetail, VoteStatus, ArticleList, ArticleType, VoteType
 } from './typing';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
@@ -75,15 +75,39 @@ class Article
      * @returns 文章列表
      */
     async list(
-        { type, page = 1, tag }:
-        { type:ArticleListType, page?: number, tag?:string }
+        { type, page = 1, size = 20, tag }:
+        { type:ArticleListType, page?: number, size?: number, tag?:string }
     ):Promise<ApiResponse<ArticleList>> {
         let rsp;
         try {
             rsp = await request({
                 url: `api/articles/${
                     tag !== undefined ? `tag/${tag}` : 'recent'
-                }${type}?p=${page}&${
+                }${type}?p=${page}&size=${size}&${
+                    this._apiKey ? `apiKey=${this._apiKey}` : ''
+                }`,
+            });         
+
+            return rsp;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 查询文章列表
+     * @param type 查询类型
+     * @param tag 指定查询标签，可选
+     * @returns 文章列表
+     */
+    async listByUser(
+        { user, page = 1, size = 20 }:
+        { user: string, page?: number, size?: number }
+    ):Promise<ApiResponse<ArticleList>> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `api/user/${user}articles?p=${page}&size=${size}&${
                     this._apiKey ? `apiKey=${this._apiKey}` : ''
                 }`,
             });         
@@ -151,7 +175,7 @@ class Article
      * @param type 点赞类型
      * @returns 文章点赞状态
      */
-    async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteStatus }> {
+    async vote(id:string, type:'up' | 'down'):Promise<{ code:number, msg?:string, type?:VoteType }> {
         let rsp;
         try {
             rsp = await request({
