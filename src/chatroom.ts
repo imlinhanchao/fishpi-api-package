@@ -345,10 +345,8 @@ class ChatRoom {
                         let { userOId, oId, time, userName, userNickname, userAvatarURL, content, md, client } = msg;
                         try {
                             let data = JSON.parse(content);
-                            if (data.msgType === 'redPacket') {
-                                content = data;
-                                msg.type = 'redPacket'
-                            }
+                            content = data;
+                            msg.type = data.msgType
                         } catch (e) { }
                         data = { userOId, oId, time, userName, userNickname, userAvatarURL, content, md, client, via: clientToVia(client) };
                         break;
