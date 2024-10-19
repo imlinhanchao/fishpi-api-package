@@ -244,8 +244,6 @@ export class Finger
                 },
             });
             
-            if (rsp.code !== 0) throw new Error(rsp.msg)
-
             return rsp.sum;
         } catch (e) {
             throw e;

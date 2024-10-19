@@ -79,7 +79,6 @@ class ChatRoom {
                     data[i].via = clientToVia(data[i].client)
                     data[i].sysMetal = toMetal(data[i].sysMetal);
                     redpacket = JSON.parse(d.content);
-                    if (redpacket.msgType !== 'redPacket') return rsp;
                     if (redpacket.recivers) redpacket.recivers = JSON.parse(redpacket.recivers);
                     data[i].content = redpacket;
                 } catch (e) {}
