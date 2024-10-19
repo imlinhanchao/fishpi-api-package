@@ -73,14 +73,12 @@ class ChatRoom {
             }
 
             if (!rsp.data) return rsp;
-            let redpacket;
             (rsp.data as Array<any>).forEach((d, i, data) => {
                 try {
                     data[i].via = clientToVia(data[i].client)
                     data[i].sysMetal = toMetal(data[i].sysMetal);
-                    redpacket = JSON.parse(d.content);
-                    if (redpacket.recivers) redpacket.recivers = JSON.parse(redpacket.recivers);
-                    data[i].content = redpacket;
+                    data[i].content = JSON.parse(d.content);
+                    if (data[i].content.recivers) data[i].content.recivers = JSON.parse(data[i].content.recivers);
                 } catch (e) {}
             })
 
