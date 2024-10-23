@@ -199,6 +199,23 @@ class Chat {
         this._rwss[user].send(content);
         return this._rwss[user];
     }
+
+    /**
+     * 关闭用户私聊频道
+     * @param user 私聊用户名, 空为关闭所有用户频道
+     */
+    async close(user?:string) {
+        if (user && this._rwss[user]) {
+            this._rwss[user].close();
+            delete this._rwss[user];
+        }
+        else {
+            Object.keys(this._rwss).forEach(key => {
+                this._rwss[key].close();
+                delete this._rwss[key];
+            });
+        }
+    }
 }
 
 export default Chat;
