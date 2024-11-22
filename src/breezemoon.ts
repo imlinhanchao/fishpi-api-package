@@ -46,7 +46,7 @@ class Breezemoon
     async listByUser(user: string, page=1, size=20):Promise<ApiResponse<BreezemoonList>> {
         try {
             let rsp = await request({
-                url: `api/user/${user}breezemoons?p=${page}&size=${size}&apiKey=${this._apiKey}`
+                url: `api/user/${user}/breezemoons?p=${page}&size=${size}&apiKey=${this._apiKey}`
             });
 
             return rsp;
