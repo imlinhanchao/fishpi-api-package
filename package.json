@@ -1,6 +1,6 @@
 {
   "name": "fishpi",
-  "version": "0.0.56",
+  "version": "0.0.59",
   "description": "A Package to use API of fishpi.",
   "main": "./lib/index.js",
   "files": [
@@ -10,6 +10,7 @@
     "prebuild": "rimraf lib",
     "build": "tsc",
     "prepublish": "npm run build",
+    "prepare": "npm run build",
     "test": "NODE_OPTIONS=\"-r ts-node/register --no-warnings\" node  ./test/index.ts",
     "publish": "npm publish"
   },

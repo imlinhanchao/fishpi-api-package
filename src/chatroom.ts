@@ -296,7 +296,7 @@ class ChatRoom {
         let rsp;
         try {
             rsp = await request({
-                url: `chat-room/node/get`,
+                url: `chat-room/node/get?apiKey=${this._apiKey}`,
                 method: 'get',
             });
 
@@ -314,12 +314,13 @@ class ChatRoom {
      * @returns 返回 Open Event
      */
     async reconnect(
-        { url=`wss://${domain}/chat-room-channel`, timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: 
+        { url=``, timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: 
         { url?:string, timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
+        if (!url) url = await this.getNode().catch(() => `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`);
         return new Promise(async (resolve, reject) => {
             if (this._rws) return resolve(this._rws.reconnect());
             this._rws = new ReconnectingWebSocket(
-                `${url}?apiKey=${this._apiKey}`, [], {
+                `${url}`, [], {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
                     connectionTimeout: 1000 * timeout
