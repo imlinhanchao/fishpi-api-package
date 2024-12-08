@@ -289,6 +289,24 @@ class ChatRoom {
     }
 
     /**
+     * 获取聊天室节点
+     * @returns 返回节点地址
+     */
+    async getNode():Promise<string> {
+        let rsp;
+        try {
+            rsp = await request({
+                url: `chat-room/node/get`,
+                method: 'get',
+            });
+
+            return rsp.data;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
      * 重连聊天室
      * @param timeout 超时时间
      * @param error 错误回调
@@ -296,12 +314,12 @@ class ChatRoom {
      * @returns 返回 Open Event
      */
     async reconnect(
-        { timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: 
-        { timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
+        { url=`wss://${domain}/chat-room-channel`, timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: 
+        { url?:string, timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
         return new Promise(async (resolve, reject) => {
             if (this._rws) return resolve(this._rws.reconnect());
             this._rws = new ReconnectingWebSocket(
-                `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`, [], {
+                `${url}?apiKey=${this._apiKey}`, [], {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     WebSocket: isBrowse ? window.WebSocket : (await import('ws')).WebSocket,
                     connectionTimeout: 1000 * timeout
