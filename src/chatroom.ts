@@ -1,7 +1,8 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { request, domain, toMetal, isBrowse, clientToVia } from './utils';
 import { 
-    ApiResponse, ChatContentType, ChatMessageType, ClientType, ChatRoomMessage, GestureType, Message, MuteItem, RedPacket, RedPacketInfo 
+    ApiResponse, ChatContentType, ChatMessageType, ClientType, ChatRoomMessage, GestureType, Message, MuteItem, RedPacket, RedPacketInfo, 
+    IChatRoomNodeInfo
 } from './typing';
 
 class ChatRoom {
@@ -292,15 +293,24 @@ class ChatRoom {
      * 获取聊天室节点
      * @returns 返回节点地址
      */
-    async getNode():Promise<string> {
-        let rsp;
+    async getNode():Promise<IChatRoomNodeInfo> {
+        let rsp: any;
         try {
             rsp = await request({
                 url: `chat-room/node/get?apiKey=${this._apiKey}`,
                 method: 'get',
             });
 
-            return rsp.data;
+            if (rsp.code != 0) throw new Error("获取节点失败");            
+
+            return {
+                recommend: {
+                    node: rsp.data,
+                    name: rsp.msg,
+                    online: rsp.avaliable.find((n:any) => n.node === rsp.data)?.online || 0
+                },
+                avaliable: rsp.avaliable,
+            };
         } catch (e) {
             throw e;
         }
@@ -316,7 +326,7 @@ class ChatRoom {
     async reconnect(
         { url=``, timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: 
         { url?:string, timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
-        if (!url) url = await this.getNode().catch(() => `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`);
+        if (!url) url = await this.getNode().then((rsp) => rsp.recommend.node).catch(() => `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`);
         return new Promise(async (resolve, reject) => {
             if (this._rws) return resolve(this._rws.reconnect());
             this._rws = new ReconnectingWebSocket(

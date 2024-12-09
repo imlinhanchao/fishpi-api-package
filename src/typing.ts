@@ -2592,3 +2592,14 @@ export interface Log {
      */
     type: string;
 }
+
+export interface IChatRoomNode {
+    node: string;
+    name: string;
+    online?: number;
+}
+
+export interface IChatRoomNodeInfo {
+    recommend: IChatRoomNode;
+    avaliable: IChatRoomNode[];
+}

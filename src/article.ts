@@ -95,32 +95,9 @@ class Article
     }
 
     /**
-     * 查询文章列表
-     * @param type 查询类型
-     * @param tag 指定查询标签，可选
-     * @returns 文章列表
-     */
-    async listByUser(
-        { user, page = 1, size = 20 }:
-        { user: string, page?: number, size?: number }
-    ):Promise<ApiResponse<ArticleList>> {
-        let rsp;
-        try {
-            rsp = await request({
-                url: `api/user/${user}articles?p=${page}&size=${size}&${
-                    this._apiKey ? `apiKey=${this._apiKey}` : ''
-                }`,
-            });         
-
-            return rsp;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /**
      * 查询用户文章列表
      * @param userName 用户名
+     * @param page 页码
      * @returns 文章列表
      */
     async userArticles(
