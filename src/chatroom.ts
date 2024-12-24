@@ -328,6 +328,7 @@ class ChatRoom {
         { url=``, timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: 
         { url?:string, timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
         if (!url) url = await this.getNode().then((rsp) => rsp.recommend.node).catch(() => `wss://${domain}/chat-room-channel?apiKey=${this._apiKey}`);
+        if (!url.includes('apiKey=')) url += `${url.includes('?') ? '&' : '?'}apiKey=${this._apiKey}`;
         return new Promise(async (resolve, reject) => {
             if (this._rws && url !== this._rws.url) {
                 this._rws.close();
