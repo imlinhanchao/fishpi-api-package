@@ -318,6 +318,7 @@ class ChatRoom {
 
     /**
      * 重连聊天室
+     * @param url 节点地址
      * @param timeout 超时时间
      * @param error 错误回调
      * @param close 关闭回调
@@ -421,19 +422,20 @@ class ChatRoom {
     /**
      * 添加聊天室消息监听函数
      * @param wsCallback 消息监听函数
+     * @param url 节点地址
      * @param timeout 超时时间
      * @param error 错误回调
      * @param close 关闭回调
      */
      async addListener(wsCallback: (event: { msg: Message }) => void, 
-        { timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: { timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
+        { url, timeout=10, error=(ev: any) => {}, close=(ev: any) => {} }: { url?:string, timeout?: number, error?: (ev: any) => void, close?: (ev: any) => void} = {}) {
         if (this._rws !== null) { 
             if (this._wsCallbacks.indexOf(wsCallback) < 0) 
                 this._wsCallbacks.push(wsCallback);
             return;
         }
         this._wsCallbacks.push(wsCallback);
-        await this.reconnect({ timeout, error, close });
+        await this.reconnect({ url, timeout, error, close });
     }
 }
 
